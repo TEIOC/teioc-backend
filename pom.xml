@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.astranfalio</groupId>
-    <artifactId>Teioc-back</artifactId>
+    <artifactId>Teioc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Teioc</name>
     <description>Teioc</description>
