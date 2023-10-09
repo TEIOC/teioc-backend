@@ -1,16 +1,19 @@
 package dev.astranfalio.teioc.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.sql.Date;
 
 @Entity
 @Table(name="intern")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class InternEntity {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="email", nullable = false)
@@ -29,5 +32,5 @@ public class InternEntity {
     private Date creationDate;
 
     @Column(name="status")
-    private boolean status; // todo: to test
+    private boolean status;
 }
