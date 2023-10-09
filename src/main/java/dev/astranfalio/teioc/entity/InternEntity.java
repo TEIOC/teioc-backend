@@ -19,11 +19,15 @@ public class InternEntity {
     @Column(name="password", nullable = false)
     private String password;
 
+    @Column(name="company")
     private String company;
 
+    @Column(name="contactDetails")
     private String contactDetails;
 
+    @Column(name="creationDate")
     private Date creationDate;
 
+    @Column(name="status")
     private boolean status; // todo: to test
 }
