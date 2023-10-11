@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name="answer")
@@ -25,4 +27,9 @@ public class AnswerEntity {
 
     @Column(name="order")
     private Integer order;
+
+    @ManyToOne
+    @JoinColumn(name="question_id", referencedColumnName = "id")
+    @JsonIgnore
+    private QuestionEntity question;
 }

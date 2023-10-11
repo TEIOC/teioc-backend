@@ -15,7 +15,7 @@ public class AnswerController {
     private AnswerRepository answerRepository;
 
     @GetMapping("/answers")
-    public List<AnswerEntity> getInterns() {
+    public List<AnswerEntity> getAnswers() {
         return answerRepository.findAll();
     }
 

@@ -15,7 +15,7 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
     @GetMapping("/questions")
-    public List<QuestionEntity> getInterns() {
+    public List<QuestionEntity> getQuestions() {
         return questionRepository.findAll();
     }
 

@@ -6,32 +6,20 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
-@Table(name="question")
+@Table(name="survey")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuestionEntity {
+public class SurveyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name="label", nullable = false)
-    private String label;
 
     @Column(name="status")
     private Boolean status;
 
     @Column(name="order")
     private Integer order;
-
-    @ManyToOne
-    @JoinColumn(name="survey_id", referencedColumnName = "id")
-    private SurveyEntity survey;
-
-    @ManyToOne
-    @JoinColumn(name="correctAnswer_id", referencedColumnName = "id")
-    private AnswerEntity correctAnswer;
 }
