@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-
 @Entity
 @Table(name="pathway_answer")
 @IdClass(PathwayAnswerId.class)
@@ -42,12 +40,4 @@ public class PathwayAnswerEntity {
 }
 
 // Composite key class
-@Embeddable
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class PathwayAnswerId implements Serializable {
-    private Integer internId;
-    private Integer surveyId;
-    private Integer answerId;
-}
+
