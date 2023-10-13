@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.sql.Time;
 @Entity
 @Table(name="pathway")
@@ -31,9 +34,11 @@ public class PathwayEntity {
 
     @ManyToOne
     @JoinColumn(name = "intern_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private InternEntity intern;
 
     @ManyToOne
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private SurveyEntity survey;
 }

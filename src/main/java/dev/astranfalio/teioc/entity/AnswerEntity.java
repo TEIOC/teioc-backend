@@ -3,6 +3,8 @@ package dev.astranfalio.teioc.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name="answer")
 @Data
@@ -27,5 +29,6 @@ public class AnswerEntity {
     @ManyToOne
     @JoinColumn(name="question_id", referencedColumnName = "id")
     @JsonIgnore
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private QuestionEntity question;
 }

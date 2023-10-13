@@ -2,6 +2,9 @@ package dev.astranfalio.teioc.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 @Entity
 @Table(name="survey")
 @Data
@@ -22,5 +25,6 @@ public class SurveyEntity {
 
     @ManyToOne
     @JoinColumn(name="topic_id", referencedColumnName = "id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private TopicEntity topic;
 }
