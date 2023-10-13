@@ -1,11 +1,7 @@
 package dev.astranfalio.teioc.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 @Entity
 @Table(name="pathway_answer")
 @IdClass(PathwayAnswerId.class)
@@ -13,18 +9,19 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class PathwayAnswerEntity {
     @Id
     @Column(name = "intern_id", nullable = false)
-    private Integer internId;
+    private Integer intern_id;
 
     @Id
     @Column(name = "survey_id", nullable = false)
-    private Integer surveyId;
+    private Integer survey_id;
 
     @Id
     @Column(name = "answer_id", nullable = false)
-    private Integer answerId;
+    private Integer answer_id;
 
     @ManyToOne
     @JoinColumn(name = "intern_id", referencedColumnName = "id")
@@ -38,6 +35,3 @@ public class PathwayAnswerEntity {
     @JoinColumn(name = "answer_id", referencedColumnName = "id")
     private AnswerEntity answer;
 }
-
-// Composite key class
-

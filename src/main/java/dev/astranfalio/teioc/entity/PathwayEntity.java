@@ -5,21 +5,35 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.sql.Time;
-
 @Entity
 @Table(name="pathway")
+@IdClass(PathwayId.class)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class PathwayEntity {
+    @Id
+    @Column(name = "intern_id", nullable = false)
+    private Integer intern_id;
 
-    @EmbeddedId
-    private PathwayId pathwayId;
+    @Id
+    @Column(name = "survey_id", nullable = false)
+    private Integer survey_id;
 
+    @Column(name = "score")
     private Integer score;
 
+    @Column(name = "duration")
     private Time duration;
+
+    @ManyToOne
+    @JoinColumn(name = "intern_id", referencedColumnName = "id")
+    private InternEntity intern;
+
+    @ManyToOne
+    @JoinColumn(name = "survey_id", referencedColumnName = "id")
+    private SurveyEntity survey;
 }

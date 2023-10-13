@@ -2,15 +2,14 @@ package dev.astranfalio.teioc.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.sql.Date;
-
 @Entity
 @Table(name="intern")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class InternEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

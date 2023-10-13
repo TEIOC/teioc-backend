@@ -1,17 +1,14 @@
 package dev.astranfalio.teioc.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 @Entity
 @Table(name = "topic")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class TopicEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

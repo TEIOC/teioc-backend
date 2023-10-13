@@ -1,19 +1,15 @@
 package dev.astranfalio.teioc.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-
 @Entity
 @Table(name="answer")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class AnswerEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
