@@ -2,7 +2,7 @@ package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.dto.InternDto;
 import dev.astranfalio.teioc.entity.InternEntity;
-import dev.astranfalio.teioc.service.InternService;
+import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/interns")
 public class InternController {
-    private final InternService internService;
+    private final InternDataService internService;
 
     @Autowired
-    public InternController(InternService internService) {
+    public InternController(InternDataService internService) {
         this.internService = internService;
     }
     @GetMapping

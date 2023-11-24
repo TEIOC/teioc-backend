@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public abstract class AbstractService<T, ID, R extends JpaRepository<T, ID>> {
+public abstract class AbstractDataService<T, ID, R extends JpaRepository<T, ID>> {
 
     protected final R repository;
     protected final Validator validator;
 
-    public AbstractService(R repository, Validator validator) {
+    public AbstractDataService(R repository, Validator validator) {
         this.repository = repository;
         this.validator = validator;
     }
