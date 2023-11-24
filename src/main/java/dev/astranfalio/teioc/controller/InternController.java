@@ -39,5 +39,13 @@ public class InternController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<InternDto> updateIntern(@PathVariable Long id, @RequestBody InternDto internDto) {
+        InternEntity internEntity = InternDto.convertToEntity(internDto);
+        internEntity.setId(id);
+        InternEntity updatedEntity = internService.save(internEntity);
+        InternDto updatedDto = InternDto.convertToDto(updatedEntity);
+        return ResponseEntity.ok(updatedDto);
+    }
 
 }
