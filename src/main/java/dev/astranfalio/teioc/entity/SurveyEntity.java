@@ -20,8 +20,8 @@ public class SurveyEntity {
     @Column(name="status")
     private Boolean status;
 
-    @Column(name="order")
-    private Integer order;
+    @Column(name="sortOrder")
+    private Integer sortOrder;
 
     @ManyToOne
     @JoinColumn(name="topic_id", referencedColumnName = "id")

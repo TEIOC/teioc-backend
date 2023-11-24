@@ -20,7 +20,7 @@ public class TopicEntity {
     @Column(name = "status", nullable = false)
     private boolean status;
 
-    @Column(name = "order", nullable = false)
-    private Long order;
+    @Column(name = "sortOrder", nullable = false)
+    private Long sortOrder;
 }
 
