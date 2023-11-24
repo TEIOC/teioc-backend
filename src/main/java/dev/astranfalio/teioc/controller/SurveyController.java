@@ -60,6 +60,20 @@ public class SurveyController {
         SurveyDto updatedDto = SurveyDto.convertToDto(updatedEntity);
         return ResponseEntity.ok(updatedDto);
     }
+
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<SurveyDto> activateSurvey(@PathVariable Long id) {
+        SurveyEntity surveyEntity = surveyDataService.activateSurvey(id);
+        SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
+        return ResponseEntity.ok(surveyDto);
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<SurveyDto> deactivateSurvey(@PathVariable Long id) {
+        SurveyEntity surveyEntity = surveyDataService.deactivateSurvey(id);
+        SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
+        return ResponseEntity.ok(surveyDto);
+    }
 }
 
 
