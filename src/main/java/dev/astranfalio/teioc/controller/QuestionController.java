@@ -63,4 +63,18 @@ public class QuestionController {
         QuestionDto updatedDto = QuestionDto.convertToDto(updatedEntity);
         return ResponseEntity.ok(updatedDto);
     }
+
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<QuestionDto> activateQuestion(@PathVariable Long id) {
+        QuestionEntity questionEntity = questionDataService.activate(id);
+        QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
+        return ResponseEntity.ok(questionDto);
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<QuestionDto> deactivateQuestion(@PathVariable Long id) {
+        QuestionEntity questionEntity = questionDataService.deactivate(id);
+        QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
+        return ResponseEntity.ok(questionDto);
+    }
 }
