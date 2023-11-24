@@ -74,6 +74,13 @@ public class SurveyController {
         SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
         return ResponseEntity.ok(surveyDto);
     }
+
+    @PutMapping("/{surveyId}/topics/{topicId}")
+    public ResponseEntity<SurveyDto> associateSurveyWithTopic(@PathVariable Long surveyId, @PathVariable Long topicId) {
+        SurveyEntity surveyEntity = surveyDataService.associateWithTopic(surveyId, topicId);
+        SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
+        return ResponseEntity.ok(surveyDto);
+    }
 }
 
 
