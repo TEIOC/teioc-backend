@@ -1,6 +1,7 @@
 package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.dto.QuestionDto;
+import dev.astranfalio.teioc.dto.SurveyDto;
 import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.entity.QuestionEntity;
 import dev.astranfalio.teioc.entity.SurveyEntity;
@@ -9,6 +10,9 @@ import dev.astranfalio.teioc.repository.QuestionRepository;
 import dev.astranfalio.teioc.repository.SurveyRepository;
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionDataService extends AbstractDataService<QuestionEntity, Long, QuestionRepository> {
@@ -49,5 +53,26 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Lon
         }
         repository.save(questionEntity);
         return questionEntity;
+    }
+
+    public List<QuestionDto> findByTopicId(Long topicId) {
+        List<SurveyDto> surveys = surveyRepository.findAll()
+                .stream()
+                .map(SurveyDto::convertToDto)
+                .filter(s -> s.getTopicId() == topicId)
+                .collect(Collectors.toList());
+
+        return surveys.stream()
+                .flatMap(surveyDto -> this.findBySurveyId(surveyDto.getId())
+                        .stream())
+                .collect(Collectors.toList());
+    }
+
+    public List<QuestionDto> findBySurveyId(Long surveyId) {
+        return repository.findAll()
+                .stream()
+                .map(QuestionDto::convertToDto)
+                .filter(questionDto -> questionDto.getSurveyId() == surveyId)
+                .collect(Collectors.toList());
     }
 }

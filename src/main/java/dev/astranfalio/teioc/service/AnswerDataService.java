@@ -1,15 +1,15 @@
 package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.dto.AnswerDto;
-import dev.astranfalio.teioc.dto.QuestionDto;
 import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.entity.QuestionEntity;
-import dev.astranfalio.teioc.entity.SurveyEntity;
 import dev.astranfalio.teioc.repository.AnswerRepository;
 import dev.astranfalio.teioc.repository.QuestionRepository;
-import dev.astranfalio.teioc.repository.SurveyRepository;
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AnswerDataService extends AbstractDataService<AnswerEntity, Long, AnswerRepository> {
@@ -33,6 +33,14 @@ public class AnswerDataService extends AbstractDataService<AnswerEntity, Long, A
                 .sortOrder(answerDto.getSortOrder())
                 .question(question)
                 .build();
+    }
+
+    public List<AnswerDto> findAnswersByQuestionId(Long questionId) {
+        return repository.findAll()
+                .stream()
+                .map(AnswerDto::convertToDto)
+                .filter(answerDto -> answerDto.getQuestionId() == questionId)
+                .collect(Collectors.toList());
     }
 
 }

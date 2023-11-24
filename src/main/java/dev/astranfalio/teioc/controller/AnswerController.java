@@ -39,6 +39,11 @@ public class AnswerController {
         return ResponseEntity.ok(answerDto);
     }
 
+    @GetMapping("/questions/{id}")
+    public List<AnswerDto> getAnswersByQuestionId(@PathVariable Long id) {
+        return answerDataService.findAnswersByQuestionId(id);
+    }
+
     @PostMapping
     public ResponseEntity<AnswerDto> addAnswer(@Valid @RequestBody AnswerDto answerDto) {
         AnswerEntity answerEntity = AnswerDataService.convertToEntity(answerDto, questionRepository);

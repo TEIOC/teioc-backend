@@ -42,10 +42,15 @@ public class QuestionController {
         return ResponseEntity.ok(questionDto);
     }
 
-    /*@GetMapping("/topics/{id}")
-    public List<QuestionDto> getQuestionsByTopic(@PathVariable Long topicId) {
-        return QuestionDataService.findByTopicId();
-    }*/
+    @GetMapping("/topics/{id}")
+    public List<QuestionDto> getQuestionsByTopic(@PathVariable Long id) {
+        return questionDataService.findByTopicId(id);
+    }
+
+    @GetMapping("/surveys/{id}")
+    public List<QuestionDto> getQuestionsBySurvey(@PathVariable Long id) {
+        return questionDataService.findBySurveyId(id);
+    }
 
     @PostMapping
     public ResponseEntity<QuestionDto> addQuestion(@Valid @RequestBody QuestionDto questionDto) {
