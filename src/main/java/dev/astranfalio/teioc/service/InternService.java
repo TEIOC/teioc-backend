@@ -12,13 +12,21 @@ public class InternService extends AbstractService<InternEntity, Long, InternRep
     public InternService(InternRepository repository) {
         super(repository);
     }
+
+    public InternEntity findInternById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Intern with ID " + id + " not found."));
+    }
+
+    public void deleteById(Long id) {
+        InternEntity intern = this.findInternById(id);
+        repository.deleteById(id);
+    }
+
     public InternEntity updateIntern(Long id, InternEntity internEntity) {
-        if (repository.existsById(id)) {
-            internEntity.setId(id);
-            return repository.save(internEntity);
-        } else {
-            throw new ResourceNotFoundException("Intern with ID " + id + " not found.");
-        }
+        this.findInternById(id);
+        internEntity.setId(id);
+        return repository.save(internEntity);
     }
 
     public InternEntity activateIntern(Long id) {

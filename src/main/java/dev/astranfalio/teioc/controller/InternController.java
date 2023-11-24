@@ -1,14 +1,14 @@
 package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.dto.InternDto;
-import dev.astranfalio.teioc.service.InternService;
 import dev.astranfalio.teioc.entity.InternEntity;
+import dev.astranfalio.teioc.service.InternService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 
 @RestController
@@ -29,13 +29,9 @@ public class InternController {
 
     @GetMapping("/{id}")
     public ResponseEntity<InternDto> getInternById(@PathVariable Long id) {
-        Optional<InternEntity> internEntityOptional = internService.findById(id);
-        if (internEntityOptional.isPresent()) {
-            InternDto internDto = InternDto.convertToDto(internEntityOptional.get());
-            return ResponseEntity.ok(internDto);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        InternEntity internEntity = internService.findInternById(id);
+        InternDto internDto = InternDto.convertToDto(internEntity);
+        return ResponseEntity.ok(internDto);
     }
 
     @PostMapping
