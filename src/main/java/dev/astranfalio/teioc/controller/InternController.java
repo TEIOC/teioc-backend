@@ -1,36 +1,28 @@
 package dev.astranfalio.teioc.controller;
 
-import dev.astranfalio.teioc.entity.InternEntity;
-import dev.astranfalio.teioc.repository.InternRepository;
-import org.springframework.web.bind.annotation.RestController;
+import dev.astranfalio.teioc.dto.InternDto;
+import dev.astranfalio.teioc.service.InternService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import java.sql.Date;
-import java.time.LocalDate;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 public class InternController {
+    private final InternService internService;
 
     @Autowired
-    private InternRepository internRepository;
-
-    @GetMapping("/interns")
-    public List<InternEntity> getInterns() {
-        return internRepository.findAll();
+    public InternController(InternService internService) {
+        this.internService = internService;
+    }
+    @GetMapping
+    @RequestMapping("/interns")
+    public List<InternDto> getAllInterns() {
+        return internService.findAll().stream()
+                .map(InternDto::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/do")
-    public void save() {
-        InternEntity internEntity = InternEntity.builder()
-                .email("testemail2.intern@example.com")
-                .company("testcompany2.intern")
-                .status(false)
-//                .id(2L)
-                .contactDetails("testcontactDetails2.intern")
-                .creationDate(Date.valueOf(LocalDate.now()))
-                .password("testpassword2.intern")
-                .build();
-
-        internRepository.save(internEntity);
-    }
 }
