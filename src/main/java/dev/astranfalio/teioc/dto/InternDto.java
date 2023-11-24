@@ -1,6 +1,8 @@
 package dev.astranfalio.teioc.dto;
-import dev.astranfalio.teioc.entity.InternEntity;
 
+import dev.astranfalio.teioc.entity.InternEntity;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +16,14 @@ import java.sql.Date;
 public class InternDto {
 
     private Long id;
+
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Invalid email format")
     private String email;
+
+    @NotNull(message = "Company cannot be null")
     private String company;
+
     private String contactDetails;
     private Date creationDate;
     private boolean status;

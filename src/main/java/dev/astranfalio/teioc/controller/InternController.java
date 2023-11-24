@@ -29,7 +29,7 @@ public class InternController {
 
     @GetMapping("/{id}")
     public ResponseEntity<InternDto> getInternById(@PathVariable Long id) {
-        InternEntity internEntity = internService.findInternById(id);
+        InternEntity internEntity = internService.findById(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
     }
@@ -51,7 +51,7 @@ public class InternController {
     @PutMapping("/{id}")
     public ResponseEntity<InternDto> updateIntern(@PathVariable Long id, @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
-        InternEntity updatedEntity = internService.updateIntern(id, internEntity);
+        InternEntity updatedEntity = internService.update(id, internEntity);
         InternDto updatedDto = InternDto.convertToDto(updatedEntity);
         return ResponseEntity.ok(updatedDto);
     }
