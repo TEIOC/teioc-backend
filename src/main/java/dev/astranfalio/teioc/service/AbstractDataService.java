@@ -1,5 +1,6 @@
 package dev.astranfalio.teioc.service;
 
+import dev.astranfalio.teioc.entity.Activatable;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -40,6 +41,24 @@ public abstract class AbstractDataService<T, ID, R extends JpaRepository<T, ID>>
     public T update(ID id, T entity) {
         findById(id);
         return repository.save(entity);
+    }
+
+    public T activate(ID id) {
+        T entity = findById(id);
+        if (entity instanceof Activatable) {
+            ((Activatable) entity).setStatus(true);
+            return repository.save(entity);
+        }
+        throw new UnsupportedOperationException("Entity does not support activation.");
+    }
+
+    public T deactivate(ID id) {
+        T entity = findById(id);
+        if (entity instanceof Activatable) {
+            ((Activatable) entity).setStatus(false);
+            return repository.save(entity);
+        }
+        throw new UnsupportedOperationException("Entity does not support deactivation.");
     }
 
     protected <E> void validate(E entity) {

@@ -17,7 +17,7 @@ import java.sql.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class InternEntity {
+public class InternEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,4 +43,8 @@ public class InternEntity {
 
     @Column(name="status")
     private boolean status;
+    @Override
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }

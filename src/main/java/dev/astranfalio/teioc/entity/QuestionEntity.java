@@ -12,7 +12,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class QuestionEntity {
+public class QuestionEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,4 +35,9 @@ public class QuestionEntity {
     @JoinColumn(name="correctAnswer_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AnswerEntity correctAnswer;
+
+    @Override
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }

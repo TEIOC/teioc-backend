@@ -59,14 +59,14 @@ public class InternController {
 
     @PutMapping("/{id}/activate")
     public ResponseEntity<InternDto> activateIntern(@PathVariable Long id) {
-        InternEntity internEntity = internDataService.activateIntern(id);
+        InternEntity internEntity = internDataService.activate(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
     }
 
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<InternDto> deactivateIntern(@PathVariable Long id) {
-        InternEntity internEntity = internDataService.deactivateIntern(id);
+        InternEntity internEntity = internDataService.deactivate(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
     }
