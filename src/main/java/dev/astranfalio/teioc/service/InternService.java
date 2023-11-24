@@ -21,4 +21,18 @@ public class InternService extends AbstractService<InternEntity, Long, InternRep
         }
     }
 
+    public InternEntity activateIntern(Long id) {
+        InternEntity internEntity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Intern with ID " + id + " not found."));
+        internEntity.setStatus(true);
+        return repository.save(internEntity);
+    }
+
+    public InternEntity deactivateIntern(Long id) {
+        InternEntity internEntity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Intern with ID " + id + " not found."));
+        internEntity.setStatus(false);
+        return repository.save(internEntity);
+    }
+
 }
