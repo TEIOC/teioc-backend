@@ -57,5 +57,19 @@ public class TopicController {
         TopicDto updatedDto = TopicDto.convertToDto(updatedEntity);
         return ResponseEntity.ok(updatedDto);
     }
+
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<TopicDto> activateTopic(@PathVariable Long id) {
+        TopicEntity topicEntity = topicDataService.activate(id);
+        TopicDto topicDto = TopicDto.convertToDto(topicEntity);
+        return ResponseEntity.ok(topicDto);
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<TopicDto> deactivateTopic(@PathVariable Long id) {
+        TopicEntity topicEntity = topicDataService.deactivate(id);
+        TopicDto topicDto = TopicDto.convertToDto(topicEntity);
+        return ResponseEntity.ok(topicDto);
+    }
 }
 

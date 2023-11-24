@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 
-public class TopicEntity {
+public class TopicEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,5 +22,10 @@ public class TopicEntity {
 
     @Column(name = "sortOrder", nullable = false)
     private Long sortOrder;
+
+    @Override
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 }
 

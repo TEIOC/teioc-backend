@@ -20,18 +20,6 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Long, S
         this.topicRepository = topicRepository;
     }
 
-    public SurveyEntity activateSurvey(Long id) {
-        SurveyEntity survey = findById(id);
-        survey.setStatus(true);
-        return save(survey);
-    }
-
-    public SurveyEntity deactivateSurvey(Long id) {
-        SurveyEntity survey = findById(id);
-        survey.setStatus(false);
-        return save(survey);
-    }
-
     public static SurveyEntity convertToEntity(SurveyDto surveyDto, TopicRepository topicRepository) {
         TopicEntity topic = surveyDto.getTopicId() != null
                 ? topicRepository.findById(surveyDto.getTopicId()).orElse(null)

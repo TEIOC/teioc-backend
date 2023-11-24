@@ -12,16 +12,4 @@ public class InternDataService extends AbstractDataService<InternEntity, Long, I
         super(repository, validator);
     }
 
-    public InternEntity activateIntern(Long id) {
-        InternEntity internEntity = findById(id);
-        internEntity.setStatus(true);
-        return repository.save(internEntity);
-    }
-
-    public InternEntity deactivateIntern(Long id) {
-        InternEntity internEntity = findById(id);
-        internEntity.setStatus(false);
-        return repository.save(internEntity);
-    }
-
 }
