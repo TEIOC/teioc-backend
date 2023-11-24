@@ -15,22 +15,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/interns")
 public class InternController {
-    private final InternDataService internService;
+    private final InternDataService internDataService;
 
     @Autowired
-    public InternController(InternDataService internService) {
-        this.internService = internService;
+    public InternController(InternDataService internDataService) {
+        this.internDataService = internDataService;
     }
     @GetMapping
     public List<InternDto> getAllInterns() {
-        return internService.findAll().stream()
+        return internDataService.findAll().stream()
                 .map(InternDto::convertToDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<InternDto> getInternById(@PathVariable Long id) {
-        InternEntity internEntity = internService.findById(id);
+        InternEntity internEntity = internDataService.findById(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
     }
@@ -38,35 +38,35 @@ public class InternController {
     @PostMapping
     public ResponseEntity<InternDto> addIntern(@Valid @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
-        InternEntity savedEntity = internService.save(internEntity);
+        InternEntity savedEntity = internDataService.save(internEntity);
         InternDto savedDto = InternDto.convertToDto(savedEntity);
         return ResponseEntity.ok(savedDto);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIntern(@PathVariable Long id) {
-        internService.deleteById(id);
+        internDataService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<InternDto> updateIntern(@PathVariable Long id, @Valid @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
-        InternEntity updatedEntity = internService.update(id, internEntity);
+        InternEntity updatedEntity = internDataService.update(id, internEntity);
         InternDto updatedDto = InternDto.convertToDto(updatedEntity);
         return ResponseEntity.ok(updatedDto);
     }
 
     @PutMapping("/{id}/activate")
     public ResponseEntity<InternDto> activateIntern(@PathVariable Long id) {
-        InternEntity internEntity = internService.activateIntern(id);
+        InternEntity internEntity = internDataService.activateIntern(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
     }
 
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<InternDto> deactivateIntern(@PathVariable Long id) {
-        InternEntity internEntity = internService.deactivateIntern(id);
+        InternEntity internEntity = internDataService.deactivateIntern(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
     }
