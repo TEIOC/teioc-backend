@@ -13,4 +13,13 @@ public class InternService extends AbstractService<InternEntity, Long, InternRep
         super(repository);
     }
 
+    public InternEntity updateIntern(Long id, InternEntity internEntity) {
+        if (repository.existsById(id)) {
+            internEntity.setId(id); // Assurez-vous que l'ID est correctement défini
+            return repository.save(internEntity);
+        } else {
+            throw new ResourceNotFoundException("Intern with ID " + id + " not found.");
+        }
+    }
+
 }
