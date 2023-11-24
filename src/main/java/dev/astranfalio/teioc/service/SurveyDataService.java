@@ -20,6 +20,14 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Long, S
         this.topicRepository = topicRepository;
     }
 
+    public SurveyEntity associateWithTopic(Long surveyId, Long topicId) {
+        SurveyEntity survey = findById(surveyId);
+        TopicEntity topic = topicRepository.findById(topicId)
+                .orElseThrow(() -> new ResourceNotFoundException("Topic not found with ID: " + topicId));
+        survey.setTopic(topic);
+        return save(survey);
+    }
+
     public static SurveyEntity convertToEntity(SurveyDto surveyDto, TopicRepository topicRepository) {
         TopicEntity topic = surveyDto.getTopicId() != null
                 ? topicRepository.findById(surveyDto.getTopicId()).orElse(null)
