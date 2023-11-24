@@ -27,17 +27,17 @@ public class PathwayAnswerEntity {
     private Integer answer_id;
 
     @ManyToOne
-    @JoinColumn(name = "intern_id", referencedColumnName = "id")
+    @JoinColumn(name = "intern_id", referencedColumnName = "id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private InternEntity intern;
 
     @ManyToOne
-    @JoinColumn(name = "survey_id", referencedColumnName = "id")
+    @JoinColumn(name = "survey_id", referencedColumnName = "id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SurveyEntity survey;
 
     @ManyToOne
-    @JoinColumn(name = "answer_id", referencedColumnName = "id")
+    @JoinColumn(name = "answer_id", referencedColumnName = "id", insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AnswerEntity answer;
 }
