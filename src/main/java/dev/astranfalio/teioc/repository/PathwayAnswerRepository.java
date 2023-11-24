@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface PathwayAnswerRepository extends JpaRepository<PathwayAnswerEntity, PathwayAnswerId> {
     List<PathwayAnswerEntity> findAllBySurvey_idAndIntern_id(Long surveyId, Long internId);
+    void deleteAllBySurvey_idAndIntern_id(Long surveyId, Long internId);
 }

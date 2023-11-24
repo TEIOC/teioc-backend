@@ -17,4 +17,8 @@ public class PathwayAnswerDataService extends AbstractDataService<PathwayAnswerE
     public List<PathwayAnswerEntity> findAllBySurvey_idAndIntern_id(Long surveyId, Long internId) {
         return repository.findAllBySurvey_idAndIntern_id(surveyId, internId);
     }
+
+    public void deleteAllBySurvey_idAndIntern_id(Long surveyId, Long internId) {
+        repository.deleteAllBySurvey_idAndIntern_id(surveyId, internId);
+    }
 }
