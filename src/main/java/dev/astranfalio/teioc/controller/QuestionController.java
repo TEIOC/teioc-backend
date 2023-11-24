@@ -42,6 +42,11 @@ public class QuestionController {
         return ResponseEntity.ok(questionDto);
     }
 
+    /*@GetMapping("/topics/{id}")
+    public List<QuestionDto> getQuestionsByTopic(@PathVariable Long topicId) {
+        return QuestionDataService.findByTopicId();
+    }*/
+
     @PostMapping
     public ResponseEntity<QuestionDto> addQuestion(@Valid @RequestBody QuestionDto questionDto) {
         QuestionEntity questionEntity = QuestionDataService.convertToEntity(questionDto, surveyRepository, answerRepository);
@@ -74,6 +79,13 @@ public class QuestionController {
     @PutMapping("/{id}/deactivate")
     public ResponseEntity<QuestionDto> deactivateQuestion(@PathVariable Long id) {
         QuestionEntity questionEntity = questionDataService.deactivate(id);
+        QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
+        return ResponseEntity.ok(questionDto);
+    }
+
+    @PutMapping("{id}/answers/{answerId}")
+    public ResponseEntity<QuestionDto> associateCorrectAnswerToQuestion(@PathVariable Long id, @PathVariable Long answerId) {
+        QuestionEntity questionEntity = questionDataService.associateCorrectAnswer(id, answerId);
         QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
         return ResponseEntity.ok(questionDto);
     }
