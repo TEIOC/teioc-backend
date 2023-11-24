@@ -2,15 +2,13 @@ package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.repository.InternRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import jakarta.validation.Validator;
+import org.springframework.stereotype.Service;
 
 @Service
-public class InternService extends AbstractService<InternEntity, Long, InternRepository> {
+public class InternDataService extends AbstractDataService<InternEntity, Long, InternRepository> {
 
-    @Autowired
-    public InternService(InternRepository repository, Validator validator) {
+    public InternDataService(InternRepository repository, Validator validator) {
         super(repository, validator);
     }
 
