@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/interns")
@@ -23,6 +25,17 @@ public class InternController {
         return internService.findAll().stream()
                 .map(InternDto::convertToDto)
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<InternDto> getInternById(@PathVariable Long id) {
+        Optional<InternEntity> internEntityOptional = internService.findById(id);
+        if (internEntityOptional.isPresent()) {
+            InternDto internDto = InternDto.convertToDto(internEntityOptional.get());
+            return ResponseEntity.ok(internDto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
