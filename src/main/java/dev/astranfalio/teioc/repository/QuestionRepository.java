@@ -1,9 +1,9 @@
 package dev.astranfalio.teioc.repository;
 
-import dev.astranfalio.teioc.entity.InternEntity;
+import dev.astranfalio.teioc.entity.QuestionEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 @Repository
-public interface InternRepository extends JpaRepository<InternEntity, Long> {
+public interface QuestionRepository extends JpaRepository<QuestionEntity, Integer> {
 
 }
