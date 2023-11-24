@@ -21,6 +21,9 @@ public class InternDto {
     @Email(message = "Invalid email format")
     private String email;
 
+    @NotNull(message = "Password cannot be null")
+    private String password;
+
     @NotNull(message = "Company cannot be null")
     private String company;
 
@@ -32,6 +35,7 @@ public class InternDto {
         return InternDto.builder()
                 .id(internEntity.getId())
                 .email(internEntity.getEmail())
+                .password(internEntity.getPassword())
                 .company(internEntity.getCompany())
                 .contactDetails(internEntity.getContactDetails())
                 .creationDate(internEntity.getCreationDate())
@@ -43,11 +47,11 @@ public class InternDto {
         return InternEntity.builder()
                 .id(internDto.getId())
                 .email(internDto.getEmail())
+                .password(internDto.getPassword())
                 .company(internDto.getCompany())
                 .contactDetails(internDto.getContactDetails())
                 .creationDate(internDto.getCreationDate())
                 .status(internDto.isStatus())
-                .password("test") // mot de passe par défaut
                 .build();
     }
 

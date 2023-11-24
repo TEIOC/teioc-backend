@@ -3,6 +3,7 @@ package dev.astranfalio.teioc.controller;
 import dev.astranfalio.teioc.dto.InternDto;
 import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.service.InternService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class InternController {
     }
 
     @PostMapping
-    public ResponseEntity<InternDto> addIntern(@RequestBody InternDto internDto) {
+    public ResponseEntity<InternDto> addIntern(@Valid @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
         InternEntity savedEntity = internService.save(internEntity);
         InternDto savedDto = InternDto.convertToDto(savedEntity);
@@ -49,7 +50,7 @@ public class InternController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InternDto> updateIntern(@PathVariable Long id, @RequestBody InternDto internDto) {
+    public ResponseEntity<InternDto> updateIntern(@PathVariable Long id, @Valid @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
         InternEntity updatedEntity = internService.update(id, internEntity);
         InternDto updatedDto = InternDto.convertToDto(updatedEntity);
