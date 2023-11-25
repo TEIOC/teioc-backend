@@ -3,6 +3,7 @@ package dev.astranfalio.teioc.service;
 import dev.astranfalio.teioc.dto.PathwayAnswerCreationDto;
 import dev.astranfalio.teioc.entity.*;
 import dev.astranfalio.teioc.repository.PathwayAnswerRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,9 @@ public class PathwayAnswerDataService extends AbstractDataService<PathwayAnswerE
         return repository.findAllBySurvey_idAndIntern_id(surveyId, internId);
     }
 
-    public void deleteAllBySurvey_idAndIntern_id(Long surveyId, Long internId) {
-        repository.deleteAllBySurvey_idAndIntern_id(surveyId, internId);
+    @Transactional
+    public void deleteBySurvey_idAndIntern_id(Long surveyId, Long internId) {
+        repository.deleteBySurvey_idAndIntern_id(surveyId, internId);
     }
 
     public PathwayAnswerEntity createPathwayAnswer(PathwayAnswerCreationDto pathwayAnswerCreationDto) {
