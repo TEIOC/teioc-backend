@@ -36,6 +36,16 @@ public class QuestionController {
         return ResponseEntity.ok(questionDto);
     }
 
+    @GetMapping("/topics/{id}")
+    public List<QuestionDto> getQuestionsByTopic(@PathVariable Integer id) {
+        return questionDataService.findByTopicId(id);
+    }
+
+    @GetMapping("/surveys/{id}")
+    public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
+        return questionDataService.findBySurveyId(id);
+    }
+
     @PostMapping
     public ResponseEntity<QuestionDto> addQuestion(@Valid @RequestBody QuestionDto questionDto) {
         QuestionEntity questionEntity = questionDataService.convertToEntity(questionDto);
@@ -71,5 +81,13 @@ public class QuestionController {
         QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
         return ResponseEntity.ok(questionDto);
     }
+
+    @PutMapping("{id}/answers/{answer_id}")
+    public ResponseEntity<QuestionDto> associateCorrectAnswerWithQuestion(@PathVariable Integer id, @PathVariable Integer answer_id) {
+        QuestionEntity questionEntity = questionDataService.associateWithCorrectAnswer(id, answer_id);
+        QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
+        return ResponseEntity.ok(questionDto);
+    }
+
 }
 

@@ -20,7 +20,7 @@ public class AnswerDto {
 
     private Boolean status;
     private Integer sortOrder;
-    private Integer questionId;
+    private Integer question_id;
 
     public static AnswerDto convertToDto(AnswerEntity answerEntity) {
         return AnswerDto.builder()
@@ -28,7 +28,7 @@ public class AnswerDto {
                 .label(answerEntity.getLabel())
                 .status(answerEntity.getStatus())
                 .sortOrder(answerEntity.getSortOrder())
-                .questionId(answerEntity.getQuestion() != null ? answerEntity.getQuestion().getId() : null)
+                .question_id(answerEntity.getQuestion() != null ? answerEntity.getQuestion().getId() : null)
                 .build();
     }
 }

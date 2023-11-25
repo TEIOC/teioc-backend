@@ -5,9 +5,12 @@ import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.entity.QuestionEntity;
 import dev.astranfalio.teioc.repository.AnswerRepository;
 import dev.astranfalio.teioc.repository.QuestionRepository;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import jakarta.validation.Validator;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AnswerDataService extends AbstractDataService<AnswerEntity, Integer, AnswerRepository> {
@@ -24,11 +27,19 @@ public class AnswerDataService extends AbstractDataService<AnswerEntity, Integer
         return questionRepository;
     }
 
+    public List<AnswerDto> findAnswersByQuestionId(Integer question_id) {
+        return repository.findAll()
+                .stream()
+                .map(AnswerDto::convertToDto)
+                .filter(answerDto -> answerDto.getQuestion_id() == question_id)
+                .collect(Collectors.toList());
+    }
+
     public static AnswerEntity convertToEntity(AnswerDto answerDto, QuestionRepository questionRepository) {
         QuestionEntity questionEntity = null;
-        if (answerDto.getQuestionId() != null) {
-            questionEntity = questionRepository.findById(answerDto.getQuestionId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Question not found with ID: " + answerDto.getQuestionId()));
+        if (answerDto.getQuestion_id() != null) {
+            questionEntity = questionRepository.findById(answerDto.getQuestion_id())
+                    .orElseThrow(() -> new ResourceNotFoundException("Question not found with ID: " + answerDto.getQuestion_id()));
         }
 
         return AnswerEntity.builder()
