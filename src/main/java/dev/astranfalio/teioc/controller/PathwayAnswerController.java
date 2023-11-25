@@ -1,11 +1,11 @@
 package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.dto.PathwayAnswerCreationDto;
+import dev.astranfalio.teioc.dto.PathwayAnswerDeletionDto;
+import dev.astranfalio.teioc.dto.PathwayAnswerDto;
 import dev.astranfalio.teioc.entity.PathwayAnswerEntity;
-import dev.astranfalio.teioc.repository.PathwayAnswerRepository;
 import dev.astranfalio.teioc.service.PathwayAnswerDataService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,19 +14,28 @@ import java.util.List;
 @RequestMapping("/pathwayanswers")
 public class PathwayAnswerController {
 
-    @Autowired
-    private PathwayAnswerRepository pathwayAnswerRepository;
-
     private PathwayAnswerDataService pathwayAnswerDataService;
 
     @GetMapping
-    public List<PathwayAnswerEntity> getPathwayAnswers() {
-        return pathwayAnswerRepository.findAll();
+    public List<PathwayAnswerDto> getPathwayAnswers() {
+        return pathwayAnswerDataService.findAll().stream()
+                .map(PathwayAnswerDto::convertToDto)
+                .toList();
     }
 
     @PostMapping
     @ResponseBody
-    public PathwayAnswerEntity createPathwayAnswer(PathwayAnswerCreationDto pathwayAnswerCreationDto) {
-        return pathwayAnswerDataService.createPathwayAnswer(pathwayAnswerCreationDto);
+    public PathwayAnswerDto createPathwayAnswer(PathwayAnswerCreationDto pathwayAnswerCreationDto) {
+        PathwayAnswerEntity pathwayAnswerEntity = pathwayAnswerDataService.createPathwayAnswer(pathwayAnswerCreationDto);
+        PathwayAnswerDto pathwayAnswerDto = PathwayAnswerDto.convertToDto(pathwayAnswerEntity);
+        return pathwayAnswerDto;
+    }
+
+    @DeleteMapping
+    @ResponseBody
+    public PathwayAnswerDto deletePathwayAnswer(PathwayAnswerDeletionDto pathwayAnswerDeletionDto) {
+        PathwayAnswerEntity pathwayAnswerEntity = pathwayAnswerDataService.deleteById(pathwayAnswerDeletionDto);
+        PathwayAnswerDto pathwayAnswerDto = PathwayAnswerDto.convertToDto(pathwayAnswerEntity);
+        return pathwayAnswerDto;
     }
 }
