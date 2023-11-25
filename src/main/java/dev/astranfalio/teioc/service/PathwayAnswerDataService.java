@@ -52,6 +52,9 @@ public class PathwayAnswerDataService extends AbstractDataService<PathwayAnswerE
                 .build();
         // fixme: Potentially add a "if (repository.existsById(pathwayAnswerId))"
         PathwayAnswerEntity pathwayAnswerEntity = this.findById(pathwayAnswerId);
+        if (!repository.existsById(pathwayAnswerId)) {
+            throw new ResourceNotFoundException("Entity not found for ID: " + pathwayAnswerId);
+        }
         repository.deleteById(pathwayAnswerId);
         return pathwayAnswerEntity;
     }
