@@ -6,37 +6,30 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name="pathway_answer")
-@IdClass(PathwayAnswerId.class)
+@Table(name = "pathway_answer")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class PathwayAnswerEntity {
-    @Id
-    @Column(name = "intern_id", nullable = false)
-    private Integer intern_id;
 
-    @Id
-    @Column(name = "survey_id", nullable = false)
-    private Integer survey_id;
-
-    @Id
-    @Column(name = "answer_id", nullable = false)
-    private Integer answer_id;
+    @EmbeddedId
+    private PathwayAnswerId id;
 
     @ManyToOne
+    @MapsId("intern_id")
     @JoinColumn(name = "intern_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private InternEntity intern;
 
     @ManyToOne
+    @MapsId("survey_id")
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private SurveyEntity survey;
 
     @ManyToOne
+    @MapsId("answer_id")
     @JoinColumn(name = "answer_id", referencedColumnName = "id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AnswerEntity answer;
