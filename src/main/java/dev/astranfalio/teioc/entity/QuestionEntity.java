@@ -15,7 +15,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class QuestionEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name="label", nullable = false)
     private String label;
