@@ -20,7 +20,7 @@ import java.sql.Date;
 public class InternEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @NotNull(message = "Email cannot be null")
     @Email(message = "Invalid email format")

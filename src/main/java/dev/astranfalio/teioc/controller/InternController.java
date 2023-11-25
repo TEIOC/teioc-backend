@@ -29,7 +29,7 @@ public class InternController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InternDto> getInternById(@PathVariable Long id) {
+    public ResponseEntity<InternDto> getInternById(@PathVariable Integer id) {
         InternEntity internEntity = internDataService.findById(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
@@ -44,13 +44,13 @@ public class InternController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIntern(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteIntern(@PathVariable Integer id) {
         internDataService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InternDto> updateIntern(@PathVariable Long id, @Valid @RequestBody InternDto internDto) {
+    public ResponseEntity<InternDto> updateIntern(@PathVariable Integer id, @Valid @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
         InternEntity updatedEntity = internDataService.update(id, internEntity);
         InternDto updatedDto = InternDto.convertToDto(updatedEntity);
@@ -58,14 +58,14 @@ public class InternController {
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<InternDto> activateIntern(@PathVariable Long id) {
+    public ResponseEntity<InternDto> activateIntern(@PathVariable Integer id) {
         InternEntity internEntity = internDataService.activate(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<InternDto> deactivateIntern(@PathVariable Long id) {
+    public ResponseEntity<InternDto> deactivateIntern(@PathVariable Integer id) {
         InternEntity internEntity = internDataService.deactivate(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return ResponseEntity.ok(internDto);
