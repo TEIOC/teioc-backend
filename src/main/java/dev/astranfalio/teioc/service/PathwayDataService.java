@@ -15,7 +15,8 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
 
     private final InternRepository internRepository;
     private final SurveyRepository surveyRepository;
-// Delete pathway revient à delete pathway answers aussi
+
+    // TODO Delete pathway revient à delete pathway answers aussi
     @Autowired
     public PathwayDataService(PathwayRepository pathwayRepository,
                               InternRepository internRepository,
