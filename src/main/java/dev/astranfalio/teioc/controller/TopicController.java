@@ -30,7 +30,7 @@ public class TopicController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TopicDto> getTopicById(@PathVariable Long id) {
+    public ResponseEntity<TopicDto> getTopicById(@PathVariable Integer id) {
         TopicEntity topicEntity = topicDataService.findById(id);
         TopicDto topicDto = TopicDto.convertToDto(topicEntity);
         return ResponseEntity.ok(topicDto);
@@ -45,13 +45,13 @@ public class TopicController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTopic(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTopic(@PathVariable Integer id) {
         topicDataService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TopicDto> updateTopic(@PathVariable Long id, @Valid @RequestBody TopicDto topicDto) {
+    public ResponseEntity<TopicDto> updateTopic(@PathVariable Integer id, @Valid @RequestBody TopicDto topicDto) {
         TopicEntity topicEntity = TopicDto.convertToEntity(topicDto);
         TopicEntity updatedEntity = topicDataService.update(id, topicEntity);
         TopicDto updatedDto = TopicDto.convertToDto(updatedEntity);
@@ -59,14 +59,14 @@ public class TopicController {
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<TopicDto> activateTopic(@PathVariable Long id) {
+    public ResponseEntity<TopicDto> activateTopic(@PathVariable Integer id) {
         TopicEntity topicEntity = topicDataService.activate(id);
         TopicDto topicDto = TopicDto.convertToDto(topicEntity);
         return ResponseEntity.ok(topicDto);
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<TopicDto> deactivateTopic(@PathVariable Long id) {
+    public ResponseEntity<TopicDto> deactivateTopic(@PathVariable Integer id) {
         TopicEntity topicEntity = topicDataService.deactivate(id);
         TopicDto topicDto = TopicDto.convertToDto(topicEntity);
         return ResponseEntity.ok(topicDto);

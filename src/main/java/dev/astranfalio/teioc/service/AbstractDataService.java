@@ -4,11 +4,13 @@ import dev.astranfalio.teioc.entity.Activatable;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Transactional
 public abstract class AbstractDataService<T, ID, R extends JpaRepository<T, ID>> {
 
     protected final R repository;

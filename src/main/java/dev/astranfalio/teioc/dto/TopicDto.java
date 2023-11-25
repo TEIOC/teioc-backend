@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TopicDto {
 
-    private Long id;
+    private Integer id;
 
     @NotNull(message = "Name cannot be null")
     private String name;
@@ -22,7 +22,7 @@ public class TopicDto {
     private boolean status;
 
     @NotNull(message = "Order cannot be null")
-    private Long sortOrder;
+    private Integer sortOrder;
 
     public static TopicDto convertToDto(TopicEntity topicEntity) {
         return TopicDto.builder()

@@ -15,7 +15,7 @@ import java.sql.Date;
 @NoArgsConstructor
 public class InternDto {
 
-    private Long id;
+    private Integer id;
 
     @NotNull(message = "Email cannot be null")
     @Email(message = "Invalid email format")

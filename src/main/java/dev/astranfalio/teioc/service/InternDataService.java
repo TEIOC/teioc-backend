@@ -6,7 +6,7 @@ import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
 
 @Service
-public class InternDataService extends AbstractDataService<InternEntity, Long, InternRepository> {
+public class InternDataService extends AbstractDataService<InternEntity, Integer, InternRepository> {
 
     public InternDataService(InternRepository repository, Validator validator) {
         super(repository, validator);

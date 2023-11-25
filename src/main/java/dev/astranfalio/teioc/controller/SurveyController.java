@@ -33,7 +33,7 @@ public class SurveyController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SurveyDto> getSurveyById(@PathVariable Long id) {
+    public ResponseEntity<SurveyDto> getSurveyById(@PathVariable Integer id) {
         SurveyEntity surveyEntity = surveyDataService.findById(id);
         SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
         return ResponseEntity.ok(surveyDto);
@@ -48,13 +48,13 @@ public class SurveyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSurvey(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSurvey(@PathVariable Integer id) {
         surveyDataService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SurveyDto> updateSurvey(@PathVariable Long id, @Valid @RequestBody SurveyDto surveyDto) {
+    public ResponseEntity<SurveyDto> updateSurvey(@PathVariable Integer id, @Valid @RequestBody SurveyDto surveyDto) {
         SurveyEntity surveyEntity = SurveyDataService.convertToEntity(surveyDto, topicRepository);
         SurveyEntity updatedEntity = surveyDataService.update(id, surveyEntity);
         SurveyDto updatedDto = SurveyDto.convertToDto(updatedEntity);
@@ -62,22 +62,22 @@ public class SurveyController {
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<SurveyDto> activateSurvey(@PathVariable Long id) {
+    public ResponseEntity<SurveyDto> activateSurvey(@PathVariable Integer id) {
         SurveyEntity surveyEntity = surveyDataService.activate(id);
         SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
         return ResponseEntity.ok(surveyDto);
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<SurveyDto> deactivateSurvey(@PathVariable Long id) {
+    public ResponseEntity<SurveyDto> deactivateSurvey(@PathVariable Integer id) {
         SurveyEntity surveyEntity = surveyDataService.deactivate(id);
         SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
         return ResponseEntity.ok(surveyDto);
     }
 
-    @PutMapping("/{surveyId}/topics/{topicId}")
-    public ResponseEntity<SurveyDto> associateSurveyWithTopic(@PathVariable Long surveyId, @PathVariable Long topicId) {
-        SurveyEntity surveyEntity = surveyDataService.associateWithTopic(surveyId, topicId);
+    @PutMapping("/{survey_id}/topics/{topic_id}")
+    public ResponseEntity<SurveyDto> associateSurveyWithTopic(@PathVariable Integer survey_id, @PathVariable Integer topic_id) {
+        SurveyEntity surveyEntity = surveyDataService.associateWithTopic(survey_id, topic_id);
         SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
         return ResponseEntity.ok(surveyDto);
     }

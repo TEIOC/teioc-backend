@@ -12,7 +12,7 @@ import lombok.*;
 public class TopicEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -21,7 +21,7 @@ public class TopicEntity implements Activatable {
     private boolean status;
 
     @Column(name = "sortOrder", nullable = false)
-    private Long sortOrder;
+    private Integer sortOrder;
 
     @Override
     public void setStatus(boolean status) {
