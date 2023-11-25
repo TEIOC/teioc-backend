@@ -20,8 +20,8 @@ public class QuestionDto {
 
     private Boolean status;
     private Integer sortOrder;
-    private Integer surveyId;
-    private Integer correctAnswerId;
+    private Integer survey_id;
+    private Integer correctAnswer_id;
 
     public static QuestionDto convertToDto(QuestionEntity questionEntity) {
         return QuestionDto.builder()
@@ -29,8 +29,8 @@ public class QuestionDto {
                 .label(questionEntity.getLabel())
                 .status(questionEntity.getStatus())
                 .sortOrder(questionEntity.getSortOrder())
-                .surveyId(questionEntity.getSurvey() != null ? questionEntity.getSurvey().getId() : null)
-                .correctAnswerId(questionEntity.getCorrectAnswer() != null ? questionEntity.getCorrectAnswer().getId() : null)
+                .survey_id(questionEntity.getSurvey() != null ? questionEntity.getSurvey().getId() : null)
+                .correctAnswer_id(questionEntity.getCorrectAnswer() != null ? questionEntity.getCorrectAnswer().getId() : null)
                 .build();
     }
 }

@@ -31,8 +31,8 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                 .label(questionDto.getLabel())
                 .status(questionDto.getStatus())
                 .sortOrder(questionDto.getSortOrder())
-                .survey(surveyRepository.findById(questionDto.getSurveyId()).orElse(null))
-                .correctAnswer(answerRepository.findById(questionDto.getCorrectAnswerId()).orElse(null))
+                .survey(surveyRepository.findById(questionDto.getSurvey_id()).orElse(null))
+                .correctAnswer(answerRepository.findById(questionDto.getCorrectAnswer_id()).orElse(null))
                 .build();
         return questionEntity;
     }
