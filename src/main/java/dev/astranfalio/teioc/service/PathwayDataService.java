@@ -30,6 +30,9 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
         Integer internIdInteger = Math.toIntExact(internId);
         Integer surveyIdInteger = Math.toIntExact(surveyId);
         PathwayId pathwayId = new PathwayId(internIdInteger, surveyIdInteger);
+        if (!repository.existsById(pathwayId)) {
+            throw new ResourceNotFoundException("Entity not found for ID: " + pathwayId);
+        }
         repository.deleteById(pathwayId);
     }
 
