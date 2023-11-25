@@ -15,7 +15,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class SurveyEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name="status")
     private Boolean status;

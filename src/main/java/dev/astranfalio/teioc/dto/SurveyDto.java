@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SurveyDto {
 
-    private Long id;
+    private Integer id;
     private Boolean status;
     private Integer sortOrder;
-    private Long topicId;
+    private Integer topicId;
 
     public static SurveyDto convertToDto(SurveyEntity surveyEntity) {
         return SurveyDto.builder()

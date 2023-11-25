@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import jakarta.validation.Validator;
 
 @Service
-public class SurveyDataService extends AbstractDataService<SurveyEntity, Long, SurveyRepository> {
+public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer, SurveyRepository> {
 
     private final TopicRepository topicRepository;
 
@@ -20,7 +20,7 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Long, S
         this.topicRepository = topicRepository;
     }
 
-    public SurveyEntity associateWithTopic(Long surveyId, Long topicId) {
+    public SurveyEntity associateWithTopic(Integer surveyId, Integer topicId) {
         SurveyEntity survey = findById(surveyId);
         TopicEntity topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new ResourceNotFoundException("Topic not found with ID: " + topicId));
