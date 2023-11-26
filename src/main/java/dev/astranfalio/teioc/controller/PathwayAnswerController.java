@@ -39,8 +39,7 @@ public class PathwayAnswerController {
 
     @PostMapping
     public ResponseEntity<PathwayAnswerDto> addPathwayAnswer(@Valid @RequestBody PathwayAnswerDto pathwayAnswerDto) {
-        PathwayAnswerEntity pathwayAnswerEntity = pathwayAnswerDataService.convertToEntity(pathwayAnswerDto);
-        PathwayAnswerEntity savedEntity = pathwayAnswerDataService.save(pathwayAnswerEntity);
+        PathwayAnswerEntity savedEntity = pathwayAnswerDataService.add(pathwayAnswerDto);
         PathwayAnswerDto savedDto = PathwayAnswerDto.convertToDto(savedEntity);
         return ResponseEntity.ok(savedDto);
     }
