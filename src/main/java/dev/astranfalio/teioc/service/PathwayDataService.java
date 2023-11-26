@@ -5,6 +5,7 @@ import dev.astranfalio.teioc.entity.PathwayEntity;
 import dev.astranfalio.teioc.entity.PathwayId;
 import dev.astranfalio.teioc.repository.InternRepository;
 import dev.astranfalio.teioc.repository.PathwayRepository;
+import dev.astranfalio.teioc.repository.PathwayAnswerRepository;
 import dev.astranfalio.teioc.repository.SurveyRepository;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,18 +16,24 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
 
     private final InternRepository internRepository;
     private final SurveyRepository surveyRepository;
+    private final PathwayAnswerRepository pathwayAnswerRepository ;
 
-    // TODO Delete pathway revient à delete pathway answers aussi
     @Autowired
     public PathwayDataService(PathwayRepository pathwayRepository,
                               InternRepository internRepository,
                               SurveyRepository surveyRepository,
+                              PathwayAnswerRepository pathwayAnswerRepository,
                               Validator validator) {
         super(pathwayRepository, validator);
         this.internRepository = internRepository;
         this.surveyRepository = surveyRepository;
+        this.pathwayAnswerRepository = pathwayAnswerRepository;
     }
 
+    public void deleteById(PathwayId id) {
+        pathwayAnswerRepository.deleteByInternIdAndSurveyId(id.getIntern_id(), id.getSurvey_id());
+        repository.deleteById(id);
+    }
     public PathwayEntity convertToEntity(PathwayDto pathwayDto) {
         PathwayId pathwayId = new PathwayId(pathwayDto.getIntern_id(), pathwayDto.getSurvey_id());
         PathwayEntity pathwayEntity = new PathwayEntity();

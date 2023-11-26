@@ -10,7 +10,6 @@ import dev.astranfalio.teioc.repository.SurveyRepository;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PathwayAnswerDataService extends AbstractDataService<PathwayAnswerEntity, PathwayAnswerId, PathwayAnswerRepository> {
@@ -42,7 +41,6 @@ TODO
     }
     deletebyid
  */
-    @Transactional
     public PathwayAnswerEntity convertToEntity(PathwayAnswerDto pathwayAnswerDto) {
         PathwayAnswerId pathwayAnswerId = new PathwayAnswerId(pathwayAnswerDto.getIntern_id(),
                 pathwayAnswerDto.getSurvey_id(),
