@@ -18,6 +18,8 @@ public class PathwayController {
 
     private final PathwayDataService pathwayDataService;
 
+    //TODO : afficher le score + stats
+
     @Autowired
     public PathwayController(PathwayDataService pathwayDataService) {
         this.pathwayDataService = pathwayDataService;
@@ -35,6 +37,15 @@ public class PathwayController {
         PathwayEntity pathwayEntity = pathwayDataService.findById(new PathwayId(intern_id, survey_id));
         PathwayDto pathwayDto = PathwayDto.convertToDto(pathwayEntity);
         return ResponseEntity.ok(pathwayDto);
+    }
+
+    @GetMapping("/intern/{internId}")
+    public ResponseEntity<List<PathwayDto>> getAllPathwaysForIntern(@PathVariable Integer internId) {
+        List<PathwayEntity> pathwayEntities = pathwayDataService.findAllByInternId(internId);
+        List<PathwayDto> pathwayDtos = pathwayEntities.stream()
+                .map(PathwayDto::convertToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(pathwayDtos);
     }
 
     @PostMapping
