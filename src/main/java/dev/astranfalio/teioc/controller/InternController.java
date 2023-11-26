@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 public class InternController {
     private final InternDataService internDataService;
 
+    //TODO : récupération mot de passe + envoi des mails
+
     @Autowired
     public InternController(InternDataService internDataService) {
         this.internDataService = internDataService;
