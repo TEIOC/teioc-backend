@@ -3,6 +3,7 @@ package dev.astranfalio.teioc.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +31,11 @@ public class InternEntity implements Activatable {
     @NotNull(message = "Password cannot be null")
     @Column(name="password", nullable = false)
     private String password;
+
+    @NotNull(message = "Name cannot be null")
+    @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
+    @Column(name="name", nullable = false)
+    private String name;
 
     @NotNull(message = "Company cannot be null")
     @Column(name="company")

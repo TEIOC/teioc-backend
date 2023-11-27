@@ -1,4 +1,4 @@
-package dev.astranfalio.teioc;
+package dev.astranfalio.teioc.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
