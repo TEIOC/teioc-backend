@@ -35,6 +35,7 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
 
         return SurveyEntity.builder()
                 .id(surveyDto.getId())
+                .name(surveyDto.getName())
                 .status(surveyDto.getStatus())
                 .sortOrder(surveyDto.getSortOrder())
                 .topic(topic)

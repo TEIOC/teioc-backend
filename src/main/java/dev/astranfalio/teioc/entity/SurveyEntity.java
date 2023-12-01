@@ -17,6 +17,9 @@ public class SurveyEntity implements Activatable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name="name")
+    private String name;
+
     @Column(name="status")
     private Boolean status;
 
