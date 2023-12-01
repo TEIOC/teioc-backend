@@ -23,6 +23,7 @@ public class QuestionController {
     }
 
     @GetMapping
+    @ResponseBody
     public List<QuestionDto> getAllQuestions() {
         return questionDataService.findAll().stream()
                 .map(QuestionDto::convertToDto)
@@ -30,64 +31,71 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<QuestionDto> getQuestionById(@PathVariable Integer id) {
+    @ResponseBody
+    public QuestionDto getQuestionById(@PathVariable Integer id) {
         QuestionEntity questionEntity = questionDataService.findById(id);
         QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
-        return ResponseEntity.ok(questionDto);
+        return questionDto;
     }
 
     @GetMapping("/topics/{id}")
+    @ResponseBody
     public List<QuestionDto> getQuestionsByTopic(@PathVariable Integer id) {
         return questionDataService.findByTopicId(id);
     }
 
     @GetMapping("/surveys/{id}")
+    @ResponseBody
     public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
         return questionDataService.findBySurveyId(id);
     }
 
     @PostMapping
-    public ResponseEntity<QuestionDto> addQuestion(@Valid @RequestBody QuestionDto questionDto) {
+    @ResponseBody
+    public QuestionDto addQuestion(@Valid @RequestBody QuestionDto questionDto) {
         QuestionEntity questionEntity = questionDataService.convertToEntity(questionDto);
         QuestionEntity savedEntity = questionDataService.save(questionEntity);
         QuestionDto savedDto = QuestionDto.convertToDto(savedEntity);
-        return ResponseEntity.ok(savedDto);
+        return savedDto;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuestion(@PathVariable Integer id) {
+    @ResponseBody
+    public void deleteQuestion(@PathVariable Integer id) {
         questionDataService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<QuestionDto> updateQuestion(@PathVariable Integer id, @Valid @RequestBody QuestionDto questionDto) {
+    @ResponseBody
+    public QuestionDto updateQuestion(@PathVariable Integer id, @Valid @RequestBody QuestionDto questionDto) {
         QuestionEntity questionEntity = questionDataService.convertToEntity(questionDto);
         QuestionEntity updatedEntity = questionDataService.update(id, questionEntity);
         QuestionDto updatedDto = QuestionDto.convertToDto(updatedEntity);
-        return ResponseEntity.ok(updatedDto);
+        return updatedDto;
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<QuestionDto> activateQuestion(@PathVariable Integer id) {
+    @ResponseBody
+    public QuestionDto activateQuestion(@PathVariable Integer id) {
         QuestionEntity questionEntity = questionDataService.activate(id);
         QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
-        return ResponseEntity.ok(questionDto);
+        return questionDto;
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<QuestionDto> deactivateQuestion(@PathVariable Integer id) {
+    @ResponseBody
+    public QuestionDto deactivateQuestion(@PathVariable Integer id) {
         QuestionEntity questionEntity = questionDataService.deactivate(id);
         QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
-        return ResponseEntity.ok(questionDto);
+        return questionDto;
     }
 
     @PutMapping("{id}/answers/{answer_id}")
-    public ResponseEntity<QuestionDto> associateCorrectAnswerWithQuestion(@PathVariable Integer id, @PathVariable Integer answer_id) {
+    @ResponseBody
+    public QuestionDto associateCorrectAnswerWithQuestion(@PathVariable Integer id, @PathVariable Integer answer_id) {
         QuestionEntity questionEntity = questionDataService.associateWithCorrectAnswer(id, answer_id);
         QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
-        return ResponseEntity.ok(questionDto);
+        return questionDto;
     }
 
 }
-
