@@ -1,5 +1,6 @@
 package dev.astranfalio.teioc.config;
 
+import dev.astranfalio.teioc.service.AuthEntryPointJwt;
 import dev.astranfalio.teioc.service.InternDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,11 +26,15 @@ public class WebSecurityConfig {
     @Autowired
     private InternDetailsService internDetailsService;
 
+    @Autowired
+    private AuthEntryPointJwt authEntryPointJwt;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(authEntryPointJwt))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/**").permitAll()
