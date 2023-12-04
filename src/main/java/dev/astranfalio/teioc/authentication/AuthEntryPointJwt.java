@@ -1,4 +1,4 @@
-package dev.astranfalio.teioc.service;
+package dev.astranfalio.teioc.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

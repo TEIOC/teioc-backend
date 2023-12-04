@@ -13,6 +13,7 @@ import java.util.Arrays;
 public class CorsConfig {
 
     @Bean
+//    public CorsFilter corsFilter() {
     public FilterRegistrationBean<CorsFilter> corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
@@ -29,6 +30,7 @@ public class CorsConfig {
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         return bean;
+//        return new CorsFilter(source);
     }
 }
 
