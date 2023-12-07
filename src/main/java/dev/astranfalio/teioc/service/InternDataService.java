@@ -12,4 +12,6 @@ public class InternDataService extends AbstractDataService<InternEntity, Integer
         super(repository, validator);
     }
 
+
+
 }
