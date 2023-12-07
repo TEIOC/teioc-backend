@@ -2,10 +2,8 @@ package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.config.JwtUtils;
 import dev.astranfalio.teioc.dto.LoginDto;
-import dev.astranfalio.teioc.service.AuthenticationService;
 import dev.astranfalio.teioc.service.InternDetailsService;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,13 +23,13 @@ public class AuthenticationController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public String authenticate(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<String> authenticate(@RequestBody LoginDto loginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         final UserDetails intern = internDetailsService.loadUserByUsername(loginDto.getEmail());
         if (intern != null) {
-            return ResponseEntity.ok(jwtUtils.generateToken(intern)).toString();
+            return ResponseEntity.ok(jwtUtils.generateToken(intern));
         }
-        return ResponseEntity.badRequest().toString();
+        return ResponseEntity.badRequest().build();
     }
 }
