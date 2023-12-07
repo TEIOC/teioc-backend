@@ -1,5 +1,6 @@
 package dev.astranfalio.teioc.config;
 
+import dev.astranfalio.teioc.service.InternDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,7 +19,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter{
 
-    private final UserDetailsService userDetailsService;
+    private final InternDetailsService internDetailsService;
     private final JwtUtils jwtUtils;
 
     @Override
@@ -39,7 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
         jwtToken = authHeader.substring(7);
         userEmail = jwtUtils.extractUsername(jwtToken);
         if(userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
+            UserDetails userDetails = internDetailsService.loadUserByUsername(userEmail);
             if(jwtUtils.isTokenValid(jwtToken, userDetails)){
                 UsernamePasswordAuthenticationToken authToken =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
