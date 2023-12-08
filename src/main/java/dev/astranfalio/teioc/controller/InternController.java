@@ -4,6 +4,7 @@ import dev.astranfalio.teioc.dto.InternDto;
 import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,15 +14,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/interns")
+@AllArgsConstructor
 public class InternController {
+
     private final InternDataService internDataService;
 
     //TODO : récupération mot de passe + envoi des mails
-
-    @Autowired
-    public InternController(InternDataService internDataService) {
-        this.internDataService = internDataService;
-    }
     @GetMapping
     @ResponseBody
     public List<InternDto> getAllInterns() {
