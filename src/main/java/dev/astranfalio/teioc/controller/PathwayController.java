@@ -5,6 +5,7 @@ import dev.astranfalio.teioc.entity.PathwayEntity;
 import dev.astranfalio.teioc.entity.PathwayId;
 import dev.astranfalio.teioc.service.PathwayDataService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,16 +14,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pathways")
+@AllArgsConstructor
 public class PathwayController {
 
     private final PathwayDataService pathwayDataService;
 
     //TODO : afficher le score + stats
-
-    @Autowired
-    public PathwayController(PathwayDataService pathwayDataService) {
-        this.pathwayDataService = pathwayDataService;
-    }
 
     @GetMapping
     @ResponseBody

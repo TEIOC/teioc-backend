@@ -5,6 +5,7 @@ import dev.astranfalio.teioc.entity.SurveyEntity;
 import dev.astranfalio.teioc.repository.TopicRepository;
 import dev.astranfalio.teioc.service.SurveyDataService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,16 +14,11 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/surveys")
+@AllArgsConstructor
 public class SurveyController {
 
     private final SurveyDataService surveyDataService;
     private final TopicRepository topicRepository;
-
-    @Autowired
-    public SurveyController(SurveyDataService surveyDataService, TopicRepository topicRepository) {
-        this.surveyDataService = surveyDataService;
-        this.topicRepository = topicRepository;
-    }
 
     @GetMapping
     @ResponseBody

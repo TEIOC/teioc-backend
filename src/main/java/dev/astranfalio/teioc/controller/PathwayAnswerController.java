@@ -5,6 +5,7 @@ import dev.astranfalio.teioc.entity.PathwayAnswerEntity;
 import dev.astranfalio.teioc.entity.PathwayAnswerId;
 import dev.astranfalio.teioc.service.PathwayAnswerDataService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,14 +14,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pathwayanswers")
+@AllArgsConstructor
 public class PathwayAnswerController {
 
     private final PathwayAnswerDataService pathwayAnswerDataService;
-
-    @Autowired
-    public PathwayAnswerController(PathwayAnswerDataService pathwayAnswerDataService) {
-        this.pathwayAnswerDataService = pathwayAnswerDataService;
-    }
 
     @GetMapping
     @ResponseBody

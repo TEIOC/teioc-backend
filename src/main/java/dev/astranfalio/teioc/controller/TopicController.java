@@ -4,6 +4,7 @@ import dev.astranfalio.teioc.dto.TopicDto;
 import dev.astranfalio.teioc.entity.TopicEntity;
 import dev.astranfalio.teioc.service.TopicDataService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +13,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/topics")
+@AllArgsConstructor
 public class TopicController {
 
     private final TopicDataService topicDataService;
-
-    @Autowired
-    public TopicController(TopicDataService topicDataService) {
-        this.topicDataService = topicDataService;
-    }
 
     @GetMapping
     @ResponseBody

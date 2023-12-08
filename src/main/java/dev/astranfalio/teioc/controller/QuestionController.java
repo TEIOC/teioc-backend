@@ -4,6 +4,7 @@ import dev.astranfalio.teioc.dto.QuestionDto;
 import dev.astranfalio.teioc.entity.QuestionEntity;
 import dev.astranfalio.teioc.service.QuestionDataService;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,14 +14,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/questions")
+@AllArgsConstructor
 public class QuestionController {
 
     private final QuestionDataService questionDataService;
-
-    @Autowired
-    public QuestionController(QuestionDataService questionDataService) {
-        this.questionDataService = questionDataService;
-    }
 
     @GetMapping
     @ResponseBody
