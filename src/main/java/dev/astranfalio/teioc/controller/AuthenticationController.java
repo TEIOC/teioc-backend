@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
@@ -23,13 +26,17 @@ public class AuthenticationController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/login")
-    public ResponseEntity<String> authenticate(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<?> authenticate(@RequestBody LoginDto loginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
         final UserDetails intern = internDetailsService.loadUserByUsername(loginDto.getEmail());
         if (intern != null) {
-            return ResponseEntity.ok(jwtUtils.generateToken(intern));
+            String token = jwtUtils.generateToken(intern);
+            Map<String, String> tokenMap = new HashMap<>();
+            tokenMap.put("token", token);
+            return ResponseEntity.ok(tokenMap);
+        } else {
+            return ResponseEntity.badRequest().body("Utilisateur introuvable ou mot de passe incorrect");
         }
-        return ResponseEntity.badRequest().build();
     }
 }
