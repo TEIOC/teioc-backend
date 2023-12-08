@@ -5,7 +5,6 @@ import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class InternController {
         this.internDataService = internDataService;
     }
     @GetMapping
+    @ResponseBody
     public List<InternDto> getAllInterns() {
         return internDataService.findAll().stream()
                 .map(InternDto::convertToDto)
@@ -31,45 +31,50 @@ public class InternController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<InternDto> getInternById(@PathVariable Integer id) {
+    @ResponseBody
+    public InternDto getInternById(@PathVariable Integer id) {
         InternEntity internEntity = internDataService.findById(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
-        return ResponseEntity.ok(internDto);
+        return internDto;
     }
 
     @PostMapping
-    public ResponseEntity<InternDto> addIntern(@Valid @RequestBody InternDto internDto) {
+    @ResponseBody
+    public InternDto addIntern(@Valid @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
         InternEntity savedEntity = internDataService.save(internEntity);
         InternDto savedDto = InternDto.convertToDto(savedEntity);
-        return ResponseEntity.ok(savedDto);
+        return savedDto;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteIntern(@PathVariable Integer id) {
+    @ResponseBody
+    public void deleteIntern(@PathVariable Integer id) {
         internDataService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<InternDto> updateIntern(@PathVariable Integer id, @Valid @RequestBody InternDto internDto) {
+    @ResponseBody
+    public InternDto updateIntern(@PathVariable Integer id, @Valid @RequestBody InternDto internDto) {
         InternEntity internEntity = InternDto.convertToEntity(internDto);
         InternEntity updatedEntity = internDataService.update(id, internEntity);
         InternDto updatedDto = InternDto.convertToDto(updatedEntity);
-        return ResponseEntity.ok(updatedDto);
+        return updatedDto;
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<InternDto> activateIntern(@PathVariable Integer id) {
+    @ResponseBody
+    public InternDto activateIntern(@PathVariable Integer id) {
         InternEntity internEntity = internDataService.activate(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
-        return ResponseEntity.ok(internDto);
+        return internDto;
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<InternDto> deactivateIntern(@PathVariable Integer id) {
+    @ResponseBody
+    public InternDto deactivateIntern(@PathVariable Integer id) {
         InternEntity internEntity = internDataService.deactivate(id);
         InternDto internDto = InternDto.convertToDto(internEntity);
-        return ResponseEntity.ok(internDto);
+        return internDto;
     }
 }

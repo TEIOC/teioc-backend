@@ -6,7 +6,6 @@ import dev.astranfalio.teioc.entity.PathwayAnswerId;
 import dev.astranfalio.teioc.service.PathwayAnswerDataService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +23,7 @@ public class PathwayAnswerController {
     }
 
     @GetMapping
+    @ResponseBody
     public List<PathwayAnswerDto> getAllPathwayAnswers() {
         return pathwayAnswerDataService.findAll().stream()
                 .map(PathwayAnswerDto::convertToDto)
@@ -31,34 +31,36 @@ public class PathwayAnswerController {
     }
 
     @GetMapping("/{intern_id}/{survey_id}/{answer_id}")
-    public ResponseEntity<PathwayAnswerDto> getPathwayAnswerById(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id) {
+    @ResponseBody
+    public PathwayAnswerDto getPathwayAnswerById(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id) {
         PathwayAnswerEntity pathwayAnswerEntity = pathwayAnswerDataService.findById(new PathwayAnswerId(intern_id, survey_id, answer_id));
         PathwayAnswerDto pathwayAnswerDto = PathwayAnswerDto.convertToDto(pathwayAnswerEntity);
-        return ResponseEntity.ok(pathwayAnswerDto);
+        return pathwayAnswerDto;
     }
 
     @PostMapping
-    public ResponseEntity<PathwayAnswerDto> addPathwayAnswer(@Valid @RequestBody PathwayAnswerDto pathwayAnswerDto) {
+    @ResponseBody
+    public PathwayAnswerDto addPathwayAnswer(@Valid @RequestBody PathwayAnswerDto pathwayAnswerDto) {
         PathwayAnswerEntity savedEntity = pathwayAnswerDataService.add(pathwayAnswerDto);
         PathwayAnswerDto savedDto = PathwayAnswerDto.convertToDto(savedEntity);
-        return ResponseEntity.ok(savedDto);
+        return savedDto;
     }
 
     @DeleteMapping("/{intern_id}/{survey_id}/{answer_id}")
-    public ResponseEntity<Void> deletePathwayAnswer(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id) {
+    @ResponseBody
+    public void deletePathwayAnswer(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id) {
         pathwayAnswerDataService.deleteById(new PathwayAnswerId(intern_id, survey_id, answer_id));
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{intern_id}/{survey_id}/{answer_id}")
-    public ResponseEntity<PathwayAnswerDto> updatePathwayAnswer(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id, @Valid @RequestBody PathwayAnswerDto pathwayAnswerDto) {
+    @ResponseBody
+    public PathwayAnswerDto updatePathwayAnswer(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id, @Valid @RequestBody PathwayAnswerDto pathwayAnswerDto) {
         pathwayAnswerDto.setIntern_id(intern_id);
         pathwayAnswerDto.setSurvey_id(survey_id);
         pathwayAnswerDto.setAnswer_id(answer_id);
         PathwayAnswerEntity pathwayAnswerEntity = pathwayAnswerDataService.convertToEntity(pathwayAnswerDto);
         PathwayAnswerEntity updatedEntity = pathwayAnswerDataService.update(new PathwayAnswerId(intern_id, survey_id, answer_id), pathwayAnswerEntity);
         PathwayAnswerDto updatedDto = PathwayAnswerDto.convertToDto(updatedEntity);
-        return ResponseEntity.ok(updatedDto);
+        return updatedDto;
     }
 }
-

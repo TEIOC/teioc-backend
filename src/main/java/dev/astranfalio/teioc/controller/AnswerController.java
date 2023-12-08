@@ -5,7 +5,6 @@ import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.service.AnswerDataService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +22,7 @@ public class AnswerController {
     }
 
     @GetMapping
+    @ResponseBody
     public List<AnswerDto> getAllAnswers() {
         return answerDataService.findAll().stream()
                 .map(AnswerDto::convertToDto)
@@ -30,52 +30,57 @@ public class AnswerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AnswerDto> getAnswerById(@PathVariable Integer id) {
+    @ResponseBody
+    public AnswerDto getAnswerById(@PathVariable Integer id) {
         AnswerEntity answerEntity = answerDataService.findById(id);
         AnswerDto answerDto = AnswerDto.convertToDto(answerEntity);
-        return ResponseEntity.ok(answerDto);
+        return answerDto;
     }
 
     @GetMapping("/questions/{id}")
+    @ResponseBody
     public List<AnswerDto> getAnswersByQuestionId(@PathVariable Integer id) {
         return answerDataService.findAnswersByQuestionId(id);
     }
 
 
     @PostMapping
-    public ResponseEntity<AnswerDto> addAnswer(@Valid @RequestBody AnswerDto answerDto) {
+    @ResponseBody
+    public AnswerDto addAnswer(@Valid @RequestBody AnswerDto answerDto) {
         AnswerEntity answerEntity = AnswerDataService.convertToEntity(answerDto, answerDataService.getQuestionRepository());
         AnswerEntity savedEntity = answerDataService.save(answerEntity);
         AnswerDto savedDto = AnswerDto.convertToDto(savedEntity);
-        return ResponseEntity.ok(savedDto);
+        return savedDto;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAnswer(@PathVariable Integer id) {
+    @ResponseBody
+    public void deleteAnswer(@PathVariable Integer id) {
         answerDataService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AnswerDto> updateAnswer(@PathVariable Integer id, @Valid @RequestBody AnswerDto answerDto) {
+    @ResponseBody
+    public AnswerDto updateAnswer(@PathVariable Integer id, @Valid @RequestBody AnswerDto answerDto) {
         AnswerEntity answerEntity = AnswerDataService.convertToEntity(answerDto, answerDataService.getQuestionRepository());
         AnswerEntity updatedEntity = answerDataService.update(id, answerEntity);
         AnswerDto updatedDto = AnswerDto.convertToDto(updatedEntity);
-        return ResponseEntity.ok(updatedDto);
+        return updatedDto;
     }
 
     @PutMapping("/{id}/activate")
-    public ResponseEntity<AnswerDto> activateAnswer(@PathVariable Integer id) {
+    @ResponseBody
+    public AnswerDto activateAnswer(@PathVariable Integer id) {
         AnswerEntity answerEntity = answerDataService.activate(id);
         AnswerDto answerDto = AnswerDto.convertToDto(answerEntity);
-        return ResponseEntity.ok(answerDto);
+        return answerDto;
     }
 
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<AnswerDto> deactivateAnswer(@PathVariable Integer id) {
+    @ResponseBody
+    public AnswerDto deactivateAnswer(@PathVariable Integer id) {
         AnswerEntity answerEntity = answerDataService.deactivate(id);
         AnswerDto answerDto = AnswerDto.convertToDto(answerEntity);
-        return ResponseEntity.ok(answerDto);
+        return answerDto;
     }
 }
-
