@@ -4,13 +4,11 @@ import dev.astranfalio.teioc.dto.InternDto;
 import dev.astranfalio.teioc.dto.InternEmailDto;
 import dev.astranfalio.teioc.service.EmailService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import dev.astranfalio.teioc.service.InternDataService;
-import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -40,7 +38,7 @@ public class EmailTestController {
         InternDto intern = internDataService.findInternByEmail(email);
         String to = email;
         String subject = "[TEIOC] Reset Password for your account!";
-        String body = "Here is the link to reset your account's password : https://localhost:8080/auth/reset-password/" + intern.getId() + " \n If you didn't ask for the change, report to administrator.";
+        String body = "Here is the link to reset your account's password : http://localhost:3000/reset-password/" + intern.getId() + " \n If you didn't ask for the change, report to administrator.";
         emailService.sendSimpleMessage(from,to,subject,body);
         return "Email sent successfully";
     }
