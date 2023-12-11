@@ -1,16 +1,10 @@
 package dev.astranfalio.teioc.controller;
 
-import dev.astranfalio.teioc.config.JwtUtils;
 import dev.astranfalio.teioc.dto.LoginDto;
-import dev.astranfalio.teioc.service.InternDataService;
-import dev.astranfalio.teioc.service.InternDetailsService;
+import dev.astranfalio.teioc.service.AuthenticationService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -18,23 +12,12 @@ import java.util.Map;
 @AllArgsConstructor
 public class AuthenticationController {
 
-    private InternDetailsService internDetailsService;
-    private InternDataService internDataService;
-    private final AuthenticationManager authenticationManager;
-    private JwtUtils jwtUtils;
+    private AuthenticationService authenticationService;
 
     @PostMapping(value = "/login")
     @ResponseBody
     public Map<String, String> authenticate(@RequestBody LoginDto loginDto) {
-        // fixme : Encapsulate this logic in a service
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
-        );
-        final UserDetails intern = internDetailsService.loadUserByUsername(loginDto.getEmail());
-        String token = jwtUtils.generateToken(intern);
-        Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token", token);
-        internDataService.reviseLastConnection(intern.getUsername());
+        Map<String, String> tokenMap = authenticationService.authenticate(loginDto.getEmail(), loginDto.getPassword());
         return tokenMap;
     }
 }
