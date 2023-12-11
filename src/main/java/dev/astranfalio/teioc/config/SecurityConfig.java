@@ -4,6 +4,7 @@ import dev.astranfalio.teioc.service.InternDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,6 +25,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    public static final String INTERN = "INTERN";
     private final JwtAuthFilter jwtAuthFilter;
     private final InternDetailsService internDetailsService;
 
@@ -33,18 +35,26 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/interns").permitAll()
-                        .requestMatchers("/interns/reset-password").permitAll()
-                        .requestMatchers("/interns/*/activate").permitAll()
-                        .requestMatchers("/surveys").permitAll()
-                        .requestMatchers("/topics").permitAll()
-                        .requestMatchers("/email/reset-password").permitAll()
-                        .requestMatchers("/email/activate").permitAll()
-                        .anyRequest().hasRole("INTERN")
+                        // PUBLIC ROUTES
+                        .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys", "/topics").permitAll()
+                        .requestMatchers(HttpMethod.POST, "interns", "/auth/login",
+                                "/auth/logout", "/interns/reset-password",
+                                "/email/reset-password", "/email/activate").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/interns/*/activate").permitAll()
+                        // PROTECTED ROUTES - INTERN ROLE
+                        .requestMatchers(HttpMethod.GET, "/questions",
+                                "/questions/*", "/questions/topics/*", "/questions/surveys/*",
+                                "/answers", "/answers/*", "/answers/questions/*",
+                                "/pathways", "/pathways/*/*", "/pathways/intern/*",
+                                "/surveys/*", "/topics/*", "/pathwayanswers",
+                                "/pathwayanswers/*/*").hasRole(INTERN)
+                        .requestMatchers(HttpMethod.POST, "/pathwayanswers").hasRole(INTERN)
+                        .requestMatchers(HttpMethod.PUT, "/interns/*/deactivate", "/pathwayanswers/*/*/*").hasRole(INTERN)
+                        .requestMatchers( HttpMethod.DELETE, "/pathwayanswers/*/*/*").hasRole(INTERN)
+                        // ADMIN FULL ACCESS (Not implemented yet)
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-//                .formLogin(form -> form.loginProcessingUrl("/login").permitAll())
                 .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout")).permitAll())
                 .httpBasic(withDefaults());
         return http.build();
@@ -55,7 +65,7 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-   @Bean
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
         authenticationProvider.setUserDetailsService(internDetailsService);
