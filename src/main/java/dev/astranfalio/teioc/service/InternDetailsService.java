@@ -1,10 +1,7 @@
 package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.entity.InternEntity;
-import dev.astranfalio.teioc.entity.PathwayAnswerEntity;
-import dev.astranfalio.teioc.entity.PathwayAnswerId;
 import dev.astranfalio.teioc.repository.InternRepository;
-import dev.astranfalio.teioc.repository.PathwayAnswerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,7 +32,7 @@ public class InternDetailsService extends AbstractDataService<InternEntity, Inte
         if (intern == null) {
             throw new ResourceNotFoundException("Utilisateur non trouvé avec l'e-mail: " + email);
         }
-        return new User(intern.getEmail(), intern.getPassword(), getGrantedAuthorities("intern"));
+        return new User(intern.getEmail(), intern.getPassword(), getGrantedAuthorities("INTERN"));
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(String role) {
