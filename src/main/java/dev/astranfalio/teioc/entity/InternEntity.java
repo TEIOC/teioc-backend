@@ -47,8 +47,12 @@ public class InternEntity implements Activatable {
     @Column(name="creationDate")
     private Date creationDate;
 
+    @Column(name="lastConnection")
+    private Date lastConnection;
+
     @Column(name="status")
     private boolean status;
+
     @Override
     public void setStatus(boolean status) {
         this.status = status;

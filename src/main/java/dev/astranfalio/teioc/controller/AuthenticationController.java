@@ -2,6 +2,7 @@ package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.config.JwtUtils;
 import dev.astranfalio.teioc.dto.LoginDto;
+import dev.astranfalio.teioc.service.InternDataService;
 import dev.astranfalio.teioc.service.InternDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,12 +19,14 @@ import java.util.Map;
 public class AuthenticationController {
 
     private InternDetailsService internDetailsService;
+    private InternDataService internDataService;
     private final AuthenticationManager authenticationManager;
     private JwtUtils jwtUtils;
 
     @PostMapping(value = "/login")
     @ResponseBody
     public Map<String, String> authenticate(@RequestBody LoginDto loginDto) {
+        // fixme : Encapsulate this logic in a service
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
         );
@@ -31,6 +34,7 @@ public class AuthenticationController {
         String token = jwtUtils.generateToken(intern);
         Map<String, String> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
+        internDataService.reviseLastConnection(intern.getUsername());
         return tokenMap;
     }
 }

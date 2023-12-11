@@ -1,10 +1,8 @@
 package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.entity.InternEntity;
-import dev.astranfalio.teioc.entity.PathwayAnswerEntity;
-import dev.astranfalio.teioc.entity.PathwayAnswerId;
 import dev.astranfalio.teioc.repository.InternRepository;
-import dev.astranfalio.teioc.repository.PathwayAnswerRepository;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
-import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +27,7 @@ public class InternDetailsService extends AbstractDataService<InternEntity, Inte
     }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        // fixme: Refrain from using internRepository here, use internDataService instead.
         InternEntity intern = internRepository.findByEmail(email);
         if (intern == null) {
             throw new ResourceNotFoundException("Utilisateur non trouvé avec l'e-mail: " + email);
