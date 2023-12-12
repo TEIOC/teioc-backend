@@ -28,10 +28,9 @@ public class InternDetailsService extends AbstractDataService<InternEntity, Inte
     }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        InternEntity intern = internRepository.findByEmail(email);
-        if (intern == null) {
-            throw new ResourceNotFoundException("Utilisateur non trouvé avec l'e-mail: " + email);
-        }
+        InternEntity intern = internRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
+
         return new User(intern.getEmail(), intern.getPassword(), getGrantedAuthorities("INTERN"));
     }
 

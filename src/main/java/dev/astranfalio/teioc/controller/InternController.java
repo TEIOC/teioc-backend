@@ -35,6 +35,14 @@ public class InternController {
         return internDto;
     }
 
+    @GetMapping("/email/{email}")
+    @ResponseBody
+    public InternDto getInternByEmail(@PathVariable String email) {
+        InternEntity internEntity = internDataService.findInternByEmail(email);
+        return InternDto.convertToDto(internEntity);
+    }
+
+
     @PostMapping
     @ResponseBody
     public InternDto addIntern(@Valid @RequestBody InternDto internDto) {
@@ -47,12 +55,10 @@ public class InternController {
     @PostMapping("/reset-password")
     @ResponseBody
     public InternDto resetPassword(@RequestBody LoginDto loginDto) {
-        InternDto internDto = internDataService.findInternByEmail(loginDto.getEmail());
-        internDto.setPassword(loginDto.getPassword());
-        InternEntity internEntity = InternDto.convertToEntity(internDto);
+        InternEntity internEntity = internDataService.findInternByEmail(loginDto.getEmail());
+        internEntity.setPassword(loginDto.getPassword());
         InternEntity updatedEntity = internDataService.update(internEntity.getId(), internEntity);
-        InternDto updatedDto = InternDto.convertToDto(updatedEntity);
-        return updatedDto;
+        return InternDto.convertToDto(updatedEntity);
     }
 
     @DeleteMapping("/{id}")
