@@ -4,6 +4,7 @@ import dev.astranfalio.teioc.service.InternDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,19 +25,35 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    public static final String INTERN = "INTERN";
     private final JwtAuthFilter jwtAuthFilter;
     private final InternDetailsService internDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/interns/**").permitAll()
-                        .requestMatchers("/email/reset-password").permitAll()
-                        .requestMatchers("/email/activate").permitAll()
+                        // PUBLIC ROUTES
+                        .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys", "/topics").permitAll()
+                        .requestMatchers(HttpMethod.POST, "interns", "/auth/login",
+                                "/auth/logout", "/interns/reset-password",
+                                "/email/reset-password", "/email/activate").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/interns/*/activate").permitAll()
+                        // PROTECTED ROUTES - INTERN ROLE
+                        .requestMatchers(HttpMethod.GET, "/questions",
+                                "/questions/*", "/questions/topics/*", "/questions/surveys/*",
+                                "/answers", "/answers/*", "/answers/questions/*",
+                                "/pathways", "/pathways/*/*", "/pathways/intern/*",
+                                "/surveys/*", "/topics/*", "/pathwayanswers",
+                                "/pathwayanswers/*/*").hasRole(INTERN)
+                        .requestMatchers(HttpMethod.POST, "/pathwayanswers").hasRole(INTERN)
+                        .requestMatchers(HttpMethod.PUT, "/interns/*/deactivate", "/pathwayanswers/*/*/*").hasRole(INTERN)
+                        .requestMatchers( HttpMethod.DELETE, "/pathwayanswers/*/*/*").hasRole(INTERN)
+                        // ADMIN FULL ACCESS (Not implemented yet)
+//                        .anyRequest().hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
