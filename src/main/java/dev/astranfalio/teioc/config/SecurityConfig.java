@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // PUBLIC ROUTES
                         .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys", "/topics").permitAll()
-                        .requestMatchers(HttpMethod.POST, "interns", "/auth/login",
+                        .requestMatchers(HttpMethod.POST, "/interns", "/auth/login",
                                 "/auth/logout", "/interns/reset-password",
                                 "/email/reset-password", "/email/activate").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/interns/*/activate").permitAll()
