@@ -2,6 +2,7 @@ package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.repository.InternRepository;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,10 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
-import jakarta.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class InternDetailsService extends AbstractDataService<InternEntity, Integer, InternRepository> implements UserDetailsService  {
@@ -28,10 +28,11 @@ public class InternDetailsService extends AbstractDataService<InternEntity, Inte
     }
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        InternEntity intern = internRepository.findByEmail(email);
-        if (intern == null) {
+        Optional<InternEntity> optionalIntern = internRepository.findByEmail(email);
+        if (!optionalIntern.isPresent()) {
             throw new ResourceNotFoundException("Utilisateur non trouvé avec l'e-mail: " + email);
         }
+        InternEntity intern = optionalIntern.get();
         return new User(intern.getEmail(), intern.getPassword(), getGrantedAuthorities("INTERN"));
     }
 
