@@ -1,11 +1,13 @@
 package dev.astranfalio.teioc.controller;
 
+import dev.astranfalio.teioc.dto.CompletedSurveyDetailsDto;
 import dev.astranfalio.teioc.dto.PathwayAnswerDto;
 import dev.astranfalio.teioc.entity.PathwayAnswerEntity;
 import dev.astranfalio.teioc.entity.PathwayAnswerId;
 import dev.astranfalio.teioc.service.PathwayAnswerDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,6 +34,12 @@ public class PathwayAnswerController {
         PathwayAnswerEntity pathwayAnswerEntity = pathwayAnswerDataService.findById(new PathwayAnswerId(intern_id, survey_id, answer_id));
         PathwayAnswerDto pathwayAnswerDto = PathwayAnswerDto.convertToDto(pathwayAnswerEntity);
         return pathwayAnswerDto;
+    }
+
+    @GetMapping("/completed/{intern_id}/{survey_id}")
+    public ResponseEntity<List<CompletedSurveyDetailsDto>> getCompletedSurveyDetails(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
+        List<CompletedSurveyDetailsDto> details = pathwayAnswerDataService.getCompletedSurveyDetails(intern_id, survey_id);
+        return ResponseEntity.ok(details);
     }
 
     @PostMapping
