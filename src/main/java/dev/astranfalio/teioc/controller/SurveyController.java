@@ -3,6 +3,7 @@ package dev.astranfalio.teioc.controller;
 import dev.astranfalio.teioc.dto.SurveyDto;
 import dev.astranfalio.teioc.entity.SurveyEntity;
 import dev.astranfalio.teioc.repository.TopicRepository;
+import dev.astranfalio.teioc.service.PathwayDataService;
 import dev.astranfalio.teioc.service.SurveyDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class SurveyController {
 
     private final SurveyDataService surveyDataService;
     private final TopicRepository topicRepository;
+    private final PathwayDataService pathwayDataService;
 
     @GetMapping
     @ResponseBody
@@ -32,6 +34,21 @@ public class SurveyController {
         SurveyEntity surveyEntity = surveyDataService.findById(id);
         SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
         return surveyDto;
+    }
+
+    @GetMapping("/remaining-surveys/{intern_id}")
+    @ResponseBody
+    public List<SurveyDto> getRemainingSurveysForIntern(@PathVariable("intern_id") Integer intern_id) {
+        List<Integer> displayedSurveyIds = pathwayDataService.findAllByInternId(intern_id)
+                .stream()
+                .map(pathway -> pathway.getSurvey().getId())
+                .collect(Collectors.toList());
+        List<SurveyEntity> allSurveys = surveyDataService.findAll();
+        List<SurveyDto> remainingSurveys = allSurveys.stream()
+                .filter(survey -> !displayedSurveyIds.contains(survey.getId()))
+                .map(SurveyDto::convertToDto)
+                .collect(Collectors.toList());
+        return remainingSurveys;
     }
 
     @PostMapping
