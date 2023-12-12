@@ -36,19 +36,19 @@ public class SurveyController {
         return surveyDto;
     }
 
-    @GetMapping("/remaining-surveys/{intern_id}")
+    @GetMapping("/available-surveys/{intern_id}")
     @ResponseBody
-    public List<SurveyDto> getRemainingSurveysForIntern(@PathVariable("intern_id") Integer intern_id) {
+    public List<SurveyDto> getAvailableSurveysForIntern(@PathVariable("intern_id") Integer intern_id) {
         List<Integer> displayedSurveyIds = pathwayDataService.findAllByInternId(intern_id)
                 .stream()
                 .map(pathway -> pathway.getSurvey().getId())
                 .collect(Collectors.toList());
         List<SurveyEntity> allSurveys = surveyDataService.findAll();
-        List<SurveyDto> remainingSurveys = allSurveys.stream()
+        List<SurveyDto> availableSurveys = allSurveys.stream()
                 .filter(survey -> !displayedSurveyIds.contains(survey.getId()))
                 .map(SurveyDto::convertToDto)
                 .collect(Collectors.toList());
-        return remainingSurveys;
+        return availableSurveys;
     }
 
     @PostMapping
