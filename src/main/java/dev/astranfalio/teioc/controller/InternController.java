@@ -1,6 +1,7 @@
 package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.dto.InternDto;
+import dev.astranfalio.teioc.dto.LoginDto;
 import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
@@ -18,7 +19,6 @@ public class InternController {
 
     private final InternDataService internDataService;
 
-    //TODO : récupération mot de passe + envoi des mails
     @GetMapping
     @ResponseBody
     public List<InternDto> getAllInterns() {
@@ -42,6 +42,17 @@ public class InternController {
         InternEntity savedEntity = internDataService.save(internEntity);
         InternDto savedDto = InternDto.convertToDto(savedEntity);
         return savedDto;
+    }
+
+    @PostMapping("/reset-password")
+    @ResponseBody
+    public InternDto resetPassword(@RequestBody LoginDto loginDto) {
+        InternDto internDto = internDataService.findInternByEmail(loginDto.getEmail());
+        internDto.setPassword(loginDto.getPassword());
+        InternEntity internEntity = InternDto.convertToEntity(internDto);
+        InternEntity updatedEntity = internDataService.update(internEntity.getId(), internEntity);
+        InternDto updatedDto = InternDto.convertToDto(updatedEntity);
+        return updatedDto;
     }
 
     @DeleteMapping("/{id}")
