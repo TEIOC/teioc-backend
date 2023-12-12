@@ -6,8 +6,6 @@ import dev.astranfalio.teioc.repository.InternRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class AuthenticationService {
 
@@ -15,14 +13,12 @@ public class AuthenticationService {
     private InternRepository internRepository;
 
     public InternEntity authenticate(LoginDto loginDto) {
-        Optional<InternEntity> optionalIntern = internRepository.findByEmail(loginDto.getEmail());
-        if (optionalIntern.isPresent()) {
-            InternEntity intern = optionalIntern.get();
-            if (intern.getPassword().equals(loginDto.getPassword())) {
-                return intern;
-            }
+        InternEntity intern = internRepository.findByEmail(loginDto.getEmail());
+        if (intern != null && intern.getPassword().equals(loginDto.getPassword())) {
+            return intern;
+        } else {
+            throw new RuntimeException("Invalid credentials");
         }
-        throw new RuntimeException("Invalid credentials");
     }
 }
 

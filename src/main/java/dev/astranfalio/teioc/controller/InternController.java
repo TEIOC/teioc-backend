@@ -18,6 +18,7 @@ public class InternController {
 
     private final InternDataService internDataService;
 
+    //TODO : récupération mot de passe + envoi des mails
     @GetMapping
     @ResponseBody
     public List<InternDto> getAllInterns() {
@@ -30,14 +31,6 @@ public class InternController {
     @ResponseBody
     public InternDto getInternById(@PathVariable Integer id) {
         InternEntity internEntity = internDataService.findById(id);
-        InternDto internDto = InternDto.convertToDto(internEntity);
-        return internDto;
-    }
-
-    @GetMapping("/profile")
-    @ResponseBody
-    public InternDto getInternByEmail(@RequestParam String email) {
-        InternEntity internEntity = internDataService.findByEmail(email);
         InternDto internDto = InternDto.convertToDto(internEntity);
         return internDto;
     }
