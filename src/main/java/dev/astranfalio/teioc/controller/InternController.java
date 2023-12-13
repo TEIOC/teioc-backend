@@ -69,11 +69,9 @@ public class InternController {
 
     @PutMapping("/{id}")
     @ResponseBody
-    public InternDto updateIntern(@PathVariable Integer id, @Valid @RequestBody InternDto internDto) {
-        InternEntity internEntity = InternDto.convertToEntity(internDto);
-        InternEntity updatedEntity = internDataService.update(id, internEntity);
-        InternDto updatedDto = InternDto.convertToDto(updatedEntity);
-        return updatedDto;
+    public InternDto updateIntern(@PathVariable Integer id, @RequestBody InternDto internDto) {
+        InternEntity updatedEntity = internDataService.update(id, internDto);
+        return InternDto.convertToDto(updatedEntity);
     }
 
     @PutMapping("/{id}/activate")
