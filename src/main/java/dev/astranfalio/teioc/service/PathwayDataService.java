@@ -11,6 +11,7 @@ import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.List;
 
 @Service
@@ -41,6 +42,14 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
     public void deleteById(PathwayId id) {
         pathwayAnswerRepository.deleteByInternIdAndSurveyId(id.getIntern_id(), id.getSurvey_id());
         repository.deleteById(id);
+    }
+
+    public PathwayDto addPathway(PathwayDto pathwayDto) {
+        PathwayEntity pathwayEntity = convertToEntity(pathwayDto);
+        pathwayEntity.setScore(0);
+        pathwayEntity.setDuration(Time.valueOf("00:00:00"));
+        PathwayEntity savedEntity = pathwayRepository.save(pathwayEntity);
+        return PathwayDto.convertToDto(savedEntity);
     }
     public PathwayEntity convertToEntity(PathwayDto pathwayDto) {
         PathwayId pathwayId = new PathwayId(pathwayDto.getIntern_id(), pathwayDto.getSurvey_id());

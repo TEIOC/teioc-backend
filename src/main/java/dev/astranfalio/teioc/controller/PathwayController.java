@@ -49,10 +49,7 @@ public class PathwayController {
     @PostMapping
     @ResponseBody
     public PathwayDto addPathway(@Valid @RequestBody PathwayDto pathwayDto) {
-        PathwayEntity pathwayEntity = pathwayDataService.convertToEntity(pathwayDto);
-        PathwayEntity savedEntity = pathwayDataService.save(pathwayEntity);
-        PathwayDto savedDto = PathwayDto.convertToDto(savedEntity);
-        return savedDto;
+        return pathwayDataService.addPathway(pathwayDto);
     }
 
     @DeleteMapping("/{intern_id}/{survey_id}")
