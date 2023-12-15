@@ -1,6 +1,8 @@
 package dev.astranfalio.teioc.service;
 
+import dev.astranfalio.teioc.dto.AnswerDto;
 import dev.astranfalio.teioc.dto.QuestionDto;
+import dev.astranfalio.teioc.dto.QuestionWithAnswersDto;
 import dev.astranfalio.teioc.dto.SurveyDto;
 import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.entity.QuestionEntity;
@@ -19,15 +21,17 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
 
     private final SurveyRepository surveyRepository;
     private final AnswerRepository answerRepository;
+    private final AnswerDataService answerDataService;
 
     @Autowired
     public QuestionDataService(QuestionRepository questionRepository,
                                SurveyRepository surveyRepository,
                                AnswerRepository answerRepository,
-                               Validator validator) {
+                               Validator validator, AnswerDataService answerDataService) {
         super(questionRepository, validator);
         this.surveyRepository = surveyRepository;
         this.answerRepository = answerRepository;
+        this.answerDataService = answerDataService;
     }
 
     public QuestionEntity associateWithCorrectAnswer(Integer id, Integer answer_id) {
@@ -72,6 +76,16 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                 .correctAnswer(answerRepository.findById(questionDto.getCorrectAnswer_id()).orElse(null))
                 .build();
         return questionEntity;
+    }
+
+    public List<QuestionWithAnswersDto> findQuestionsWithAnswersBySurveyId(Integer survey_id) {
+        return repository.findBySurveyId(survey_id)
+                .stream()
+                .map(questionEntity -> {
+                    List<AnswerDto> answerDtos = answerDataService.findAnswersByQuestionId(questionEntity.getId());
+                    return new QuestionWithAnswersDto(questionEntity.getId(), questionEntity.getLabel(), answerDtos);
+                })
+                .collect(Collectors.toList());
     }
 }
 
