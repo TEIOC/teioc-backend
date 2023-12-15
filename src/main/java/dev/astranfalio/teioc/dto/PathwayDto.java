@@ -19,11 +19,14 @@ public class PathwayDto {
     private Time duration;
 
     public static PathwayDto convertToDto(PathwayEntity pathwayEntity) {
+        Integer score = pathwayEntity.getScore() != null ? pathwayEntity.getScore() : 0;
+        Time duration = pathwayEntity.getDuration() != null ? pathwayEntity.getDuration() : Time.valueOf("00:00:00");
+
         return PathwayDto.builder()
                 .intern_id(pathwayEntity.getIntern() != null ? pathwayEntity.getIntern().getId() : null)
                 .survey_id(pathwayEntity.getSurvey() != null ? pathwayEntity.getSurvey().getId() : null)
-                .score(pathwayEntity.getScore())
-                .duration(pathwayEntity.getDuration())
+                .score(score)
+                .duration(duration)
                 .build();
     }
 }
