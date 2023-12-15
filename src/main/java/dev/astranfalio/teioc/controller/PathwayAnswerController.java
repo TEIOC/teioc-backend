@@ -67,4 +67,13 @@ public class PathwayAnswerController {
         PathwayAnswerDto updatedDto = PathwayAnswerDto.convertToDto(updatedEntity);
         return updatedDto;
     }
+
+    @PostMapping("/save-answers")
+    @ResponseBody
+    public ResponseEntity<?> saveInternAnswers(@RequestBody List<PathwayAnswerDto> answers) {
+        for (PathwayAnswerDto answer : answers) {
+            pathwayAnswerDataService.add(answer);
+        }
+        return ResponseEntity.ok().build();
+    }
 }
