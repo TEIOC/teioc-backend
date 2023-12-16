@@ -50,8 +50,12 @@ public class PathwayController {
     @PostMapping
     @ResponseBody
     public PathwayDto addPathway(@Valid @RequestBody PathwayDto pathwayDto) {
+        // Log the received duration
+        System.out.println("Received Duration from Frontend: " + pathwayDto.getDuration());
+
         return pathwayDataService.addPathway(pathwayDto);
     }
+
 
     @DeleteMapping("/{intern_id}/{survey_id}")
     @ResponseBody
@@ -67,4 +71,15 @@ public class PathwayController {
         PathwayEntity updatedEntity = pathwayDataService.updatePathway(intern_id, survey_id, duration);
         return PathwayDto.convertToDto(updatedEntity);
     }
+
+    @PutMapping("/{intern_id}/{survey_id}/update-score")
+    @ResponseBody
+    public PathwayDto updatePathwayScore(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
+        // Call a method to update the pathway's score here
+        pathwayDataService.updatePathwayScore(intern_id, survey_id);
+
+        // Fetch and return the updated pathway details
+        return getPathwayById(intern_id, survey_id);
+    }
+
 }

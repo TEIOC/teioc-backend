@@ -48,11 +48,21 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
 
     public PathwayDto addPathway(PathwayDto pathwayDto) {
         PathwayEntity pathwayEntity = convertToEntity(pathwayDto);
-        pathwayEntity.setScore(0);
-        pathwayEntity.setDuration(Time.valueOf("00:00:00"));
+
+        // Calculate the score based on selected answers
+        int score = calculateScore(pathwayDto.getIntern_id(), pathwayDto.getSurvey_id());
+        pathwayEntity.setScore(score);
+
+        // Set the duration from pathwayDto if it's provided and not null
+        if (pathwayDto.getDuration() != null) {
+            pathwayEntity.setDuration(pathwayDto.getDuration());
+        }
+
         PathwayEntity savedEntity = pathwayRepository.save(pathwayEntity);
         return PathwayDto.convertToDto(savedEntity);
     }
+
+
 
 
     public PathwayEntity updatePathway(Integer internId, Integer surveyId, Time duration) {
@@ -64,6 +74,21 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
 
         return repository.save(pathway);
     }
+
+    public void updatePathwayScore(Integer internId, Integer surveyId) {
+        // Calculate the new score based on the updated pathway answers
+        int score = calculateScore(internId, surveyId);
+
+        // Find the pathway entity by internId and surveyId
+        PathwayEntity pathway = findById(new PathwayId(internId, surveyId));
+
+        // Update the score
+        pathway.setScore(score);
+
+        // Save the updated pathway entity
+        repository.save(pathway);
+    }
+
 
     private int calculateScore(Integer internId, Integer surveyId) {
         int score = 0;
