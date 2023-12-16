@@ -1,6 +1,7 @@
 package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.dto.QuestionDto;
+import dev.astranfalio.teioc.dto.QuestionWithAnswersDto;
 import dev.astranfalio.teioc.entity.QuestionEntity;
 import dev.astranfalio.teioc.service.QuestionDataService;
 import jakarta.validation.Valid;
@@ -43,6 +44,12 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
         return questionDataService.findBySurveyId(id);
+    }
+
+    @GetMapping("/surveys/{id}/with-answers")
+    @ResponseBody
+    public List<QuestionWithAnswersDto> getQuestionsWithAnswersBySurvey(@PathVariable Integer id) {
+        return questionDataService.findQuestionsWithAnswersBySurveyId(id);
     }
 
     @PostMapping

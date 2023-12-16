@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,8 +50,12 @@ public class PathwayController {
     @PostMapping
     @ResponseBody
     public PathwayDto addPathway(@Valid @RequestBody PathwayDto pathwayDto) {
+        // Log the received duration
+        System.out.println("Received Duration from Frontend: " + pathwayDto.getDuration());
+
         return pathwayDataService.addPathway(pathwayDto);
     }
+
 
     @DeleteMapping("/{intern_id}/{survey_id}")
     @ResponseBody
@@ -60,12 +65,21 @@ public class PathwayController {
 
     @PutMapping("/{intern_id}/{survey_id}")
     @ResponseBody
-    public PathwayDto updatePathway(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @Valid @RequestBody PathwayDto pathwayDto) {
-        pathwayDto.setIntern_id(intern_id);
-        pathwayDto.setSurvey_id(survey_id);
-        PathwayEntity pathwayEntity = pathwayDataService.convertToEntity(pathwayDto);
-        PathwayEntity updatedEntity = pathwayDataService.update(new PathwayId(intern_id, survey_id), pathwayEntity);
-        PathwayDto updatedDto = PathwayDto.convertToDto(updatedEntity);
-        return updatedDto;
+    public PathwayDto updatePathway(@PathVariable Integer intern_id,
+                                    @PathVariable Integer survey_id,
+                                    @RequestBody Time duration) {
+        PathwayEntity updatedEntity = pathwayDataService.updatePathway(intern_id, survey_id, duration);
+        return PathwayDto.convertToDto(updatedEntity);
     }
+
+    @PutMapping("/{intern_id}/{survey_id}/update-score")
+    @ResponseBody
+    public PathwayDto updatePathwayScore(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
+        // Call a method to update the pathway's score here
+        pathwayDataService.updatePathwayScore(intern_id, survey_id);
+
+        // Fetch and return the updated pathway details
+        return getPathwayById(intern_id, survey_id);
+    }
+
 }
