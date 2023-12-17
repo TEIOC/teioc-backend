@@ -9,15 +9,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
-@Table(name="intern")
+@Table(name = "intern")
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class InternEntity implements Activatable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,37 +24,42 @@ public class InternEntity implements Activatable {
 
     @NotNull(message = "Email cannot be null")
     @Email(message = "Invalid email format")
-    @Column(name="email", nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     @NotNull(message = "Password cannot be null")
-    @Column(name="password", nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @NotNull(message = "Name cannot be null")
     @Size(min = 1, max = 100, message = "Name must be between 1 and 100 characters")
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @NotNull(message = "Company cannot be null")
-    @Column(name="company")
+    @Column(name = "company")
     private String company;
 
-    @Column(name="contactDetails")
+    @Column(name = "contactDetails")
     private String contactDetails;
 
-    @Column(name="creationDate")
+    @Column(name = "creationDate")
     private Date creationDate;
 
     @Builder.Default
-    @Column(name="status")
+    @Column(name = "status")
     private boolean status = false;
+
+    public boolean isStatus() {
+        return status;
+    }
+
     @Override
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-    @Column(name="lastConnection")
-    private Date lastConnection;
-
+    @Column(name = "lastConnection")
+    private Date lastConnection = new Date();
 }
+

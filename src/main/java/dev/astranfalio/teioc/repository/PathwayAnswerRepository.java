@@ -14,5 +14,5 @@ public interface PathwayAnswerRepository extends JpaRepository<PathwayAnswerEnti
     @Transactional
     void deleteByInternIdAndSurveyId(Integer intern_id, Integer survey_id);
     List<PathwayAnswerEntity> findByInternIdAndSurveyId(Integer internId, Integer surveyId);
-
+    List<PathwayAnswerEntity> findByInternId(Integer internId); // Add this method
 }
