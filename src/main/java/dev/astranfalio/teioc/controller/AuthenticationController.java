@@ -21,16 +21,36 @@ public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
     private JwtUtils jwtUtils;
 
-    @PostMapping(value = "/login")
+    private Map<String, String> generateToken(UserDetails intern) {
+        String token = jwtUtils.generateToken(intern);
+        String refreshToken = jwtUtils.generateRefreshToken(intern); // Generate refresh token
+
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+        tokenMap.put("refreshToken", refreshToken); // Include refresh token in the response
+        return tokenMap;
+    }
+
+    @PostMapping("/login")
     @ResponseBody
     public Map<String, String> authenticate(@RequestBody LoginDto loginDto) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
         );
         final UserDetails intern = internDetailsService.loadUserByUsername(loginDto.getEmail());
-        String token = jwtUtils.generateToken(intern);
-        Map<String, String> tokenMap = new HashMap<>();
-        tokenMap.put("token", token);
-        return tokenMap;
+        return generateToken(intern);
+    }
+    @PostMapping("/refresh-token")
+    @ResponseBody
+    public Map<String, String> refreshToken(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+        if (!jwtUtils.validateRefreshToken(refreshToken)) {
+            throw new RuntimeException("Invalid Refresh Token");
+        }
+
+        String username = jwtUtils.extractUsername(refreshToken);
+        final UserDetails intern = internDetailsService.loadUserByUsername(username);
+
+        return generateToken(intern);
     }
 }

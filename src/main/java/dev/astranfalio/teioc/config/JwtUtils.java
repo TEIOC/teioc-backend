@@ -15,6 +15,7 @@ import java.util.function.Function;
 public class JwtUtils {
     private final String jwtSigningKey = "secret";
 
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -46,7 +47,7 @@ public class JwtUtils {
 
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 24 * 10 * 60  * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 15 * 60 * 1000)) // 15 minutes
                 .signWith(SignatureAlgorithm.HS256, jwtSigningKey).compact();
     }
 
@@ -58,5 +59,21 @@ public class JwtUtils {
     public Boolean isTokenValid(String token, UserDetails internDetails) {
         final String username = extractUsername(token);
         return (username.equals(internDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public String generateRefreshToken(UserDetails internDetails) {
+        Map<String, Object> claims = new HashMap<>();
+        // You can add specific claims for refresh token if needed
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(internDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000)) // 24 hours
+                .signWith(SignatureAlgorithm.HS256, jwtSigningKey)
+                .compact();
+    }
+
+    public Boolean validateRefreshToken(String token) {
+        return !isTokenExpired(token);
     }
 }
