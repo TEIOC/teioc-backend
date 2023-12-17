@@ -48,7 +48,7 @@ public class SecurityConfig {
                                 "/answers", "/answers/*", "/answers/questions/*",
                                 "/pathways", "/pathways/*/*", "/pathways/intern/*",
                                 "/surveys/*", "/topics/*", "/pathwayanswers",
-                                "/pathwayanswers/*/*").hasRole(INTERN)
+                                "/pathwayanswers/*/*", "/pathways/statistics/*", "/surveys/statistics/*").hasRole(INTERN)
                         .requestMatchers(HttpMethod.POST, "/pathwayanswers").hasRole(INTERN)
                         .requestMatchers(HttpMethod.PUT, "/interns/*/deactivate", "/pathwayanswers/*/*/*").hasRole(INTERN)
                         .requestMatchers( HttpMethod.DELETE, "/pathwayanswers/*/*/*").hasRole(INTERN)
