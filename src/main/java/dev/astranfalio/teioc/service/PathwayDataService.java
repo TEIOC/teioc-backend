@@ -105,6 +105,16 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
 
         return score;
     }
+
+    public Double calculateOverallPerformance() {
+        Double averageScore = pathwayRepository.calculateAverageScore();
+        return averageScore != null ? averageScore : 0.0;
+    }
+
+    public Double calculateIndividualPerformance(Integer internId) {
+        Double averageScore = pathwayRepository.calculateAverageScoreForIntern(internId);
+        return averageScore != null ? averageScore : 0.0;
+    }
     public PathwayEntity convertToEntity(PathwayDto pathwayDto) {
         PathwayId pathwayId = new PathwayId(pathwayDto.getIntern_id(), pathwayDto.getSurvey_id());
         PathwayEntity pathwayEntity = new PathwayEntity();
