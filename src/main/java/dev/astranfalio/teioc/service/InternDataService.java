@@ -6,6 +6,9 @@ import dev.astranfalio.teioc.repository.InternRepository;
 import jakarta.validation.Validator;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.util.List;
+
 @Service
 public class InternDataService extends AbstractDataService<InternEntity, Integer, InternRepository> {
     private final InternRepository internRepository;
@@ -14,6 +17,11 @@ public class InternDataService extends AbstractDataService<InternEntity, Integer
         super(repository, validator);
         this.internRepository = internRepository;
     }
+
+    public List<InternEntity> findAllActive() {
+        return internRepository.findByStatus(true);
+    }
+
 
     public InternEntity findInternByEmail(String email) {
         return internRepository.findByEmail(email)
@@ -41,4 +49,12 @@ public class InternDataService extends AbstractDataService<InternEntity, Integer
             existingEntity.setContactDetails(internDto.getContactDetails());
         }
     }
+
+    public InternEntity updateLastConnection(Integer id) {
+        InternEntity intern = internRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Intern not found with ID: " + id));
+        intern.setLastConnection(new Date(System.currentTimeMillis()));
+        return internRepository.save(intern);
+    }
+
 }

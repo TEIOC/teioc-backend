@@ -6,6 +6,7 @@ import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,11 +22,12 @@ public class InternController {
 
     @GetMapping
     @ResponseBody
-    public List<InternDto> getAllInterns() {
-        return internDataService.findAll().stream()
+    public List<InternDto> getAllActiveInterns() {
+        return internDataService.findAllActive().stream()
                 .map(InternDto::convertToDto)
                 .collect(Collectors.toList());
     }
+
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -89,4 +91,14 @@ public class InternController {
         InternDto internDto = InternDto.convertToDto(internEntity);
         return internDto;
     }
+
+    @PutMapping("/{id}/update-last-connection")
+    @ResponseBody
+    public ResponseEntity<?> updateLastConnection(@PathVariable Integer id) {
+        InternEntity updatedIntern = internDataService.updateLastConnection(id);
+        InternDto internDto = InternDto.convertToDto(updatedIntern);
+        return ResponseEntity.ok(internDto);
+    }
+
+
 }

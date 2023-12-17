@@ -35,6 +35,8 @@ public class InternDto {
     private String contactDetails;
     private Date creationDate;
     private boolean status;
+    private Date lastConnection;
+
 
     public static InternDto convertToDto(InternEntity internEntity) {
         return InternDto.builder()
@@ -46,6 +48,7 @@ public class InternDto {
                 .contactDetails(internEntity.getContactDetails())
                 .creationDate(internEntity.getCreationDate())
                 .status(internEntity.isStatus())
+                .lastConnection(internEntity.getLastConnection())
                 .build();
     }
 
@@ -59,6 +62,7 @@ public class InternDto {
                 .contactDetails(internDto.getContactDetails())
                 .creationDate(internDto.getCreationDate())
                 .status(internDto.isStatus())
+                .lastConnection(internDto.getLastConnection())
                 .build();
     }
 
