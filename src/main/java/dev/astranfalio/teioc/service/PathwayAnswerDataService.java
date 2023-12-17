@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class PathwayAnswerDataService extends AbstractDataService<PathwayAnswerEntity, PathwayAnswerId, PathwayAnswerRepository> {
@@ -79,6 +81,14 @@ TODO
     public List<CompletedSurveyDetailsDto> getCompletedSurveyDetails(Integer internId, Integer surveyId) {
         List<CompletedSurveyDetailsDto> completedSurveyDetails = new ArrayList<>();
 
+        // Fetch all answers for the intern and survey
+        List<PathwayAnswerEntity> answers = pathwayAnswerRepository.findByInternIdAndSurveyId(internId, surveyId);
+        Map<Integer, AnswerEntity> answerMap = answers.stream()
+                .collect(Collectors.toMap(
+                        answer -> answer.getAnswer().getQuestion().getId(),
+                        PathwayAnswerEntity::getAnswer
+                ));
+
         // Fetch all questions for the survey
         List<QuestionEntity> questions = questionRepository.findBySurveyId(surveyId);
 
@@ -87,25 +97,24 @@ TODO
             dto.setQuestionId(question.getId());
             dto.setQuestionText(question.getLabel());
 
-            // Find the answer selected by the intern
-            PathwayAnswerEntity selectedAnswerEntity = pathwayAnswerRepository.findById(new PathwayAnswerId(internId, surveyId, question.getCorrectAnswer().getId())).orElse(null);
-            if (selectedAnswerEntity != null) {
-                AnswerEntity selectedAnswer = selectedAnswerEntity.getAnswer();
+            AnswerEntity selectedAnswer = answerMap.get(question.getId());
+            if (selectedAnswer != null) {
                 dto.setSelectedAnswerId(selectedAnswer.getId());
                 dto.setSelectedAnswerText(selectedAnswer.getLabel());
+            } else {
+                dto.setSelectedAnswerId(null);
+                dto.setSelectedAnswerText("No answer selected");
             }
 
-            // Set the correct answer
             AnswerEntity correctAnswer = question.getCorrectAnswer();
-            if (correctAnswer != null) {
-                dto.setCorrectAnswerId(correctAnswer.getId());
-                dto.setCorrectAnswerText(correctAnswer.getLabel());
-            }
+            dto.setCorrectAnswerId(correctAnswer.getId());
+            dto.setCorrectAnswerText(correctAnswer.getLabel());
 
             completedSurveyDetails.add(dto);
         }
 
         return completedSurveyDetails;
     }
+
 }
 
