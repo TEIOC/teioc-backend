@@ -44,7 +44,7 @@ public class StatisticsController {
         return ResponseEntity.ok(averageScore);
     }
 
-    @GetMapping("/statistics/individual-performance/{internId}")
+    @GetMapping("/individual-performance/{internId}")
     @ResponseBody
     public ResponseEntity<?> getIndividualPerformance(@PathVariable Integer internId) {
         Double averageScore = statisticsDataService.calculateIndividualPerformance(internId);
