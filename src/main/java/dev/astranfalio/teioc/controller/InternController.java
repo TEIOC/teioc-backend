@@ -48,6 +48,7 @@ public class InternController {
     @PostMapping
     @ResponseBody
     public InternDto addIntern(@Valid @RequestBody InternDto internDto) {
+        internDto.setStatus(false);
         InternEntity internEntity = InternDto.convertToEntity(internDto);
         InternEntity savedEntity = internDataService.save(internEntity);
         InternDto savedDto = InternDto.convertToDto(savedEntity);

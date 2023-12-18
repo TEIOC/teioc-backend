@@ -18,7 +18,7 @@ public class AnswerDto {
     @NotNull(message = "Label cannot be null")
     private String label;
 
-    private Boolean status;
+    private Boolean status = false;
     private Integer sortOrder;
     private Integer question_id;
 

@@ -20,8 +20,9 @@ public class AnswerEntity implements Activatable {
     @Column(name="label", nullable = false)
     private String label;
 
-    @Column(name="status")
-    private Boolean status;
+    @Builder.Default
+    @Column(name = "status")
+    private boolean status = false;
 
     @Column(name="sortOrder")
     private Integer sortOrder;
@@ -35,5 +36,9 @@ public class AnswerEntity implements Activatable {
     @Override
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public boolean getStatus() {
+        return status;
     }
 }

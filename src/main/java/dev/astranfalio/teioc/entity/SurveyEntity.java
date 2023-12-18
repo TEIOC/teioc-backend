@@ -20,8 +20,9 @@ public class SurveyEntity implements Activatable {
     @Column(name="name")
     private String name;
 
-    @Column(name="status")
-    private Boolean status;
+    @Builder.Default
+    @Column(name = "status")
+    private boolean status = false;
 
     @Column(name="sortOrder")
     private Integer sortOrder;
@@ -34,5 +35,9 @@ public class SurveyEntity implements Activatable {
     @Override
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public boolean getStatus() {
+        return status;
     }
 }

@@ -18,5 +18,11 @@ public class QuestionWithAnswersDto {
     private String label;
     private List<AnswerDto> answers;
 
+    private QuestionDto questionDto;
+
+    public boolean isQuestionActive() {
+        return questionDto != null && questionDto.getStatus();
+    }
+
 }
 

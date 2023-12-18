@@ -18,8 +18,7 @@ public class TopicDto {
     @NotNull(message = "Name cannot be null")
     private String name;
 
-    @NotNull(message = "Status cannot be null")
-    private boolean status;
+    private Boolean status = false;
 
     @NotNull(message = "Order cannot be null")
     private Integer sortOrder;
@@ -28,7 +27,7 @@ public class TopicDto {
         return TopicDto.builder()
                 .id(topicEntity.getId())
                 .name(topicEntity.getName())
-                .status(topicEntity.isStatus())
+                .status(topicEntity.getStatus())
                 .sortOrder(topicEntity.getSortOrder())
                 .build();
     }
@@ -37,7 +36,7 @@ public class TopicDto {
         return TopicEntity.builder()
                 .id(topicDto.getId())
                 .name(topicDto.getName())
-                .status(topicDto.isStatus())
+                .status(topicDto.getStatus())
                 .sortOrder(topicDto.getSortOrder())
                 .build();
     }

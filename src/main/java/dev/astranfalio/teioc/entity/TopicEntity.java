@@ -17,8 +17,9 @@ public class TopicEntity implements Activatable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "status", nullable = false)
-    private boolean status;
+    @Builder.Default
+    @Column(name = "status")
+    private boolean status = false;
 
     @Column(name = "sortOrder", nullable = false)
     private Integer sortOrder;
@@ -26,6 +27,10 @@ public class TopicEntity implements Activatable {
     @Override
     public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public boolean getStatus() {
+        return status;
     }
 }
 

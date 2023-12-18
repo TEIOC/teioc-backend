@@ -20,11 +20,13 @@ public class QuestionController {
 
     @GetMapping
     @ResponseBody
-    public List<QuestionDto> getAllQuestions() {
+    public List<QuestionDto> getAllActiveQuestions() {
         return questionDataService.findAll().stream()
+                .filter(questionDto -> questionDto.getStatus())
                 .map(QuestionDto::convertToDto)
                 .collect(Collectors.toList());
     }
+
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -37,24 +39,35 @@ public class QuestionController {
     @GetMapping("/topics/{id}")
     @ResponseBody
     public List<QuestionDto> getQuestionsByTopic(@PathVariable Integer id) {
-        return questionDataService.findByTopicId(id);
+        return questionDataService.findByTopicId(id).stream()
+                .filter(questionDto -> questionDto.getStatus())
+                .collect(Collectors.toList());
     }
+
 
     @GetMapping("/surveys/{id}")
     @ResponseBody
     public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
-        return questionDataService.findBySurveyId(id);
+        return questionDataService.findBySurveyId(id).stream()
+                .filter(questionDto -> questionDto.getStatus())
+                .collect(Collectors.toList());
     }
+
 
     @GetMapping("/surveys/{id}/with-answers")
     @ResponseBody
     public List<QuestionWithAnswersDto> getQuestionsWithAnswersBySurvey(@PathVariable Integer id) {
-        return questionDataService.findQuestionsWithAnswersBySurveyId(id);
+        return questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
+                .filter(QuestionWithAnswersDto::isQuestionActive)
+                .collect(Collectors.toList());
     }
+
+
 
     @PostMapping
     @ResponseBody
     public QuestionDto addQuestion(@Valid @RequestBody QuestionDto questionDto) {
+        questionDto.setStatus(false);
         QuestionEntity questionEntity = questionDataService.convertToEntity(questionDto);
         QuestionEntity savedEntity = questionDataService.save(questionEntity);
         QuestionDto savedDto = QuestionDto.convertToDto(savedEntity);

@@ -37,25 +37,20 @@ public class DeleteInactiveInternsService {
 
         Date oneMonthAgo = calendar.getTime();
 
-        // Fetch all interns
         List<InternEntity> interns = internRepository.findAll();
 
-        // Filter inactive interns
         List<InternEntity> inactiveInterns = interns.stream()
                 .filter(intern -> !intern.isStatus() && intern.getLastConnection() != null && intern.getLastConnection().before(oneMonthAgo))
                 .collect(Collectors.toList());
 
-        // Find and delete pathways for inactive interns
         for (InternEntity intern : inactiveInterns) {
             List<PathwayEntity> pathways = pathwayRepository.findAllByInternId(intern.getId());
             pathwayRepository.deleteAll(pathways);
 
-            // Delete related PathwayAnswerEntity records
             List<PathwayAnswerEntity> pathwayAnswers = pathwayAnswerRepository.findByInternId(intern.getId());
             pathwayAnswerRepository.deleteAll(pathwayAnswers);
         }
 
-        // Delete inactive interns
         internRepository.deleteAll(inactiveInterns);
     }
 }

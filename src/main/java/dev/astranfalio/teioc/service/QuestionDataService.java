@@ -83,7 +83,8 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                 .stream()
                 .map(questionEntity -> {
                     List<AnswerDto> answerDtos = answerDataService.findAnswersByQuestionId(questionEntity.getId());
-                    return new QuestionWithAnswersDto(questionEntity.getId(), questionEntity.getLabel(), answerDtos);
+                    QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
+                    return new QuestionWithAnswersDto(questionEntity.getId(), questionEntity.getLabel(), answerDtos, questionDto);
                 })
                 .collect(Collectors.toList());
     }

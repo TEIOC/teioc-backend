@@ -19,8 +19,9 @@ public class AnswerController {
 
     @GetMapping
     @ResponseBody
-    public List<AnswerDto> getAllAnswers() {
+    public List<AnswerDto> getAllActiveAnswers() {
         return answerDataService.findAll().stream()
+                .filter(answerEntity -> answerEntity.getStatus())
                 .map(AnswerDto::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -35,14 +36,18 @@ public class AnswerController {
 
     @GetMapping("/questions/{id}")
     @ResponseBody
-    public List<AnswerDto> getAnswersByQuestionId(@PathVariable Integer id) {
-        return answerDataService.findAnswersByQuestionId(id);
+    public List<AnswerDto> getActiveAnswersByQuestionId(@PathVariable Integer id) {
+        return answerDataService.findAnswersByQuestionId(id).stream()
+                .filter(answerDto -> answerDto.getStatus())
+                .collect(Collectors.toList());
     }
+
 
 
     @PostMapping
     @ResponseBody
     public AnswerDto addAnswer(@Valid @RequestBody AnswerDto answerDto) {
+        answerDto.setStatus(false);
         AnswerEntity answerEntity = AnswerDataService.convertToEntity(answerDto, answerDataService.getQuestionRepository());
         AnswerEntity savedEntity = answerDataService.save(answerEntity);
         AnswerDto savedDto = AnswerDto.convertToDto(savedEntity);
