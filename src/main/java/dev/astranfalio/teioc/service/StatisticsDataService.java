@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+
 
 @Service
 public class StatisticsDataService {
@@ -28,7 +30,125 @@ public class StatisticsDataService {
         this.pathwayRepository = pathwayRepository;
     }
 
-    public Map<String, Double> calculateActiveSurveyWisePerformance() {
+    public Double calculateOverallPerformance() {
+        return pathwayRepository.calculateAverageScore() != null ? pathwayRepository.calculateAverageScore() : 0.0;
+    }
+
+    public Double calculateIndividualPerformance(Integer internId) {
+        Double averageScore = pathwayRepository.calculateAverageScoreForIntern(internId);
+        return averageScore != null ? averageScore : 0.0;
+    }
+// StatisticsDataService.java
+
+    public Map<String, Map<String, Object>> calculateScoreAndDurationPerSurveyForIntern(Integer internId) {
+        List<Object[]> scoreResults = surveyRepository.calculateScorePerSurveyForIntern(internId);
+        List<PathwayEntity> durationResults = pathwayRepository.findDurationsBySurveyForIntern(internId);
+        Map<String, Double> averageDurations = calculateAverageDurations(durationResults, false);
+
+        return scoreResults.stream().collect(Collectors.toMap(
+                result -> String.valueOf(result[1]), // Survey name
+                result -> {
+                    Map<String, Object> details = new HashMap<>();
+                    details.put("Survey ID", (Integer) result[0]); // Include Survey ID
+                    details.put("Average Score", (Double) result[2]);
+                    details.put("Average Duration", averageDurations.getOrDefault(String.valueOf(result[1]), 0.0));
+                    return details;
+                }
+        ));
+    }
+
+    public Map<String, Map<String, Object>> calculateScoreAndDurationPerTopicForIntern(Integer internId) {
+        List<Object[]> scoreResults = surveyRepository.calculateScorePerTopicForIntern(internId);
+        List<PathwayEntity> durationResults = pathwayRepository.findDurationsByTopicForIntern(internId);
+        Map<String, Double> averageDurations = calculateAverageDurations(durationResults, true);
+        return scoreResults.stream().collect(Collectors.toMap(
+                result -> String.valueOf(result[1]), // Topic name
+                result -> {
+                    Map<String, Object> details = new HashMap<>();
+                    details.put("Topic ID", (Integer) result[0]); // Include Topic ID
+                    details.put("Average Score", (Double) result[2]);
+                    details.put("Average Duration", averageDurations.getOrDefault(String.valueOf(result[0]), 0.0));
+                    return details;
+                }
+        ));
+    }
+
+    private Map<String, Double> calculateAverageDurations(List<PathwayEntity> durationResults, boolean isTopicWise) {
+        Map<String, Long[]> durationSumsAndCounts = new HashMap<>();
+        for (PathwayEntity pathway : durationResults) {
+            String name = isTopicWise ? pathway.getSurvey().getTopic().getName() : pathway.getSurvey().getName();
+            Time duration = pathway.getDuration();
+            long durationInMinutes = duration != null ? duration.toLocalTime().getHour() * 60
+                    + duration.toLocalTime().getMinute()
+                    + duration.toLocalTime().getSecond() / 60L : 0;
+
+            durationSumsAndCounts.compute(name, (key, value) -> {
+                if (value == null) {
+                    return new Long[]{durationInMinutes, 1L};
+                } else {
+                    value[0] += durationInMinutes;
+                    value[1]++;
+                    return value;
+                }
+            });
+        }
+        Map<String, Double> averageDurations = new HashMap<>();
+        durationSumsAndCounts.forEach((name, sumAndCount) -> {
+            double average = sumAndCount[0] / (double) sumAndCount[1];
+            averageDurations.put(name, average);
+        });
+        return averageDurations;
+    }
+
+    public Map<Integer, Double> getInternRankingBySurvey(Integer surveyId) {
+        List<Object[]> internData = surveyRepository.calculateRankingBySurvey(surveyId);
+        return internData.stream()
+                .sorted((a, b) -> Double.compare((Double) b[1], (Double) a[1]))
+                .collect(Collectors.toMap(
+                        data -> (Integer) data[0], // Intern ID
+                        data -> (Double) data[1],  // Average Score
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    public Map<Integer, Double> getInternRankingByTopic(Integer topicId) {
+        List<Object[]> internData = topicRepository.calculateRankingByTopic(topicId);
+        return internData.stream()
+                .sorted((a, b) -> Double.compare((Double) b[1], (Double) a[1]))
+                .collect(Collectors.toMap(
+                        data -> (Integer) data[0], // Intern ID
+                        data -> (Double) data[1],  // Average Score
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+    }
+
+    public Map<String, Double> getRankedSurveys() {
+        List<Object[]> surveyData = surveyRepository.fetchSurveyDataForRanking();
+        return surveyData.stream()
+                .sorted((a, b) -> Double.compare((Double) b[1], (Double) a[1]))
+                .collect(Collectors.toMap(
+                        data -> (String) data[0], // Survey name
+                        data -> (Double) data[1], // Average score
+                        (e1, e2) -> e1,           // In case of duplicate keys, keep the first
+                        LinkedHashMap::new        // Preserve the order
+                ));
+    }
+
+    public Map<String, Double> getRankedTopics() {
+        List<Object[]> topicData = topicRepository.fetchTopicDataForRanking();
+        return topicData.stream()
+                .sorted((a, b) -> Double.compare((Double) b[1], (Double) a[1]))
+                .collect(Collectors.toMap(
+                        data -> (String) data[0], // Topic name
+                        data -> (Double) data[1], // Average score
+                        (e1, e2) -> e1,           // In case of duplicate keys, keep the first
+                        LinkedHashMap::new        // Preserve the order
+                ));
+    }
+
+        /* public Map<String, Double> calculateActiveSurveyWisePerformance() {
         List<Object[]> results = surveyRepository.calculateAverageScorePerSurveyForActiveInterns();
         return results.stream().collect(Collectors.toMap(
                 result -> (String) result[0],
@@ -56,82 +176,6 @@ public class StatisticsDataService {
             topicPerformance.put(topicName, averageScore);
         }
         return topicPerformance;
-    }
+    }  */
 
-    public Double calculateOverallPerformance() {
-        return pathwayRepository.calculateAverageScore() != null ? pathwayRepository.calculateAverageScore() : 0.0;
-    }
-
-    public Double calculateIndividualPerformance(Integer internId) {
-        Double averageScore = pathwayRepository.calculateAverageScoreForIntern(internId);
-        return averageScore != null ? averageScore : 0.0;
-    }
-    public Map<String, Map<String, Object>> calculateScoreAndDurationPerSurveyForIntern(Integer internId) {
-        List<Object[]> scoreResults = surveyRepository.calculateScorePerSurveyForIntern(internId);
-        List<PathwayEntity> durationResults = pathwayRepository.findDurationsBySurveyForIntern(internId);
-
-        Map<String, Double> averageDurations = calculateAverageDurations(durationResults);
-
-        return scoreResults.stream().collect(Collectors.toMap(
-                result -> (String) result[0],
-                result -> {
-                    Map<String, Object> details = new HashMap<>();
-                    details.put("Average Score", (Double) result[1]);
-                    details.put("Average Duration", averageDurations.getOrDefault((String) result[0], 0.0));
-                    return details;
-                }
-        ));
-    }
-
-    public Map<String, Map<String, Object>> calculateScoreAndDurationPerTopicForIntern(Integer internId) {
-        List<Object[]> scoreResults = surveyRepository.calculateScorePerTopicForIntern(internId);
-        List<PathwayEntity> durationResults = pathwayRepository.findDurationsByTopicForIntern(internId);
-
-        Map<String, Double> averageDurations = calculateAverageDurations(durationResults);
-
-        return scoreResults.stream().collect(Collectors.toMap(
-                result -> (String) result[0],
-                result -> {
-                    Map<String, Object> details = new HashMap<>();
-                    details.put("Average Score", (Double) result[1]);
-                    details.put("Average Duration", averageDurations.getOrDefault((String) result[0], 0.0));
-                    return details;
-                }
-        ));
-    }
-
-    private Map<String, Double> calculateAverageDurations(List<PathwayEntity> durationResults) {
-        // Map to store total durations and count for each survey/topic
-        Map<String, Long[]> durationSumsAndCounts = new HashMap<>();
-
-        for (PathwayEntity pathway : durationResults) {
-            String name = pathway.getSurvey().getName(); // or getTopic().getName() based on your structure
-            Time duration = pathway.getDuration();
-
-            // Convert Time to minutes (or any other unit you prefer)
-            long durationInMinutes = duration != null ? duration.toLocalTime().getHour() * 60
-                    + duration.toLocalTime().getMinute()
-                    + duration.toLocalTime().getSecond() / 60L : 0;
-
-            // Update the total duration and count
-            durationSumsAndCounts.compute(name, (key, value) -> {
-                if (value == null) {
-                    return new Long[]{durationInMinutes, 1L};
-                } else {
-                    value[0] += durationInMinutes; // Sum of durations
-                    value[1]++; // Count
-                    return value;
-                }
-            });
-        }
-
-        // Calculate average duration for each survey/topic
-        Map<String, Double> averageDurations = new HashMap<>();
-        durationSumsAndCounts.forEach((name, sumAndCount) -> {
-            double average = sumAndCount[0] / (double) sumAndCount[1];
-            averageDurations.put(name, average);
-        });
-
-        return averageDurations;
-    }
 }
