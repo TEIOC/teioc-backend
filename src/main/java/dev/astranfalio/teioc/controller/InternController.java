@@ -7,6 +7,7 @@ import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class InternController {
 
     private final InternDataService internDataService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping
     @ResponseBody
@@ -50,6 +52,7 @@ public class InternController {
     public InternDto addIntern(@Valid @RequestBody InternDto internDto) {
         internDto.setStatus(false);
         InternEntity internEntity = InternDto.convertToEntity(internDto);
+        internEntity.setPassword(passwordEncoder.encode(internEntity.getPassword()));
         InternEntity savedEntity = internDataService.save(internEntity);
         InternDto savedDto = InternDto.convertToDto(savedEntity);
         return savedDto;
@@ -59,7 +62,7 @@ public class InternController {
     @ResponseBody
     public InternDto resetPassword(@RequestBody LoginDto loginDto) {
         InternEntity internEntity = internDataService.findInternByEmail(loginDto.getEmail());
-        internEntity.setPassword(loginDto.getPassword());
+        internEntity.setPassword(passwordEncoder.encode(loginDto.getPassword()));
         InternEntity updatedEntity = internDataService.update(internEntity.getId(), internEntity);
         return InternDto.convertToDto(updatedEntity);
     }
