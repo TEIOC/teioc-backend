@@ -36,16 +36,16 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
         return save(survey);
     }
 
-    public Map<String, Double> calculateSurveyWisePerformance() {
-        List<Object[]> results = surveyRepository.calculateAverageScorePerSurvey();
+    public Map<String, Double> calculateActiveSurveyWisePerformance() {
+        List<Object[]> results = surveyRepository.calculateAverageScorePerSurveyForActiveInterns();
         return results.stream().collect(Collectors.toMap(
                 result -> (String) result[0], // Survey name
                 result -> (Double) result[1]  // Average score
         ));
     }
 
-    public Map<String, Double> calculateTopicWisePerformance() {
-        List<Object[]> results = surveyRepository.calculateAverageScorePerTopic();
+    public Map<String, Double> calculateActiveTopicWisePerformance() {
+        List<Object[]> results = surveyRepository.calculateAverageScorePerTopicForActiveInterns();
         Map<String, Double> topicPerformance = new HashMap<>();
         for (Object[] result : results) {
             String topicName = (String) result[0];
@@ -55,8 +55,8 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
         return topicPerformance;
     }
 
-    public Map<String, Double> calculateTopicWisePerformanceForIntern(Integer internId) {
-        List<Object[]> results = surveyRepository.calculateAverageScorePerTopicForIntern(internId);
+    public Map<String, Double> calculateActiveTopicWisePerformanceForIntern(Integer internId) {
+        List<Object[]> results = surveyRepository.calculateAverageScorePerTopicForActiveIntern(internId);
         Map<String, Double> topicPerformance = new HashMap<>();
         for (Object[] result : results) {
             String topicName = (String) result[0];
@@ -65,6 +65,7 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
         }
         return topicPerformance;
     }
+
 
     public static SurveyEntity convertToEntity(SurveyDto surveyDto, TopicRepository topicRepository) {
         TopicEntity topic = surveyDto.getTopicId() != null

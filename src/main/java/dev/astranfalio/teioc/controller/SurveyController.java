@@ -25,8 +25,9 @@ public class SurveyController {
 
     @GetMapping
     @ResponseBody
-    public List<SurveyDto> getAllSurveys() {
+    public List<SurveyDto> getAllActiveSurveys() {
         return surveyDataService.findAll().stream()
+                .filter(surveyDto -> surveyDto.getStatus())
                 .map(SurveyDto::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -40,22 +41,24 @@ public class SurveyController {
 
     @GetMapping("/available-surveys/{intern_id}")
     @ResponseBody
-    public List<SurveyDto> getAvailableSurveysForIntern(@PathVariable("intern_id") Integer intern_id) {
+    public List<SurveyDto> getActiveAvailableSurveysForIntern(@PathVariable("intern_id") Integer intern_id) {
         List<Integer> displayedSurveyIds = pathwayDataService.findAllByInternId(intern_id)
                 .stream()
                 .map(pathway -> pathway.getSurvey().getId())
                 .collect(Collectors.toList());
         List<SurveyEntity> allSurveys = surveyDataService.findAll();
         List<SurveyDto> availableSurveys = allSurveys.stream()
-                .filter(survey -> !displayedSurveyIds.contains(survey.getId()))
+                .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus())
                 .map(SurveyDto::convertToDto)
                 .collect(Collectors.toList());
         return availableSurveys;
     }
 
+
     @PostMapping
     @ResponseBody
     public SurveyDto addSurvey(@Valid @RequestBody SurveyDto surveyDto) {
+        surveyDto.setStatus(false);
         SurveyEntity surveyEntity = SurveyDataService.convertToEntity(surveyDto, topicRepository);
         SurveyEntity savedEntity = surveyDataService.save(surveyEntity);
         SurveyDto savedDto = SurveyDto.convertToDto(savedEntity);
@@ -103,24 +106,25 @@ public class SurveyController {
 
     @GetMapping("/statistics/survey-performance")
     @ResponseBody
-    public ResponseEntity<?> getSurveyWisePerformance() {
-        Map<String, Double> surveyPerformance = surveyDataService.calculateSurveyWisePerformance();
+    public ResponseEntity<?> getActiveSurveyWisePerformance() {
+        Map<String, Double> surveyPerformance = surveyDataService.calculateActiveSurveyWisePerformance();
         return ResponseEntity.ok(surveyPerformance);
     }
 
     @GetMapping("/statistics/topic-performance")
     @ResponseBody
-    public ResponseEntity<?> getTopicWisePerformance() {
-        Map<String, Double> topicPerformance = surveyDataService.calculateTopicWisePerformance();
+    public ResponseEntity<?> getActiveTopicWisePerformance() {
+        Map<String, Double> topicPerformance = surveyDataService.calculateActiveTopicWisePerformance();
         return ResponseEntity.ok(topicPerformance);
     }
 
     @GetMapping("/statistics/topic-performance/{internId}")
     @ResponseBody
-    public ResponseEntity<?> getTopicWisePerformanceForIntern(@PathVariable Integer internId) {
-        Map<String, Double> topicPerformance = surveyDataService.calculateTopicWisePerformanceForIntern(internId);
+    public ResponseEntity<?> getActiveTopicWisePerformanceForIntern(@PathVariable Integer internId) {
+        Map<String, Double> topicPerformance = surveyDataService.calculateActiveTopicWisePerformanceForIntern(internId);
         return ResponseEntity.ok(topicPerformance);
     }
+
 }
 
 
