@@ -64,4 +64,18 @@ public class SurveyCreatorService {
         }
         return true;
     }
+
+    public void createEmptyQuestion(QuestionSimpleDto dto) {
+        QuestionEntity questionEntity = dto.toEntity();
+        if (isQuestionValidForCreation(questionEntity)) {
+            questionDataService.save(questionEntity);
+        }
+    }
+
+    public boolean isQuestionValidForCreation(QuestionEntity questionEntity) {
+        return questionEntity != null
+                && questionEntity.getLabel() != null
+                && !questionEntity.getLabel().isEmpty()
+                && !questionDataService.existsById(questionEntity.getId());
+    }
 }
