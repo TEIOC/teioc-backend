@@ -37,7 +37,7 @@
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(auth -> auth
                             // PUBLIC ROUTES
-                            .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys", "/topics").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys", "/topics", "/statistics/survey-performance", "/statistics/topic-performance", "/statistics/overall-performance").permitAll()
                             .requestMatchers(HttpMethod.POST, "/interns", "/auth/login", "/auth/refresh-token",
                                     "/auth/logout", "/interns/reset-password",
                                     "/email/reset-password", "/email/activate").permitAll()
@@ -48,7 +48,7 @@
                                     "/answers", "/answers/*", "/answers/questions/*",
                                     "/pathways", "/pathways/*/*", "/pathways/intern/*",
                                     "/surveys/*", "/topics/*", "/pathwayanswers",
-                                    "/pathwayanswers/*/*", "/pathways/statistics/*", "/surveys/statistics/*").hasRole(INTERN)
+                                    "/pathwayanswers/*/*", "/pathways/statistics/*", "/statistics/topic-performance/*").hasRole(INTERN)
                             .requestMatchers(HttpMethod.POST, "/pathwayanswers").hasRole(INTERN)
                             .requestMatchers(HttpMethod.PUT, "/interns/*/deactivate", "/pathwayanswers/*/*/*").hasRole(INTERN)
                             .requestMatchers( HttpMethod.DELETE, "/pathwayanswers/*/*/*").hasRole(INTERN)

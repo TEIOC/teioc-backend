@@ -6,7 +6,6 @@ import dev.astranfalio.teioc.entity.PathwayId;
 import dev.astranfalio.teioc.service.PathwayDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Time;
@@ -19,8 +18,6 @@ import java.util.stream.Collectors;
 public class PathwayController {
 
     private final PathwayDataService pathwayDataService;
-
-    //TODO : afficher le score + stats
 
     @GetMapping
     @ResponseBody
@@ -83,17 +80,4 @@ public class PathwayController {
         return getPathwayById(intern_id, survey_id);
     }
 
-    @GetMapping("/statistics/overall-performance")
-    @ResponseBody
-    public ResponseEntity<?> getOverallPerformance() {
-        Double averageScore = pathwayDataService.calculateOverallPerformance();
-        return ResponseEntity.ok(averageScore);
-    }
-
-    @GetMapping("/statistics/individual-performance/{internId}")
-    @ResponseBody
-    public ResponseEntity<?> getIndividualPerformance(@PathVariable Integer internId) {
-        Double averageScore = pathwayDataService.calculateIndividualPerformance(internId);
-        return ResponseEntity.ok(averageScore);
-    }
 }

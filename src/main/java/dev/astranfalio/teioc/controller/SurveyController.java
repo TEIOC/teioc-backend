@@ -7,11 +7,9 @@ import dev.astranfalio.teioc.service.PathwayDataService;
 import dev.astranfalio.teioc.service.SurveyDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -102,27 +100,6 @@ public class SurveyController {
         SurveyEntity surveyEntity = surveyDataService.associateWithTopic(survey_id, topic_id);
         SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
         return surveyDto;
-    }
-
-    @GetMapping("/statistics/survey-performance")
-    @ResponseBody
-    public ResponseEntity<?> getActiveSurveyWisePerformance() {
-        Map<String, Double> surveyPerformance = surveyDataService.calculateActiveSurveyWisePerformance();
-        return ResponseEntity.ok(surveyPerformance);
-    }
-
-    @GetMapping("/statistics/topic-performance")
-    @ResponseBody
-    public ResponseEntity<?> getActiveTopicWisePerformance() {
-        Map<String, Double> topicPerformance = surveyDataService.calculateActiveTopicWisePerformance();
-        return ResponseEntity.ok(topicPerformance);
-    }
-
-    @GetMapping("/statistics/topic-performance/{internId}")
-    @ResponseBody
-    public ResponseEntity<?> getActiveTopicWisePerformanceForIntern(@PathVariable Integer internId) {
-        Map<String, Double> topicPerformance = surveyDataService.calculateActiveTopicWisePerformanceForIntern(internId);
-        return ResponseEntity.ok(topicPerformance);
     }
 
 }
