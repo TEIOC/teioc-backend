@@ -2,8 +2,10 @@ package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.dto.QuestionDto;
 import dev.astranfalio.teioc.dto.QuestionWithAnswersDto;
+import dev.astranfalio.teioc.dto.QuestionWithAnswersSimpleDto;
 import dev.astranfalio.teioc.entity.QuestionEntity;
 import dev.astranfalio.teioc.service.QuestionDataService;
+import dev.astranfalio.teioc.service.SurveyCreatorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 public class QuestionController {
 
     private final QuestionDataService questionDataService;
+    private final SurveyCreatorService surveyCreatorService;
 
     @GetMapping
     @ResponseBody
@@ -72,6 +75,12 @@ public class QuestionController {
         QuestionEntity savedEntity = questionDataService.save(questionEntity);
         QuestionDto savedDto = QuestionDto.convertToDto(savedEntity);
         return savedDto;
+    }
+
+    @PostMapping("/withAnswers")
+    @ResponseBody
+    public void addQuestionWithAnswers(@Valid @RequestBody QuestionWithAnswersSimpleDto dto) {
+        surveyCreatorService.createQuestionWithAnswers(dto);
     }
 
     @DeleteMapping("/{id}")
