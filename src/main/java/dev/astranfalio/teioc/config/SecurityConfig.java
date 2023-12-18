@@ -48,7 +48,7 @@
                                     "/answers", "/answers/*", "/answers/questions/*",
                                     "/pathways", "/pathways/*/*", "/pathways/intern/*",
                                     "/surveys/*", "/topics/*", "/pathwayanswers",
-                                    "/pathwayanswers/*/*", "/statistics/topic-performance/*", "/statistics/individual-performance/*").hasRole(INTERN)
+                                    "/pathwayanswers/*/*", "/statistics/topic-performance/*", "/statistics/individual-performance/*", "/statistics/survey-performance/intern/*", "/statistics/topic-performance/intern/*").hasRole(INTERN)
                             .requestMatchers(HttpMethod.POST, "/pathwayanswers").hasRole(INTERN)
                             .requestMatchers(HttpMethod.PUT, "/interns/*/deactivate", "/pathwayanswers/*/*/*").hasRole(INTERN)
                             .requestMatchers( HttpMethod.DELETE, "/pathwayanswers/*/*/*").hasRole(INTERN)

@@ -21,4 +21,10 @@ public interface PathwayRepository extends JpaRepository<PathwayEntity, PathwayI
     @Query("SELECT AVG(p.score) FROM PathwayEntity p WHERE p.intern.id = :internId")
     Double calculateAverageScoreForIntern(@Param("internId") Integer internId);
 
+    @Query("SELECT p FROM PathwayEntity p WHERE p.intern.id = :internId AND p.survey.status = true")
+    List<PathwayEntity> findDurationsBySurveyForIntern(Integer internId);
+
+    @Query("SELECT p FROM PathwayEntity p WHERE p.intern.id = :internId AND p.survey.topic.status = true")
+    List<PathwayEntity> findDurationsByTopicForIntern(Integer internId);
+
 }
