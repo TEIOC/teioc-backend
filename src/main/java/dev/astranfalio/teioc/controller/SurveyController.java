@@ -1,9 +1,11 @@
 package dev.astranfalio.teioc.controller;
 
+import dev.astranfalio.teioc.dto.SurveyCompleteSimpleDto;
 import dev.astranfalio.teioc.dto.SurveyDto;
 import dev.astranfalio.teioc.entity.SurveyEntity;
 import dev.astranfalio.teioc.repository.TopicRepository;
 import dev.astranfalio.teioc.service.PathwayDataService;
+import dev.astranfalio.teioc.service.SurveyCreatorService;
 import dev.astranfalio.teioc.service.SurveyDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class SurveyController {
 
     private final SurveyDataService surveyDataService;
+    private final SurveyCreatorService surveyCreatorService;
     private final TopicRepository topicRepository;
     private final PathwayDataService pathwayDataService;
 
@@ -26,7 +29,7 @@ public class SurveyController {
     @ResponseBody
     public List<SurveyDto> getAllActiveSurveys() {
         return surveyDataService.findAll().stream()
-                .filter(surveyDto -> surveyDto.getStatus())
+                .filter(surveyDto -> surveyDto.getStatus()) // fixme : change to reference style
                 .map(SurveyDto::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -44,7 +47,7 @@ public class SurveyController {
         List<Integer> displayedSurveyIds = pathwayDataService.findAllByInternId(intern_id)
                 .stream()
                 .map(pathway -> pathway.getSurvey().getId())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // fixme : change every collect(Collectors.toList()) to toList().
         List<SurveyEntity> allSurveys = surveyDataService.findAll();
         List<SurveyDto> availableSurveys = allSurveys.stream()
                 .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus())
@@ -62,6 +65,12 @@ public class SurveyController {
         SurveyEntity savedEntity = surveyDataService.save(surveyEntity);
         SurveyDto savedDto = SurveyDto.convertToDto(savedEntity);
         return savedDto;
+    }
+
+    @PostMapping("/complete")
+    @ResponseBody
+    public void addCompleteSurvey(@Valid @RequestBody SurveyCompleteSimpleDto dto) {
+        surveyCreatorService.createSurveyWithQuestionWithAnswers(dto);
     }
 
     @DeleteMapping("/{id}")

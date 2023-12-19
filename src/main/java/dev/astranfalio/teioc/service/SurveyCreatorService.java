@@ -2,9 +2,12 @@ package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.dto.QuestionSimpleDto;
 import dev.astranfalio.teioc.dto.QuestionWithAnswersSimpleDto;
+import dev.astranfalio.teioc.dto.SurveyCompleteSimpleDto;
 import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.entity.QuestionEntity;
+import dev.astranfalio.teioc.entity.SurveyEntity;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -21,20 +24,24 @@ public class SurveyCreatorService {
     public void createQuestionWithAnswers(QuestionWithAnswersSimpleDto dto) {
         QuestionWithAnswers questionWithAnswers = dto.toModel();
         if (isQuestionWithAnswersValid(questionWithAnswers)) {
-            QuestionEntity savedQuestion =
-                    questionDataService.save(questionWithAnswers.getQuestion());
-            for (AnswerEntity answerEntity : questionWithAnswers.getIncorrectAnswers()) {
-                answerEntity.setQuestion(savedQuestion);
-                answerDataService.save(answerEntity);
-            }
-            AnswerEntity correctAnswer = questionWithAnswers.getCorrectAnswer();
-            correctAnswer.setQuestion(savedQuestion);
-            AnswerEntity savedCorrectAnswer = answerDataService.save(correctAnswer);
-            questionDataService.associateWithCorrectAnswer(
-                    savedQuestion.getId(),
-                    savedCorrectAnswer.getId()
-            );
+            saveQuestionWithAnswers(questionWithAnswers);
         }
+    }
+
+    private void saveQuestionWithAnswers(QuestionWithAnswers questionWithAnswers) {
+        QuestionEntity savedQuestion =
+                questionDataService.save(questionWithAnswers.getQuestion());
+        for (AnswerEntity answerEntity : questionWithAnswers.getIncorrectAnswers()) {
+            answerEntity.setQuestion(savedQuestion);
+            answerDataService.save(answerEntity);
+        }
+        AnswerEntity correctAnswer = questionWithAnswers.getCorrectAnswer();
+        correctAnswer.setQuestion(savedQuestion);
+        AnswerEntity savedCorrectAnswer = answerDataService.save(correctAnswer);
+        questionDataService.associateWithCorrectAnswer(
+                savedQuestion.getId(),
+                savedCorrectAnswer.getId()
+        );
     }
 
     public boolean isQuestionWithAnswersValid(QuestionWithAnswers input) {
@@ -77,5 +84,24 @@ public class SurveyCreatorService {
                 && questionEntity.getLabel() != null
                 && !questionEntity.getLabel().isEmpty()
                 && !questionDataService.existsById(questionEntity.getId());
+    }
+
+    public void createSurveyWithQuestionWithAnswers(SurveyCompleteSimpleDto dto) {
+        SurveyQuestionAnswerModel surveyQAModel = dto.toModel();
+        if (isSurveyQAValidForCreation(surveyQAModel)) {
+            SurveyEntity savedSurvey = surveyDataService.save(surveyQAModel.getSurveyEntity());
+            for (QuestionWithAnswers questionWithAnswers : surveyQAModel.getQuestionWithAnswersList()) {
+                QuestionEntity question = questionWithAnswers.getQuestion();
+                question.setSurvey(savedSurvey);
+                saveQuestionWithAnswers(questionWithAnswers);
+            }
+        }
+    }
+
+    public boolean isSurveyQAValidForCreation(SurveyQuestionAnswerModel input) {
+        return input.getSurveyEntity().getName() != null
+                && !input.getSurveyEntity().getName().isEmpty()
+                && !surveyDataService.exists(Example.of(input.getSurveyEntity()))
+                && input.getQuestionWithAnswersList().stream().allMatch(this::isQuestionWithAnswersValid);
     }
 }
