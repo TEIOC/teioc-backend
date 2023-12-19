@@ -30,6 +30,20 @@ public class StatisticsController {
         return ResponseEntity.ok(averageScore);
     }
 
+    @GetMapping("/survey-performance/all")
+    @ResponseBody
+    public ResponseEntity<?> getSurveyPerformanceForAllInterns() {
+        var allPerformances = statisticsDataService.calculateScoreAndDurationForAllInterns();
+        return ResponseEntity.ok(allPerformances);
+    }
+
+    @GetMapping("/topic-performance/all")
+    @ResponseBody
+    public ResponseEntity<?> getTopicPerformanceForAllInterns() {
+        var allPerformances = statisticsDataService.calculateScoreAndDurationForAllInternsForTopics();
+        return ResponseEntity.ok(allPerformances);
+    }
+
     @GetMapping("/survey-performance/intern/{internId}")
     @ResponseBody
     public ResponseEntity<?> getSurveyPerformanceForIntern(@PathVariable Integer internId) {

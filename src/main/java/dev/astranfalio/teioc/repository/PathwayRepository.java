@@ -13,6 +13,10 @@ import java.util.List;
 public interface PathwayRepository extends JpaRepository<PathwayEntity, PathwayId> {
     boolean existsById(PathwayId pathwayId);
 
+    @Query("SELECT DISTINCT p.intern.id FROM PathwayEntity p")
+    List<Integer> findAllInternIds();
+
+
     List<PathwayEntity> findAllByInternId(Integer internId);
 
     @Query("SELECT AVG(p.score) FROM PathwayEntity p")

@@ -38,6 +38,32 @@ public class StatisticsDataService {
         Double averageScore = pathwayRepository.calculateAverageScoreForIntern(internId);
         return averageScore != null ? averageScore : 0.0;
     }
+
+    public Map<Integer, Map<String, Map<String, Object>>> calculateScoreAndDurationForAllInterns() {
+        List<Integer> internIds = pathwayRepository.findAllInternIds(); // Obtenez tous les ID des internes
+        Map<Integer, Map<String, Map<String, Object>>> allPerformances = new HashMap<>();
+
+        for (Integer internId : internIds) {
+            Map<String, Map<String, Object>> performance = calculateScoreAndDurationPerSurveyForIntern(internId);
+            allPerformances.put(internId, performance);
+        }
+
+        return allPerformances;
+    }
+
+    public Map<Integer, Map<String, Map<String, Object>>> calculateScoreAndDurationForAllInternsForTopics() {
+        List<Integer> internIds = pathwayRepository.findAllInternIds(); // Obtenez tous les ID des internes
+        Map<Integer, Map<String, Map<String, Object>>> allPerformances = new HashMap<>();
+
+        for (Integer internId : internIds) {
+            Map<String, Map<String, Object>> performance = calculateScoreAndDurationPerTopicForIntern(internId); // Utilisez la méthode pour les sujets (topics)
+            allPerformances.put(internId, performance);
+        }
+
+        return allPerformances;
+    }
+
+
 // StatisticsDataService.java
 
     public Map<String, Map<String, Object>> calculateScoreAndDurationPerSurveyForIntern(Integer internId) {
