@@ -16,27 +16,6 @@ public class StatisticsController {
         this.statisticsDataService = statisticsDataService;
     }
 
-    @GetMapping("/survey-performance")
-    @ResponseBody
-    public ResponseEntity<?> getActiveSurveyWisePerformance() {
-        Map<String, Double> surveyPerformance = statisticsDataService.calculateActiveSurveyWisePerformance();
-        return ResponseEntity.ok(surveyPerformance);
-    }
-
-    @GetMapping("/topic-performance")
-    @ResponseBody
-    public ResponseEntity<?> getActiveTopicWisePerformance() {
-        Map<String, Double> topicPerformance = statisticsDataService.calculateActiveTopicWisePerformance();
-        return ResponseEntity.ok(topicPerformance);
-    }
-
-    @GetMapping("/topic-performance/{internId}")
-    @ResponseBody
-    public ResponseEntity<?> getActiveTopicWisePerformanceForIntern(@PathVariable Integer internId) {
-        Map<String, Double> topicPerformance = statisticsDataService.calculateActiveTopicWisePerformanceForIntern(internId);
-        return ResponseEntity.ok(topicPerformance);
-    }
-
     @GetMapping("/overall-performance")
     @ResponseBody
     public ResponseEntity<?> getOverallPerformance() {
@@ -64,5 +43,50 @@ public class StatisticsController {
         var performance = statisticsDataService.calculateScoreAndDurationPerTopicForIntern(internId);
         return ResponseEntity.ok(performance);
     }
+
+    @GetMapping("/ranking/survey/{surveyId}")
+    public ResponseEntity<?> getInternRankingBySurvey(@PathVariable Integer surveyId) {
+        Map<Integer, Double> ranking = statisticsDataService.getInternRankingBySurvey(surveyId);
+        return ResponseEntity.ok(ranking);
+    }
+
+    @GetMapping("/ranking/topic/{topicId}")
+    public ResponseEntity<?> getInternRankingByTopic(@PathVariable Integer topicId) {
+        Map<Integer, Double> ranking = statisticsDataService.getInternRankingByTopic(topicId);
+        return ResponseEntity.ok(ranking);
+    }
+
+    @GetMapping("/ranking/survey")
+    public ResponseEntity<?> getSurveyRanking() {
+        Map<String, Double> ranking = statisticsDataService.getRankedSurveys();
+        return ResponseEntity.ok(ranking);
+    }
+
+    @GetMapping("/ranking/topic")
+    public ResponseEntity<?> getTopicRanking() {
+        Map<String, Double> ranking = statisticsDataService.getRankedTopics();
+        return ResponseEntity.ok(ranking);
+    }
+
+    /* @GetMapping("/survey-performance")
+    @ResponseBody
+    public ResponseEntity<?> getActiveSurveyWisePerformance() {
+        Map<String, Double> surveyPerformance = statisticsDataService.calculateActiveSurveyWisePerformance();
+        return ResponseEntity.ok(surveyPerformance);
+    }
+
+    @GetMapping("/topic-performance")
+    @ResponseBody
+    public ResponseEntity<?> getActiveTopicWisePerformance() {
+        Map<String, Double> topicPerformance = statisticsDataService.calculateActiveTopicWisePerformance();
+        return ResponseEntity.ok(topicPerformance);
+    }
+
+    @GetMapping("/topic-performance/{internId}")
+    @ResponseBody
+    public ResponseEntity<?> getActiveTopicWisePerformanceForIntern(@PathVariable Integer internId) {
+        Map<String, Double> topicPerformance = statisticsDataService.calculateActiveTopicWisePerformanceForIntern(internId);
+        return ResponseEntity.ok(topicPerformance);
+    } */
 
 }

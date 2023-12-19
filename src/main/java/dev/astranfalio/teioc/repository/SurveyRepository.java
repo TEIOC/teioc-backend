@@ -11,19 +11,24 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<SurveyEntity, Integer> {
 
-    @Query("SELECT s.name, AVG(p.score) " +
+    @Query("SELECT s.id, s.name, AVG(p.score) " +
             "FROM PathwayEntity p JOIN p.survey s " +
             "WHERE p.intern.id = :internId " +
-            "GROUP BY s.name")
+            "GROUP BY s.id, s.name")
     List<Object[]> calculateScorePerSurveyForIntern(@Param("internId") Integer internId);
 
-    @Query("SELECT t.name, AVG(p.score) " +
+    @Query("SELECT t.id, t.name, AVG(p.score) " +
             "FROM PathwayEntity p JOIN p.survey s JOIN s.topic t " +
             "WHERE p.intern.id = :internId " +
-            "GROUP BY t.name")
+            "GROUP BY t.id, t.name")
     List<Object[]> calculateScorePerTopicForIntern(@Param("internId") Integer internId);
 
-    @Query("SELECT s.name, AVG(p.score) " +
+    @Query("SELECT p.intern.id, AVG(p.score) FROM PathwayEntity p WHERE p.survey.id = :surveyId GROUP BY p.intern.id")
+    List<Object[]> calculateRankingBySurvey(@Param("surveyId") Integer surveyId);
+    @Query("SELECT s.name, AVG(p.score) FROM PathwayEntity p JOIN p.survey s GROUP BY s.name")
+    List<Object[]> fetchSurveyDataForRanking();
+
+    /* @Query("SELECT s.name, AVG(p.score) " +
             "FROM PathwayEntity p JOIN p.survey s " +
             "WHERE p.intern.status = true " +
             "AND s.status = true " +
@@ -46,5 +51,5 @@ public interface SurveyRepository extends JpaRepository<SurveyEntity, Integer> {
             "AND t.status = true " +
             "GROUP BY t.name")
     List<Object[]> calculateAverageScorePerTopicForActiveIntern(@Param("internId") Integer internId);
-
+*/
 }

@@ -13,7 +13,7 @@
     import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
     import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
     import org.springframework.security.config.http.SessionCreationPolicy;
-    import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+    import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.security.web.SecurityFilterChain;
     import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -37,7 +37,9 @@
                     .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .authorizeHttpRequests(auth -> auth
                             // PUBLIC ROUTES
-                            .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys", "/topics", "/statistics/survey-performance", "/statistics/topic-performance", "/statistics/overall-performance").permitAll()
+                            .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys",
+                                    "/topics" /*, "/statistics/survey-performance", "/statistics/topic-performance",
+                                    "/statistics/overall-performance"*/, "/statistics/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/interns", "/auth/login", "/auth/refresh-token",
                                     "/auth/logout", "/interns/reset-password",
                                     "/email/reset-password", "/email/activate").permitAll()
@@ -48,7 +50,9 @@
                                     "/answers", "/answers/*", "/answers/questions/*",
                                     "/pathways", "/pathways/*/*", "/pathways/intern/*",
                                     "/surveys/*", "/topics/*", "/pathwayanswers",
-                                    "/pathwayanswers/*/*", "/statistics/topic-performance/*", "/statistics/individual-performance/*", "/statistics/survey-performance/intern/*", "/statistics/topic-performance/intern/*").hasRole(INTERN)
+                                    "/pathwayanswers/*/*"/*, "/statistics/topic-performance/*", "/statistics/individual-performance/*",
+                                    "/statistics/survey-performance/intern/*", "/statistics/topic-performance/intern/*"
+                                    , "/statistics/ranking/survey/*", "/statistics/ranking/topic/* "*/).hasRole(INTERN)
                             .requestMatchers(HttpMethod.POST, "/pathwayanswers").hasRole(INTERN)
                             .requestMatchers(HttpMethod.PUT, "/interns/*/deactivate", "/pathwayanswers/*/*/*").hasRole(INTERN)
                             .requestMatchers( HttpMethod.DELETE, "/pathwayanswers/*/*/*").hasRole(INTERN)
@@ -80,8 +84,8 @@
 
         @Bean
         public PasswordEncoder passwordEncoder() {
-            return NoOpPasswordEncoder.getInstance();
-    //        return new BCryptPasswordEncoder();
+    //        return NoOpPasswordEncoder.getInstance();
+            return new BCryptPasswordEncoder();
         }
     }
 
