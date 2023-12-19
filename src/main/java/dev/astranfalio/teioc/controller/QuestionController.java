@@ -1,6 +1,7 @@
 package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.dto.QuestionDto;
+import dev.astranfalio.teioc.dto.QuestionSimpleDto;
 import dev.astranfalio.teioc.dto.QuestionWithAnswersDto;
 import dev.astranfalio.teioc.dto.QuestionWithAnswersSimpleDto;
 import dev.astranfalio.teioc.entity.QuestionEntity;
@@ -75,6 +76,12 @@ public class QuestionController {
         QuestionEntity savedEntity = questionDataService.save(questionEntity);
         QuestionDto savedDto = QuestionDto.convertToDto(savedEntity);
         return savedDto;
+    }
+
+    @PostMapping("/empty")
+    @ResponseBody
+    public void addEmptyQuestion(@RequestBody QuestionSimpleDto dto) {
+        surveyCreatorService.createEmptyQuestion(dto);
     }
 
     @PostMapping("/withAnswers")

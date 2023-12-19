@@ -17,7 +17,7 @@ public class QuestionSimpleDto {
         return QuestionEntity.builder()
                 .label(this.label)
                 .sortOrder(0)
-                .id(0)
+                .id(-1)
                 .status(false)
                 .build();
     }
