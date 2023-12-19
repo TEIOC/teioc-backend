@@ -38,7 +38,7 @@
                     .authorizeHttpRequests(auth -> auth
                             // PUBLIC ROUTES
                             .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys",
-                                    "/topics" /*, "/statistics/survey-performance", "/statistics/topic-performance",
+                                    "/topics", "/questions/surveys/*/questions-count" /*, "/statistics/survey-performance", "/statistics/topic-performance",
                                     "/statistics/overall-performance"*/, "/statistics/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/interns", "/auth/login", "/auth/refresh-token",
                                     "/auth/logout", "/interns/reset-password",
