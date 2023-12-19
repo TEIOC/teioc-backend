@@ -29,7 +29,7 @@ public class SurveyController {
     @ResponseBody
     public List<SurveyDto> getAllActiveSurveys() {
         return surveyDataService.findAll().stream()
-                .filter(surveyDto -> surveyDto.getStatus()) // fixme : change to reference style
+                .filter(SurveyEntity::getStatus)
                 .map(SurveyDto::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -47,7 +47,7 @@ public class SurveyController {
         List<Integer> displayedSurveyIds = pathwayDataService.findAllByInternId(intern_id)
                 .stream()
                 .map(pathway -> pathway.getSurvey().getId())
-                .collect(Collectors.toList()); // fixme : change every collect(Collectors.toList()) to toList().
+                .toList();
         List<SurveyEntity> allSurveys = surveyDataService.findAll();
         List<SurveyDto> availableSurveys = allSurveys.stream()
                 .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus())
