@@ -60,14 +60,17 @@ public class StatisticsDataService {
     public Map<String, Map<String, Object>> calculateScoreAndDurationPerTopicForIntern(Integer internId) {
         List<Object[]> scoreResults = surveyRepository.calculateScorePerTopicForIntern(internId);
         List<PathwayEntity> durationResults = pathwayRepository.findDurationsByTopicForIntern(internId);
+
+        // We need to pass the topic name to the calculateAverageDurations function
         Map<String, Double> averageDurations = calculateAverageDurations(durationResults, true);
+
         return scoreResults.stream().collect(Collectors.toMap(
-                result -> String.valueOf(result[1]), // Topic name
+                result -> String.valueOf(result[1]),
                 result -> {
                     Map<String, Object> details = new HashMap<>();
-                    details.put("Topic ID", (Integer) result[0]); // Include Topic ID
+                    details.put("Topic ID", (Integer) result[0]);
                     details.put("Average Score", (Double) result[2]);
-                    details.put("Average Duration", averageDurations.getOrDefault(String.valueOf(result[0]), 0.0));
+                    details.put("Average Duration", averageDurations.getOrDefault(String.valueOf(result[1]), 0.0));
                     return details;
                 }
         ));
