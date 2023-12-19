@@ -13,7 +13,10 @@ import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,6 +90,37 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                     return new QuestionWithAnswersDto(questionEntity.getId(), questionEntity.getLabel(), answerDtos, questionDto);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public List<String> validateQuestions(List<QuestionDto> questions) {
+        Set<String> validationMessages = new HashSet<>();
+        Set<Integer> questionOrders = new HashSet<>();
+
+        for (QuestionDto question : questions) {
+            List<AnswerDto> answers = answerDataService.findAnswersByQuestionId(question.getId());
+
+            if (answers.size() < 2) {
+                validationMessages.add("Question n°" + question.getId() + " has less than two possible answers.");
+            }
+
+            Integer correctAnswerId = question.getCorrectAnswer_id();
+            if (correctAnswerId == null || answerDataService.findById(correctAnswerId) == null) {
+                validationMessages.add("No correct answer defined for question n°" + question.getId());
+            }
+
+            if (!questionOrders.add(question.getSortOrder())) {
+                validationMessages.add("Two questions share the same order value.");
+            }
+
+            Set<Integer> answerOrders = new HashSet<>();
+            for (AnswerDto answer : answers) {
+                if (!answerOrders.add(answer.getSortOrder())) {
+                    validationMessages.add("Two answers share the same order value for question n°"+question.getId());
+                }
+            }
+        }
+
+        return new ArrayList<>(validationMessages);
     }
 }
 

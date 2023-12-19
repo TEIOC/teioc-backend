@@ -55,6 +55,8 @@
                             // ADMIN FULL ACCESS (Not implemented yet)
     //                        .anyRequest().hasRole("ADMIN")
                             .anyRequest().authenticated()
+                            // TEMP GODMODE
+//                            .anyRequest().permitAll()
                     )
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
     //                .formLogin(form -> form.loginProcessingUrl("/login").permitAll())

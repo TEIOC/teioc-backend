@@ -1,5 +1,6 @@
 package dev.astranfalio.teioc.service;
 
+import dev.astranfalio.teioc.dto.QuestionDto;
 import dev.astranfalio.teioc.dto.SurveyDto;
 import dev.astranfalio.teioc.entity.SurveyEntity;
 import dev.astranfalio.teioc.entity.TopicEntity;
@@ -9,18 +10,20 @@ import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer, SurveyRepository> {
 
     private final TopicRepository topicRepository;
 
-    private final SurveyRepository surveyRepository;
+    private final QuestionDataService questionDataService;
 
     @Autowired
-    public SurveyDataService(SurveyRepository surveyRepository, TopicRepository topicRepository, Validator validator, SurveyRepository surveyRepository1) {
+    public SurveyDataService(SurveyRepository surveyRepository, TopicRepository topicRepository, Validator validator, QuestionDataService questionDataService, AnswerDataService answerDataService) {
         super(surveyRepository, validator);
         this.topicRepository = topicRepository;
-        this.surveyRepository = surveyRepository1;
+        this.questionDataService = questionDataService;
     }
 
     public SurveyEntity associateWithTopic(Integer survey_id, Integer topic_id) {
@@ -29,6 +32,13 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
                 .orElseThrow(() -> new ResourceNotFoundException("Topic not found with ID: " + topic_id));
         survey.setTopic(topic);
         return save(survey);
+    }
+
+    public List<String> isSurveyValid(Integer id) {
+        List<QuestionDto> questions = questionDataService.findBySurveyId(id);
+        List<String> validationMessages = questionDataService.validateQuestions(questions);
+
+        return validationMessages;
     }
 
 
