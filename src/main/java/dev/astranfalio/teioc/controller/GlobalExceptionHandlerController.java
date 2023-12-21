@@ -1,6 +1,7 @@
 package dev.astranfalio.teioc.controller;
 
 import dev.astranfalio.teioc.service.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandlerController {
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler({ResourceNotFoundException.class, EntityNotFoundException.class})
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleResourceNotFoundException(ResourceNotFoundException ex) {

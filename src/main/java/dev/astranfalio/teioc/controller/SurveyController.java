@@ -91,6 +91,7 @@ public class SurveyController {
     @PutMapping("/{id}/activate")
     @ResponseBody
     public ResponseEntity<String> activateSurvey(@PathVariable Integer id) {
+        // fixme : move this code to a service
         List<String> validationMessages = surveyDataService.isSurveyValid(id);
 
         if (validationMessages.isEmpty()) {
