@@ -92,10 +92,6 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                 .collect(Collectors.toList());
     }
 
-    public boolean existsById(Integer id) {
-        return repository.existsById(id);
-    }
-
     public List<String> validateQuestions(List<QuestionDto> questions) {
         Set<String> validationMessages = new HashSet<>();
         Set<Integer> questionOrders = new HashSet<>();

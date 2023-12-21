@@ -32,6 +32,9 @@ public abstract class AbstractDataService<T extends Identifiable<ID>, ID, R exte
     }
 
     public T save(T entity) {
+        if (existsById(entity.getId())) {
+            throw new UnsupportedOperationException("You can’t save a entity with an existing ID.");
+        }
         validate(entity);
         return repository.save(entity);
     }
@@ -47,6 +50,10 @@ public abstract class AbstractDataService<T extends Identifiable<ID>, ID, R exte
         }
         findById(id);
         return repository.save(entity);
+    }
+
+    public boolean existsById(ID id) {
+        return repository.existsById(id);
     }
 
     public T activate(ID id) {

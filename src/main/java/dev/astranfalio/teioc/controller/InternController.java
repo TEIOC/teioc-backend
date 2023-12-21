@@ -30,7 +30,6 @@ public class InternController {
                 .collect(Collectors.toList());
     }
 
-
     @GetMapping("/{id}")
     @ResponseBody
     public InternDto getInternById(@PathVariable Integer id) {
@@ -50,6 +49,7 @@ public class InternController {
     @PostMapping
     @ResponseBody
     public InternDto addIntern(@Valid @RequestBody InternDto internDto) {
+        // fixme: move to service
         internDto.setStatus(false);
         InternEntity internEntity = InternDto.convertToEntity(internDto);
         internEntity.setPassword(passwordEncoder.encode(internEntity.getPassword()));
