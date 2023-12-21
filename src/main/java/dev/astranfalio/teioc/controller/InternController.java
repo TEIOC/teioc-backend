@@ -76,6 +76,7 @@ public class InternController {
     @PutMapping("/{id}")
     @ResponseBody
     public InternDto updateIntern(@PathVariable Integer id, @RequestBody InternDto internDto) {
+        internDto.setPassword(passwordEncoder.encode(internDto.getPassword()));
         InternEntity updatedEntity = internDataService.update(id, internDto);
         return InternDto.convertToDto(updatedEntity);
     }
