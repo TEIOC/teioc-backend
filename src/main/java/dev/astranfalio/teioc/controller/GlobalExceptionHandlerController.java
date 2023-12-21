@@ -33,4 +33,11 @@ public class GlobalExceptionHandlerController {
         });
         return errors;
     }
+
+    @ExceptionHandler(UnsupportedOperationException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String handleUnsupportedOperationException(UnsupportedOperationException ex) {
+        return ex.getMessage();
+    }
 }

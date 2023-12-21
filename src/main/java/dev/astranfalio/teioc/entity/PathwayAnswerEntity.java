@@ -11,7 +11,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PathwayAnswerEntity {
+public class PathwayAnswerEntity implements Identifiable<PathwayAnswerId> {
 
     @EmbeddedId
     private PathwayAnswerId id;

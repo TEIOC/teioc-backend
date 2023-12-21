@@ -58,6 +58,7 @@ public class PathwayAnswerController {
 
     @PutMapping("/{intern_id}/{survey_id}/{answer_id}")
     @ResponseBody
+    @Deprecated
     public PathwayAnswerDto updatePathwayAnswer(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id, @Valid @RequestBody PathwayAnswerDto pathwayAnswerDto) {
         pathwayAnswerDto.setIntern_id(intern_id);
         pathwayAnswerDto.setSurvey_id(survey_id);

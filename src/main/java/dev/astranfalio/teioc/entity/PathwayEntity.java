@@ -14,7 +14,7 @@ import java.sql.Time;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PathwayEntity {
+public class PathwayEntity implements Identifiable<PathwayId> {
     @EmbeddedId
     private PathwayId id;
 

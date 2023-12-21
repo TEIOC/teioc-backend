@@ -1,6 +1,7 @@
 package dev.astranfalio.teioc.service;
 
 import dev.astranfalio.teioc.entity.Activatable;
+import dev.astranfalio.teioc.entity.Identifiable;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Transactional
-public abstract class AbstractDataService<T, ID, R extends JpaRepository<T, ID>> {
+public abstract class AbstractDataService<T extends Identifiable<ID>, ID, R extends JpaRepository<T, ID>> {
 
     protected final R repository;
     protected final Validator validator;
@@ -41,6 +42,9 @@ public abstract class AbstractDataService<T, ID, R extends JpaRepository<T, ID>>
     }
 
     public T update(ID id, T entity) {
+        if (!id.equals(entity.getId())) {
+            throw new UnsupportedOperationException("You can’t change the ID through an update!");
+        }
         findById(id);
         return repository.save(entity);
     }
