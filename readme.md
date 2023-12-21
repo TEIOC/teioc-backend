@@ -23,33 +23,33 @@ The following guides illustrate how to use some features concretely:
 
 ### Repo
 
-.
-├── src
-│   └── main
-│       ├── java
-│       │   └── dev
-│       │       └── astranfalio
-│       │           └── teioc
-│       │               ├── config
-│       │               ├── controller
-│       │               ├── dto
-│       │               ├── entity
-│       │               ├── repository
-│       │               └── service
-│       └── resources
-└── target
-    ├── classes
-    │   └── dev
-    │       └── astranfalio
-    │           └── teioc
-    │               ├── config
-    │               ├── controller
-    │               ├── dto
-    │               ├── entity
-    │               ├── repository
-    │               └── service
-    ├── generated-sources
-    │   └── annotations
-    ├── generated-test-sources
-    │   └── test-annotations
-    └── test-classes
+├── 📁 src  
+│   └── 📁 main  
+│       ├── 📁 java  
+│       │   └── 📁 dev  
+│       │       └── 📁 astranfalio  
+│       │           └── 📁 teioc  
+│       │               ├── 📁 config  
+│       │               ├── 📁 controller  
+│       │               ├── 📁 dto  
+│       │               ├── 📁 entity  
+│       │               ├── 📁 repository  
+│       │               └── 📁 service  
+│       └── 📁 resources  
+└── 📁 target  
+    ├── 📁 classes  
+    │   └── 📁 dev  
+    │       └── 📁 astranfalio  
+    │           └── 📁 teioc  
+    │               ├── 📁 config  
+    │               ├── 📁 controller  
+    │               ├── 📁 dto  
+    │               ├── 📁 entity  
+    │               ├── 📁 repository  
+    │               └── 📁 service  
+    ├── 📁 generated-sources  
+    │   └── 📁 annotations  
+    ├── 📁 generated-test-sources  
+    │   └── 📁 test-annotations  
+    └── 📁 test-classes
+
