@@ -20,3 +20,36 @@ The following guides illustrate how to use some features concretely:
 * [Accessing Data with JPA](https://spring.io/guides/gs/accessing-data-jpa/)
 * [Accessing data with MySQL](https://spring.io/guides/gs/accessing-data-mysql/)
 
+
+### Repo
+
+.
+├── src
+│   └── main
+│       ├── java
+│       │   └── dev
+│       │       └── astranfalio
+│       │           └── teioc
+│       │               ├── config
+│       │               ├── controller
+│       │               ├── dto
+│       │               ├── entity
+│       │               ├── repository
+│       │               └── service
+│       └── resources
+└── target
+    ├── classes
+    │   └── dev
+    │       └── astranfalio
+    │           └── teioc
+    │               ├── config
+    │               ├── controller
+    │               ├── dto
+    │               ├── entity
+    │               ├── repository
+    │               └── service
+    ├── generated-sources
+    │   └── annotations
+    ├── generated-test-sources
+    │   └── test-annotations
+    └── test-classes
