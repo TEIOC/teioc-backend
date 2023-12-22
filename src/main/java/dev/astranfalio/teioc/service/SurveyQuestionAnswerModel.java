@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class SurveyQuestionAnswerModel {
-    List<QuestionWithAnswers> questionWithAnswersList;
-    SurveyEntity surveyEntity;
+    private List<QuestionWithAnswers> questionWithAnswersList;
+    private SurveyEntity surveyEntity;
 }

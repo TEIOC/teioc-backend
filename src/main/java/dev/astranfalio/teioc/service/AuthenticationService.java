@@ -14,12 +14,11 @@ public class AuthenticationService {
 
     public InternEntity authenticate(LoginDto loginDto) {
         InternEntity intern = internRepository.findByEmail(loginDto.getEmail())
-                .orElse(null); // This handles the case where findByEmail returns an Optional.
+                .orElse(null);
 
         if (intern != null && intern.getPassword().equals(loginDto.getPassword())) {
             return intern;
         } else {
-            // Throwing a generic exception to avoid giving hints to potential attackers
             throw new RuntimeException("Invalid credentials");
         }
     }

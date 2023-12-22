@@ -7,7 +7,6 @@ import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.entity.QuestionEntity;
 import dev.astranfalio.teioc.entity.SurveyEntity;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -25,6 +24,8 @@ public class SurveyCreatorService {
         QuestionWithAnswers questionWithAnswers = dto.toModel();
         if (isQuestionWithAnswersValid(questionWithAnswers)) {
             saveQuestionWithAnswers(questionWithAnswers);
+        } else {
+            throw new IllegalArgumentException("Survey is not valid for creation, contact admin for details.");
         }
     }
 
@@ -76,6 +77,8 @@ public class SurveyCreatorService {
         QuestionEntity questionEntity = dto.toEntity();
         if (isQuestionValidForCreation(questionEntity)) {
             questionDataService.save(questionEntity);
+        } else {
+            throw new IllegalArgumentException("Survey is not valid for creation, contact admin for details.");
         }
     }
 
@@ -95,13 +98,15 @@ public class SurveyCreatorService {
                 question.setSurvey(savedSurvey);
                 saveQuestionWithAnswers(questionWithAnswers);
             }
+        } else {
+            throw new IllegalArgumentException("Survey is not valid for creation, contact admin for details.");
         }
     }
 
     public boolean isSurveyQAValidForCreation(SurveyQuestionAnswerModel input) {
         return input.getSurveyEntity().getName() != null
                 && !input.getSurveyEntity().getName().isEmpty()
-                && !surveyDataService.exists(Example.of(input.getSurveyEntity()))
+                && !surveyDataService.existsByName(input.getSurveyEntity().getName())
                 && input.getQuestionWithAnswersList().stream().allMatch(this::isQuestionWithAnswersValid);
     }
 }

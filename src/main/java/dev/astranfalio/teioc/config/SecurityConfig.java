@@ -38,8 +38,7 @@
                     .authorizeHttpRequests(auth -> auth
                             // PUBLIC ROUTES
                             .requestMatchers(HttpMethod.GET, "/interns", "/interns/*", "/surveys",
-                                    "/topics", "/questions/surveys/*/questions-count" /*, "/statistics/survey-performance", "/statistics/topic-performance",
-                                    "/statistics/overall-performance"*/, "/statistics/**").permitAll()
+                                    "/topics", "/questions/surveys/*/questions-count", "/statistics/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/interns", "/auth/login", "/auth/refresh-token",
                                     "/auth/logout", "/interns/reset-password",
                                     "/email/reset-password", "/email/activate").permitAll()
@@ -50,20 +49,13 @@
                                     "/answers", "/answers/*", "/answers/questions/*",
                                     "/pathways", "/pathways/*/*", "/pathways/intern/*",
                                     "/surveys/*", "/topics/*", "/pathwayanswers",
-                                    "/pathwayanswers/*/*"/*, "/statistics/topic-performance/*", "/statistics/individual-performance/*",
-                                    "/statistics/survey-performance/intern/*", "/statistics/topic-performance/intern/*"
-                                    , "/statistics/ranking/survey/*", "/statistics/ranking/topic/* "*/).hasRole(INTERN)
+                                    "/pathwayanswers/*/*").hasRole(INTERN)
                             .requestMatchers(HttpMethod.POST, "/pathwayanswers").hasRole(INTERN)
                             .requestMatchers(HttpMethod.PUT, "/interns/*/deactivate", "/pathwayanswers/*/*/*").hasRole(INTERN)
                             .requestMatchers( HttpMethod.DELETE, "/pathwayanswers/*/*/*").hasRole(INTERN)
-                            // ADMIN FULL ACCESS (Not implemented yet)
-    //                        .anyRequest().hasRole("ADMIN")
                             .anyRequest().authenticated()
-                            // TEMP GODMODE
-//                            .anyRequest().permitAll()
                     )
                     .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-    //                .formLogin(form -> form.loginProcessingUrl("/login").permitAll())
                     .logout(logout -> logout.logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout")).permitAll())
                     .httpBasic(withDefaults());
             return http.build();
@@ -88,8 +80,3 @@
             return new BCryptPasswordEncoder();
         }
     }
-
-
-
-
-

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,20 +54,20 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
         List<SurveyDto> surveys = surveyRepository.findAll()
                 .stream()
                 .map(SurveyDto::convertToDto)
-                .filter(s -> s.getTopicId() == topic_id)
-                .collect(Collectors.toList());
+                .filter(s -> Objects.equals(s.getTopicId(), topic_id))
+                .toList();
         return surveys.stream()
                 .flatMap(surveyDto -> this.findBySurveyId(surveyDto.getId())
                         .stream())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<QuestionDto> findBySurveyId(Integer survey_id) {
         return repository.findAll()
                 .stream()
                 .map(QuestionDto::convertToDto)
-                .filter(questionDto -> questionDto.getSurvey_id() == survey_id)
-                .collect(Collectors.toList());
+                .filter(questionDto -> Objects.equals(questionDto.getSurvey_id(), survey_id))
+                .toList();
     }
 
     public QuestionEntity convertToEntity(QuestionDto questionDto) {
@@ -89,15 +90,11 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                     QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
                     return new QuestionWithAnswersDto(questionEntity.getId(), questionEntity.getLabel(), answerDtos, questionDto);
                 })
-                .collect(Collectors.toList());
-    }
-
-    public boolean existsById(Integer id) {
-        return repository.existsById(id);
+                .toList();
     }
 
     public List<String> validateQuestions(List<QuestionDto> questions) {
-        Set<String> validationMessages = new HashSet<>();
+        List<String> validationMessages = new ArrayList<>();
         Set<Integer> questionOrders = new HashSet<>();
 
         for (QuestionDto question : questions) {
@@ -124,7 +121,7 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
             }
         }
 
-        return new ArrayList<>(validationMessages);
+        return validationMessages;
     }
 }
 

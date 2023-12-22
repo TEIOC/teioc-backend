@@ -7,7 +7,6 @@ import dev.astranfalio.teioc.entity.PathwayAnswerId;
 import dev.astranfalio.teioc.service.PathwayAnswerDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,7 +24,7 @@ public class PathwayAnswerController {
     public List<PathwayAnswerDto> getAllPathwayAnswers() {
         return pathwayAnswerDataService.findAll().stream()
                 .map(PathwayAnswerDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/{intern_id}/{survey_id}/{answer_id}")
@@ -37,9 +36,9 @@ public class PathwayAnswerController {
     }
 
     @GetMapping("/completed/{intern_id}/{survey_id}")
-    public ResponseEntity<List<CompletedSurveyDetailsDto>> getCompletedSurveyDetails(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
+    public List<CompletedSurveyDetailsDto> getCompletedSurveyDetails(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
         List<CompletedSurveyDetailsDto> details = pathwayAnswerDataService.getCompletedSurveyDetails(intern_id, survey_id);
-        return ResponseEntity.ok(details);
+        return details;
     }
 
     @PostMapping
@@ -56,8 +55,10 @@ public class PathwayAnswerController {
         pathwayAnswerDataService.deleteById(new PathwayAnswerId(intern_id, survey_id, answer_id));
     }
 
+    // fixme: just delete it. Never used and do not work anyway.
     @PutMapping("/{intern_id}/{survey_id}/{answer_id}")
     @ResponseBody
+    @Deprecated
     public PathwayAnswerDto updatePathwayAnswer(@PathVariable Integer intern_id, @PathVariable Integer survey_id, @PathVariable Integer answer_id, @Valid @RequestBody PathwayAnswerDto pathwayAnswerDto) {
         pathwayAnswerDto.setIntern_id(intern_id);
         pathwayAnswerDto.setSurvey_id(survey_id);
@@ -70,10 +71,9 @@ public class PathwayAnswerController {
 
     @PostMapping("/save-answers")
     @ResponseBody
-    public ResponseEntity<?> saveInternAnswers(@RequestBody List<PathwayAnswerDto> answers) {
+    public void saveInternAnswers(@RequestBody List<PathwayAnswerDto> answers) {
         for (PathwayAnswerDto answer : answers) {
             pathwayAnswerDataService.add(answer);
         }
-        return ResponseEntity.ok().build();
     }
 }

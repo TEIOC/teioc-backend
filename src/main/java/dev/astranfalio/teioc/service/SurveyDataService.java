@@ -8,7 +8,6 @@ import dev.astranfalio.teioc.repository.SurveyRepository;
 import dev.astranfalio.teioc.repository.TopicRepository;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,6 +41,19 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
         return validationMessages;
     }
 
+    @Override
+    public SurveyEntity activate(Integer id) {
+        SurveyEntity surveyEntity = findById(id);
+        if (surveyEntity.getTopic() == null) {
+            throw new IllegalArgumentException("Could not activate survey with empty topicId.");
+        }
+        List<QuestionDto> questions = questionDataService.findBySurveyId(id);
+        List<String> validationErrors = questionDataService.validateQuestions(questions);
+        if (!validationErrors.isEmpty()) {
+            throw new IllegalArgumentException("Validation errors found: " + validationErrors);
+        }
+        return super.activate(id);
+    }
 
     public static SurveyEntity convertToEntity(SurveyDto surveyDto, TopicRepository topicRepository) {
         TopicEntity topic = surveyDto.getTopicId() != null
@@ -57,7 +69,7 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
                 .build();
     }
 
-    public boolean exists(Example<SurveyEntity> surveyEntityExample) {
-        return repository.exists(surveyEntityExample);
+    public boolean existsByName(String name) {
+        return repository.existsByName(name);
     }
 }

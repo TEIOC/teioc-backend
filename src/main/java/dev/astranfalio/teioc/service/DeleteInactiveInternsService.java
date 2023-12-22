@@ -12,14 +12,13 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class DeleteInactiveInternsService {
 
     private final InternRepository internRepository;
     private final PathwayRepository pathwayRepository;
-    private final PathwayAnswerRepository pathwayAnswerRepository; // Add this repository
+    private final PathwayAnswerRepository pathwayAnswerRepository;
 
     @Autowired
     public DeleteInactiveInternsService(
@@ -41,7 +40,7 @@ public class DeleteInactiveInternsService {
 
         List<InternEntity> inactiveInterns = interns.stream()
                 .filter(intern -> !intern.isStatus() && intern.getLastConnection() != null && intern.getLastConnection().before(oneMonthAgo))
-                .collect(Collectors.toList());
+                .toList();
 
         for (InternEntity intern : inactiveInterns) {
             List<PathwayEntity> pathways = pathwayRepository.findAllByInternId(intern.getId());
@@ -54,6 +53,3 @@ public class DeleteInactiveInternsService {
         internRepository.deleteAll(inactiveInterns);
     }
 }
-
-
-

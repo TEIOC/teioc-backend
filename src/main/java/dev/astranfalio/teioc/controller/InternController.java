@@ -6,7 +6,6 @@ import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +26,16 @@ public class InternController {
     public List<InternDto> getAllActiveInterns() {
         return internDataService.findAllActive().stream()
                 .map(InternDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
+    @GetMapping("/all")
+    @ResponseBody
+    public List<InternDto> findAll() {
+        return internDataService.findAll().stream()
+                .map(InternDto::convertToDto)
+                .toList();
+    }
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -50,9 +56,10 @@ public class InternController {
     @PostMapping
     @ResponseBody
     public InternDto addIntern(@Valid @RequestBody InternDto internDto) {
-        internDto.setStatus(false);
+        // fixme: move to service
+        internDto.setStatus(false); // fixme: move to a service
         InternEntity internEntity = InternDto.convertToEntity(internDto);
-        internEntity.setPassword(passwordEncoder.encode(internEntity.getPassword()));
+        internEntity.setPassword(passwordEncoder.encode(internEntity.getPassword())); // fixme: move to a service
         InternEntity savedEntity = internDataService.save(internEntity);
         InternDto savedDto = InternDto.convertToDto(savedEntity);
         return savedDto;
@@ -62,7 +69,7 @@ public class InternController {
     @ResponseBody
     public InternDto resetPassword(@RequestBody LoginDto loginDto) {
         InternEntity internEntity = internDataService.findInternByEmail(loginDto.getEmail());
-        internEntity.setPassword(passwordEncoder.encode(loginDto.getPassword()));
+        internEntity.setPassword(passwordEncoder.encode(loginDto.getPassword())); // fixme: move to a service
         InternEntity updatedEntity = internDataService.update(internEntity.getId(), internEntity);
         return InternDto.convertToDto(updatedEntity);
     }
@@ -76,7 +83,7 @@ public class InternController {
     @PutMapping("/{id}")
     @ResponseBody
     public InternDto updateIntern(@PathVariable Integer id, @RequestBody InternDto internDto) {
-        internDto.setPassword(passwordEncoder.encode(internDto.getPassword()));
+        internDto.setPassword(passwordEncoder.encode(internDto.getPassword())); // fixme: move to a service
         InternEntity updatedEntity = internDataService.update(id, internDto);
         return InternDto.convertToDto(updatedEntity);
     }
@@ -99,11 +106,9 @@ public class InternController {
 
     @PutMapping("/{id}/update-last-connection")
     @ResponseBody
-    public ResponseEntity<?> updateLastConnection(@PathVariable Integer id) {
+    public InternDto updateLastConnection(@PathVariable Integer id) {
         InternEntity updatedIntern = internDataService.updateLastConnection(id);
         InternDto internDto = InternDto.convertToDto(updatedIntern);
-        return ResponseEntity.ok(internDto);
+        return internDto;
     }
-
-
 }

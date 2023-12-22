@@ -9,7 +9,6 @@ import dev.astranfalio.teioc.service.QuestionDataService;
 import dev.astranfalio.teioc.service.SurveyCreatorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,11 +26,18 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getAllActiveQuestions() {
         return questionDataService.findAll().stream()
-                .filter(questionDto -> questionDto.getStatus())
+                .filter(QuestionEntity::getStatus) // fixme: move to service
                 .map(QuestionDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
+    @GetMapping("/all")
+    @ResponseBody
+    public List<QuestionDto> findAll() {
+        return questionDataService.findAll().stream()
+                .map(QuestionDto::convertToDto)
+                .toList();
+    }
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -45,8 +51,8 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getQuestionsByTopic(@PathVariable Integer id) {
         return questionDataService.findByTopicId(id).stream()
-                .filter(questionDto -> questionDto.getStatus())
-                .collect(Collectors.toList());
+                .filter(QuestionDto::getStatus) // fixme: move to service
+                .toList();
     }
 
 
@@ -54,8 +60,8 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
         return questionDataService.findBySurveyId(id).stream()
-                .filter(questionDto -> questionDto.getStatus())
-                .collect(Collectors.toList());
+                .filter(QuestionDto::getStatus) // fixme: move to service
+                .toList();
     }
 
 
@@ -63,26 +69,26 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionWithAnswersDto> getQuestionsWithAnswersBySurvey(@PathVariable Integer id) {
         return questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
-                .filter(QuestionWithAnswersDto::isQuestionActive)
-                .collect(Collectors.toList());
+                .filter(QuestionWithAnswersDto::isQuestionActive) // fixme: move to service
+                .toList();
     }
 
     @GetMapping("/surveys/{id}/questions-count")
     @ResponseBody
-    public ResponseEntity<?> getQuestionsCountBySurvey(@PathVariable Integer id) {
+    public int getQuestionsCountBySurvey(@PathVariable Integer id) {
         List<QuestionWithAnswersDto> questionsWithAnswers = questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
-                .filter(QuestionWithAnswersDto::isQuestionActive)
-                .collect(Collectors.toList());
+                .filter(QuestionWithAnswersDto::isQuestionActive) // fixme: move to service
+                .toList();
 
         int questionCount = questionsWithAnswers.size();
-        return ResponseEntity.ok(questionCount);
+        return questionCount;
     }
 
 
     @PostMapping
     @ResponseBody
     public QuestionDto addQuestion(@Valid @RequestBody QuestionDto questionDto) {
-        questionDto.setStatus(false);
+        questionDto.setStatus(false); // fixme: move to service
         QuestionEntity questionEntity = questionDataService.convertToEntity(questionDto);
         QuestionEntity savedEntity = questionDataService.save(questionEntity);
         QuestionDto savedDto = QuestionDto.convertToDto(savedEntity);

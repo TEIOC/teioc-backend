@@ -40,7 +40,7 @@ public class StatisticsDataService {
     }
 
     public Map<Integer, Map<String, Map<String, Object>>> calculateScoreAndDurationForAllInterns() {
-        List<Integer> internIds = pathwayRepository.findAllInternIds(); // Obtenez tous les ID des internes
+        List<Integer> internIds = pathwayRepository.findAllInternIds();
         Map<Integer, Map<String, Map<String, Object>>> allPerformances = new HashMap<>();
 
         for (Integer internId : internIds) {
@@ -52,19 +52,16 @@ public class StatisticsDataService {
     }
 
     public Map<Integer, Map<String, Map<String, Object>>> calculateScoreAndDurationForAllInternsForTopics() {
-        List<Integer> internIds = pathwayRepository.findAllInternIds(); // Obtenez tous les ID des internes
+        List<Integer> internIds = pathwayRepository.findAllInternIds();
         Map<Integer, Map<String, Map<String, Object>>> allPerformances = new HashMap<>();
 
         for (Integer internId : internIds) {
-            Map<String, Map<String, Object>> performance = calculateScoreAndDurationPerTopicForIntern(internId); // Utilisez la méthode pour les sujets (topics)
+            Map<String, Map<String, Object>> performance = calculateScoreAndDurationPerTopicForIntern(internId);
             allPerformances.put(internId, performance);
         }
 
         return allPerformances;
     }
-
-
-// StatisticsDataService.java
 
     public Map<String, Map<String, Object>> calculateScoreAndDurationPerSurveyForIntern(Integer internId) {
         List<Object[]> scoreResults = surveyRepository.calculateScorePerSurveyForIntern(internId);
@@ -176,35 +173,4 @@ public class StatisticsDataService {
                         LinkedHashMap::new        // Preserve the order
                 ));
     }
-
-        /* public Map<String, Double> calculateActiveSurveyWisePerformance() {
-        List<Object[]> results = surveyRepository.calculateAverageScorePerSurveyForActiveInterns();
-        return results.stream().collect(Collectors.toMap(
-                result -> (String) result[0],
-                result -> (Double) result[1]
-        ));
-    }
-
-    public Map<String, Double> calculateActiveTopicWisePerformance() {
-        List<Object[]> results = surveyRepository.calculateAverageScorePerTopicForActiveInterns();
-        Map<String, Double> topicPerformance = new HashMap<>();
-        for (Object[] result : results) {
-            String topicName = (String) result[0];
-            Double averageScore = (Double) result[1];
-            topicPerformance.put(topicName, averageScore);
-        }
-        return topicPerformance;
-    }
-
-    public Map<String, Double> calculateActiveTopicWisePerformanceForIntern(Integer internId) {
-        List<Object[]> results = surveyRepository.calculateAverageScorePerTopicForActiveIntern(internId);
-        Map<String, Double> topicPerformance = new HashMap<>();
-        for (Object[] result : results) {
-            String topicName = (String) result[0];
-            Double averageScore = (Double) result[1];
-            topicPerformance.put(topicName, averageScore);
-        }
-        return topicPerformance;
-    }  */
-
 }

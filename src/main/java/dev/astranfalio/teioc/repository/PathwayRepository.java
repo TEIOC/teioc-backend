@@ -16,7 +16,6 @@ public interface PathwayRepository extends JpaRepository<PathwayEntity, PathwayI
     @Query("SELECT DISTINCT p.intern.id FROM PathwayEntity p")
     List<Integer> findAllInternIds();
 
-
     List<PathwayEntity> findAllByInternId(Integer internId);
 
     @Query("SELECT AVG(p.score) FROM PathwayEntity p")

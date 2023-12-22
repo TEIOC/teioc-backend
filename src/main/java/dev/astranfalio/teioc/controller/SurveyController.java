@@ -9,7 +9,6 @@ import dev.astranfalio.teioc.service.SurveyCreatorService;
 import dev.astranfalio.teioc.service.SurveyDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,9 +28,17 @@ public class SurveyController {
     @ResponseBody
     public List<SurveyDto> getAllActiveSurveys() {
         return surveyDataService.findAll().stream()
-                .filter(SurveyEntity::getStatus)
+                .filter(SurveyEntity::getStatus) // fixme: move to service
                 .map(SurveyDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    @GetMapping("/all")
+    @ResponseBody
+    public List<SurveyDto> findAll() {
+        return surveyDataService.findAll().stream()
+                .map(SurveyDto::convertToDto)
+                .toList();
     }
 
     @GetMapping("/{id}")
@@ -44,23 +51,23 @@ public class SurveyController {
     @GetMapping("/available-surveys/{intern_id}")
     @ResponseBody
     public List<SurveyDto> getActiveAvailableSurveysForIntern(@PathVariable("intern_id") Integer intern_id) {
+        // fixme: move to service
         List<Integer> displayedSurveyIds = pathwayDataService.findAllByInternId(intern_id)
                 .stream()
                 .map(pathway -> pathway.getSurvey().getId())
                 .toList();
         List<SurveyEntity> allSurveys = surveyDataService.findAll();
         List<SurveyDto> availableSurveys = allSurveys.stream()
-                .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus())
+                .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus()) // fixme: move to service
                 .map(SurveyDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
         return availableSurveys;
     }
-
 
     @PostMapping
     @ResponseBody
     public SurveyDto addSurvey(@Valid @RequestBody SurveyDto surveyDto) {
-        surveyDto.setStatus(false);
+        surveyDto.setStatus(false); // fixme: move to service
         SurveyEntity surveyEntity = SurveyDataService.convertToEntity(surveyDto, topicRepository);
         SurveyEntity savedEntity = surveyDataService.save(surveyEntity);
         SurveyDto savedDto = SurveyDto.convertToDto(savedEntity);
@@ -90,19 +97,10 @@ public class SurveyController {
 
     @PutMapping("/{id}/activate")
     @ResponseBody
-    public ResponseEntity<String> activateSurvey(@PathVariable Integer id) {
-        List<String> validationMessages = surveyDataService.isSurveyValid(id);
-
-        if (validationMessages.isEmpty()) {
-            surveyDataService.activate(id);
-            return ResponseEntity.ok("Survey with ID " + id + " activated successfully");
-        } else {
-            StringBuilder errorMessage = new StringBuilder("Validation failed for Survey with ID " + id + ":\n");
-            for (String message : validationMessages) {
-                errorMessage.append(message).append("\n");
-            }
-            return ResponseEntity.badRequest().body(errorMessage.toString());
-        }
+    public SurveyDto activateSurvey(@PathVariable Integer id) {
+        SurveyEntity surveyEntity = surveyDataService.activate(id);
+        SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
+        return surveyDto;
     }
 
 

@@ -21,12 +21,18 @@ public class TopicController {
     @ResponseBody
     public List<TopicDto> getAllActiveTopics() {
         return topicDataService.findAll().stream()
-                .filter(topicDto -> topicDto.getStatus()) // Filter only active topics (status = true)
+                .filter(TopicEntity::getStatus) // fixme: move to service
                 .map(TopicDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
-
+    @GetMapping("/all")
+    @ResponseBody
+    public List<TopicDto> findAll() {
+        return topicDataService.findAll().stream()
+                .map(TopicDto::convertToDto)
+                .toList();
+    }
 
     @GetMapping("/{id}")
     @ResponseBody
@@ -39,7 +45,7 @@ public class TopicController {
     @PostMapping
     @ResponseBody
     public TopicDto addTopic(@Valid @RequestBody TopicDto topicDto) {
-        topicDto.setStatus(false);
+        topicDto.setStatus(false); // fixme: move to service
         TopicEntity topicEntity = TopicDto.convertToEntity(topicDto);
         TopicEntity savedEntity = topicDataService.save(topicEntity);
         TopicDto savedDto = TopicDto.convertToDto(savedEntity);
