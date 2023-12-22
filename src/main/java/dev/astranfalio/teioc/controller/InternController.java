@@ -6,7 +6,6 @@ import dev.astranfalio.teioc.entity.InternEntity;
 import dev.astranfalio.teioc.service.InternDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -107,9 +106,9 @@ public class InternController {
 
     @PutMapping("/{id}/update-last-connection")
     @ResponseBody
-    public ResponseEntity<?> updateLastConnection(@PathVariable Integer id) {
+    public InternDto updateLastConnection(@PathVariable Integer id) {
         InternEntity updatedIntern = internDataService.updateLastConnection(id);
         InternDto internDto = InternDto.convertToDto(updatedIntern);
-        return ResponseEntity.ok(internDto);
+        return internDto;
     }
 }

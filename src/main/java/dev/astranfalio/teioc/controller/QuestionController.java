@@ -9,7 +9,6 @@ import dev.astranfalio.teioc.service.QuestionDataService;
 import dev.astranfalio.teioc.service.SurveyCreatorService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -76,13 +75,13 @@ public class QuestionController {
 
     @GetMapping("/surveys/{id}/questions-count")
     @ResponseBody
-    public ResponseEntity<?> getQuestionsCountBySurvey(@PathVariable Integer id) {
+    public int getQuestionsCountBySurvey(@PathVariable Integer id) {
         List<QuestionWithAnswersDto> questionsWithAnswers = questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
                 .filter(QuestionWithAnswersDto::isQuestionActive) // fixme: move to service
                 .collect(Collectors.toList());
 
         int questionCount = questionsWithAnswers.size();
-        return ResponseEntity.ok(questionCount);
+        return questionCount;
     }
 
 

@@ -7,7 +7,6 @@ import dev.astranfalio.teioc.entity.PathwayAnswerId;
 import dev.astranfalio.teioc.service.PathwayAnswerDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,9 +36,9 @@ public class PathwayAnswerController {
     }
 
     @GetMapping("/completed/{intern_id}/{survey_id}")
-    public ResponseEntity<List<CompletedSurveyDetailsDto>> getCompletedSurveyDetails(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
+    public List<CompletedSurveyDetailsDto> getCompletedSurveyDetails(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
         List<CompletedSurveyDetailsDto> details = pathwayAnswerDataService.getCompletedSurveyDetails(intern_id, survey_id);
-        return ResponseEntity.ok(details);
+        return details;
     }
 
     @PostMapping
