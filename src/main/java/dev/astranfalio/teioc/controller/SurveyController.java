@@ -33,6 +33,14 @@ public class SurveyController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/all")
+    @ResponseBody
+    public List<SurveyDto> findAll() {
+        return surveyDataService.findAll().stream()
+                .map(SurveyDto::convertToDto)
+                .toList();
+    }
+
     @GetMapping("/{id}")
     public SurveyDto getSurveyById(@PathVariable Integer id) {
         SurveyEntity surveyEntity = surveyDataService.findById(id);

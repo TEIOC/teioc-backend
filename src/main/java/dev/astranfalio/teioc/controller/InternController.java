@@ -30,6 +30,14 @@ public class InternController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/all")
+    @ResponseBody
+    public List<InternDto> findAll() {
+        return internDataService.findAll().stream()
+                .map(InternDto::convertToDto)
+                .toList();
+    }
+
     @GetMapping("/{id}")
     @ResponseBody
     public InternDto getInternById(@PathVariable Integer id) {

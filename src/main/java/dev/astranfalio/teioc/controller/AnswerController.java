@@ -26,6 +26,14 @@ public class AnswerController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/all")
+    @ResponseBody
+    public List<AnswerDto> findAll() {
+        return answerDataService.findAll().stream()
+                .map(AnswerDto::convertToDto)
+                .toList();
+    }
+
     @GetMapping("/{id}")
     @ResponseBody
     public AnswerDto getAnswerById(@PathVariable Integer id) {

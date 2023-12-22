@@ -8,7 +8,6 @@ import dev.astranfalio.teioc.repository.SurveyRepository;
 import dev.astranfalio.teioc.repository.TopicRepository;
 import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

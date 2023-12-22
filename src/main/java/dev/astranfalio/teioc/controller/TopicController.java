@@ -26,7 +26,13 @@ public class TopicController {
                 .collect(Collectors.toList());
     }
 
-
+    @GetMapping("/all")
+    @ResponseBody
+    public List<TopicDto> findAll() {
+        return topicDataService.findAll().stream()
+                .map(TopicDto::convertToDto)
+                .toList();
+    }
 
     @GetMapping("/{id}")
     @ResponseBody

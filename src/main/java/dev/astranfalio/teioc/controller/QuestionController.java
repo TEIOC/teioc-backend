@@ -32,6 +32,13 @@ public class QuestionController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/all")
+    @ResponseBody
+    public List<QuestionDto> findAll() {
+        return questionDataService.findAll().stream()
+                .map(QuestionDto::convertToDto)
+                .toList();
+    }
 
     @GetMapping("/{id}")
     @ResponseBody

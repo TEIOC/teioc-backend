@@ -7,7 +7,6 @@ import dev.astranfalio.teioc.entity.AnswerEntity;
 import dev.astranfalio.teioc.entity.QuestionEntity;
 import dev.astranfalio.teioc.entity.SurveyEntity;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
