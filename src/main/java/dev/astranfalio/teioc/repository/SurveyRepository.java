@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface SurveyRepository extends JpaRepository<SurveyEntity, Integer> {
 
+    boolean existsByName(String name);
+
     @Query("SELECT s.id, s.name, AVG(p.score) " +
             "FROM PathwayEntity p JOIN p.survey s " +
             "WHERE p.intern.id = :internId " +

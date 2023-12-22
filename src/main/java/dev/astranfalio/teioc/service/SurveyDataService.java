@@ -57,7 +57,7 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
                 .build();
     }
 
-    public boolean exists(Example<SurveyEntity> surveyEntityExample) {
-        return repository.exists(surveyEntityExample);
+    public boolean existsByName(String name) {
+        return repository.existsByName(name);
     }
 }

@@ -42,4 +42,11 @@ public class GlobalExceptionHandlerController {
     public String handleUnsupportedOperationException(UnsupportedOperationException ex) {
         return ex.getMessage();
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public String handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ex.getMessage();
+    }
 }
