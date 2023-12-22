@@ -40,18 +40,6 @@ public class PathwayAnswerDataService extends AbstractDataService<PathwayAnswerE
         this.questionRepository = questionRepository;
     }
 
-/*
-TODO
-    public List<PathwayAnswerEntity> findAllBySurvey_idAndIntern_id(Long surveyId, Long internId) {
-        return repository.findAllBySurvey_idAndIntern_id(surveyId, internId);
-    }
-    @Transactional
-    public void deleteBySurvey_idAndIntern_id(Long surveyId, Long internId) {
-        repository.deleteBySurvey_idAndIntern_id(surveyId, internId);
-    }
-    deletebyid
- */
-
     public PathwayAnswerEntity add(PathwayAnswerDto pathwayAnswerDto) {
         PathwayId pathwayId = new PathwayId(pathwayAnswerDto.getIntern_id(), pathwayAnswerDto.getSurvey_id());
         if (!pathwayRepository.existsById(pathwayId)) {

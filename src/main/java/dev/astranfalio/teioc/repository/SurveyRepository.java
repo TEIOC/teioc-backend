@@ -29,29 +29,4 @@ public interface SurveyRepository extends JpaRepository<SurveyEntity, Integer> {
     @Query("SELECT s.name, AVG(p.score) FROM PathwayEntity p JOIN p.survey s GROUP BY s.name")
     List<Object[]> fetchSurveyDataForRanking();
 
-    // fixme: delete every comments below
-    /* @Query("SELECT s.name, AVG(p.score) " +
-            "FROM PathwayEntity p JOIN p.survey s " +
-            "WHERE p.intern.status = true " +
-            "AND s.status = true " +
-            "GROUP BY s.name")
-    List<Object[]> calculateAverageScorePerSurveyForActiveInterns();
-
-    @Query("SELECT t.name, AVG(p.score) " +
-            "FROM PathwayEntity p JOIN p.survey s JOIN s.topic t " +
-            "WHERE p.intern.status = true " +
-            "AND s.status = true " + // Filter by active surveys
-            "AND t.status = true " + // Filter by active topics
-            "GROUP BY t.name")
-    List<Object[]> calculateAverageScorePerTopicForActiveInterns();
-
-    @Query("SELECT t.name, AVG(p.score) " +
-            "FROM PathwayEntity p JOIN p.survey s JOIN s.topic t " +
-            "WHERE p.intern.id = :internId " +
-            "AND p.intern.status = true " +
-            "AND s.status = true " +
-            "AND t.status = true " +
-            "GROUP BY t.name")
-    List<Object[]> calculateAverageScorePerTopicForActiveIntern(@Param("internId") Integer internId);
-*/
 }

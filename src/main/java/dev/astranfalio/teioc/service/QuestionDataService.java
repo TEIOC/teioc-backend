@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,8 +54,8 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
         List<SurveyDto> surveys = surveyRepository.findAll()
                 .stream()
                 .map(SurveyDto::convertToDto)
-                .filter(s -> s.getTopicId() == topic_id) // fixme: use equals() method
-                .collect(Collectors.toList()); // fixme: use equals() method
+                .filter(s -> Objects.equals(s.getTopicId(), topic_id))
+                .toList();
         return surveys.stream()
                 .flatMap(surveyDto -> this.findBySurveyId(surveyDto.getId())
                         .stream())
@@ -65,7 +66,7 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
         return repository.findAll()
                 .stream()
                 .map(QuestionDto::convertToDto)
-                .filter(questionDto -> questionDto.getSurvey_id() == survey_id) // fixme: use equals() method
+                .filter(questionDto -> Objects.equals(questionDto.getSurvey_id(), survey_id))
                 .collect(Collectors.toList());
     }
 
