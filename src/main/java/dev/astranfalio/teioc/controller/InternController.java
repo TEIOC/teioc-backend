@@ -26,7 +26,7 @@ public class InternController {
     public List<InternDto> getAllActiveInterns() {
         return internDataService.findAllActive().stream()
                 .map(InternDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/all")

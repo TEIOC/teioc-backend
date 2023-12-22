@@ -23,7 +23,7 @@ public class TopicController {
         return topicDataService.findAll().stream()
                 .filter(topicDto -> topicDto.getStatus()) // fixme: move to service
                 .map(TopicDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/all")

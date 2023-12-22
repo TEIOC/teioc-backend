@@ -24,7 +24,7 @@ public class PathwayAnswerController {
     public List<PathwayAnswerDto> getAllPathwayAnswers() {
         return pathwayAnswerDataService.findAll().stream()
                 .map(PathwayAnswerDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/{intern_id}/{survey_id}/{answer_id}")

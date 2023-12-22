@@ -59,7 +59,7 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
         return surveys.stream()
                 .flatMap(surveyDto -> this.findBySurveyId(surveyDto.getId())
                         .stream())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<QuestionDto> findBySurveyId(Integer survey_id) {
@@ -67,7 +67,7 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                 .stream()
                 .map(QuestionDto::convertToDto)
                 .filter(questionDto -> Objects.equals(questionDto.getSurvey_id(), survey_id))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public QuestionEntity convertToEntity(QuestionDto questionDto) {
@@ -90,7 +90,7 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
                     QuestionDto questionDto = QuestionDto.convertToDto(questionEntity);
                     return new QuestionWithAnswersDto(questionEntity.getId(), questionEntity.getLabel(), answerDtos, questionDto);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<String> validateQuestions(List<QuestionDto> questions) {

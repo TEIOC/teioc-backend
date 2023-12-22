@@ -32,7 +32,7 @@ public class AnswerDataService extends AbstractDataService<AnswerEntity, Integer
                 .stream()
                 .map(AnswerDto::convertToDto)
                 .filter(answerDto -> answerDto.getQuestion_id() == question_id)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public static AnswerEntity convertToEntity(AnswerDto answerDto, QuestionRepository questionRepository) {

@@ -41,7 +41,7 @@ public class DeleteInactiveInternsService {
 
         List<InternEntity> inactiveInterns = interns.stream()
                 .filter(intern -> !intern.isStatus() && intern.getLastConnection() != null && intern.getLastConnection().before(oneMonthAgo))
-                .collect(Collectors.toList());
+                .toList();
 
         for (InternEntity intern : inactiveInterns) {
             List<PathwayEntity> pathways = pathwayRepository.findAllByInternId(intern.getId());

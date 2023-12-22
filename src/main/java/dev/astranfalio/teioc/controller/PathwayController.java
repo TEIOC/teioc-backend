@@ -24,7 +24,7 @@ public class PathwayController {
     public List<PathwayDto> getAllPathways() {
         return pathwayDataService.findAll().stream()
                 .map(PathwayDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/{intern_id}/{survey_id}")
@@ -41,7 +41,7 @@ public class PathwayController {
         List<PathwayEntity> pathwayEntities = pathwayDataService.findAllByInternId(internId);
         List<PathwayDto> pathwayDtos = pathwayEntities.stream()
                 .map(PathwayDto::convertToDto)
-                .collect(Collectors.toList()); // fixme: change for .toList()
+                .toList(); // fixme: change for .toList()
         return pathwayDtos;
     }
 

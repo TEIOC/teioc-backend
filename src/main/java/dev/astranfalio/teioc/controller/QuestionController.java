@@ -28,7 +28,7 @@ public class QuestionController {
         return questionDataService.findAll().stream()
                 .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
                 .map(QuestionDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/all")
@@ -52,7 +52,7 @@ public class QuestionController {
     public List<QuestionDto> getQuestionsByTopic(@PathVariable Integer id) {
         return questionDataService.findByTopicId(id).stream()
                 .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
@@ -61,7 +61,7 @@ public class QuestionController {
     public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
         return questionDataService.findBySurveyId(id).stream()
                 .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
@@ -70,7 +70,7 @@ public class QuestionController {
     public List<QuestionWithAnswersDto> getQuestionsWithAnswersBySurvey(@PathVariable Integer id) {
         return questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
                 .filter(QuestionWithAnswersDto::isQuestionActive) // fixme: move to service
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/surveys/{id}/questions-count")
@@ -78,7 +78,7 @@ public class QuestionController {
     public int getQuestionsCountBySurvey(@PathVariable Integer id) {
         List<QuestionWithAnswersDto> questionsWithAnswers = questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
                 .filter(QuestionWithAnswersDto::isQuestionActive) // fixme: move to service
-                .collect(Collectors.toList());
+                .toList();
 
         int questionCount = questionsWithAnswers.size();
         return questionCount;

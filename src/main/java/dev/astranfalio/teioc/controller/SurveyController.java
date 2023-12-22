@@ -30,7 +30,7 @@ public class SurveyController {
         return surveyDataService.findAll().stream()
                 .filter(SurveyEntity::getStatus) // fixme: move to service
                 .map(SurveyDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @GetMapping("/all")
@@ -60,7 +60,7 @@ public class SurveyController {
         List<SurveyDto> availableSurveys = allSurveys.stream()
                 .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus()) // fixme: move to service
                 .map(SurveyDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
         return availableSurveys;
     }
 
