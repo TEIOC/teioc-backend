@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +32,7 @@ public class AnswerDataService extends AbstractDataService<AnswerEntity, Integer
         return repository.findAll()
                 .stream()
                 .map(AnswerDto::convertToDto)
-                .filter(answerDto -> answerDto.getQuestion_id() == question_id)
+                .filter(answerDto -> Objects.equals(answerDto.getQuestion_id(), question_id))
                 .toList();
     }
 

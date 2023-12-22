@@ -21,7 +21,7 @@ public class TopicController {
     @ResponseBody
     public List<TopicDto> getAllActiveTopics() {
         return topicDataService.findAll().stream()
-                .filter(topicDto -> topicDto.getStatus()) // fixme: move to service
+                .filter(TopicEntity::getStatus) // fixme: move to service
                 .map(TopicDto::convertToDto)
                 .toList();
     }

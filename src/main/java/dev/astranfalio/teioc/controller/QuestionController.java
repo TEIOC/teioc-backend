@@ -26,7 +26,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getAllActiveQuestions() {
         return questionDataService.findAll().stream()
-                .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
+                .filter(QuestionEntity::getStatus) // fixme: move to service
                 .map(QuestionDto::convertToDto)
                 .toList();
     }
@@ -51,7 +51,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getQuestionsByTopic(@PathVariable Integer id) {
         return questionDataService.findByTopicId(id).stream()
-                .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
+                .filter(QuestionDto::getStatus) // fixme: move to service
                 .toList();
     }
 
@@ -60,7 +60,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
         return questionDataService.findBySurveyId(id).stream()
-                .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
+                .filter(QuestionDto::getStatus) // fixme: move to service
                 .toList();
     }
 
