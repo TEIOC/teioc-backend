@@ -42,6 +42,19 @@ public class SurveyDataService extends AbstractDataService<SurveyEntity, Integer
         return validationMessages;
     }
 
+    @Override
+    public SurveyEntity activate(Integer id) {
+        SurveyEntity surveyEntity = findById(id);
+        if (surveyEntity.getTopic() == null) {
+            throw new IllegalArgumentException("Could not activate survey with empty topicId.");
+        }
+        List<QuestionDto> questions = questionDataService.findBySurveyId(id);
+        List<String> validationErrors = questionDataService.validateQuestions(questions);
+        if (!validationErrors.isEmpty()) {
+            throw new IllegalArgumentException("Validation errors found: " + validationErrors);
+        }
+        return super.activate(id);
+    }
 
     public static SurveyEntity convertToEntity(SurveyDto surveyDto, TopicRepository topicRepository) {
         TopicEntity topic = surveyDto.getTopicId() != null

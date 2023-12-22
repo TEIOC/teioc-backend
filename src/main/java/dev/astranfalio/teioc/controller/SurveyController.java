@@ -9,7 +9,6 @@ import dev.astranfalio.teioc.service.SurveyCreatorService;
 import dev.astranfalio.teioc.service.SurveyDataService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -90,20 +89,10 @@ public class SurveyController {
 
     @PutMapping("/{id}/activate")
     @ResponseBody
-    public ResponseEntity<String> activateSurvey(@PathVariable Integer id) {
-        // fixme : move this code to a service
-        List<String> validationMessages = surveyDataService.isSurveyValid(id);
-
-        if (validationMessages.isEmpty()) {
-            surveyDataService.activate(id);
-            return ResponseEntity.ok("Survey with ID " + id + " activated successfully");
-        } else {
-            StringBuilder errorMessage = new StringBuilder("Validation failed for Survey with ID " + id + ":\n");
-            for (String message : validationMessages) {
-                errorMessage.append(message).append("\n");
-            }
-            return ResponseEntity.badRequest().body(errorMessage.toString());
-        }
+    public SurveyDto activateSurvey(@PathVariable Integer id) {
+        SurveyEntity surveyEntity = surveyDataService.activate(id);
+        SurveyDto surveyDto = SurveyDto.convertToDto(surveyEntity);
+        return surveyDto;
     }
 
 

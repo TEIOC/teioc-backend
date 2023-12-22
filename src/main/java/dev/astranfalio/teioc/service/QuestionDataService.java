@@ -93,7 +93,7 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
     }
 
     public List<String> validateQuestions(List<QuestionDto> questions) {
-        Set<String> validationMessages = new HashSet<>();
+        List<String> validationMessages = new ArrayList<>();
         Set<Integer> questionOrders = new HashSet<>();
 
         for (QuestionDto question : questions) {
@@ -120,7 +120,7 @@ public class QuestionDataService extends AbstractDataService<QuestionEntity, Int
             }
         }
 
-        return new ArrayList<>(validationMessages);
+        return validationMessages;
     }
 }
 
