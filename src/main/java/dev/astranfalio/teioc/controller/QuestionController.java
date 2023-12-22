@@ -27,7 +27,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getAllActiveQuestions() {
         return questionDataService.findAll().stream()
-                .filter(questionDto -> questionDto.getStatus())
+                .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
                 .map(QuestionDto::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -52,7 +52,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getQuestionsByTopic(@PathVariable Integer id) {
         return questionDataService.findByTopicId(id).stream()
-                .filter(questionDto -> questionDto.getStatus())
+                .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +61,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionDto> getQuestionsBySurvey(@PathVariable Integer id) {
         return questionDataService.findBySurveyId(id).stream()
-                .filter(questionDto -> questionDto.getStatus())
+                .filter(questionDto -> questionDto.getStatus()) // fixme: move to service
                 .collect(Collectors.toList());
     }
 
@@ -70,7 +70,7 @@ public class QuestionController {
     @ResponseBody
     public List<QuestionWithAnswersDto> getQuestionsWithAnswersBySurvey(@PathVariable Integer id) {
         return questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
-                .filter(QuestionWithAnswersDto::isQuestionActive)
+                .filter(QuestionWithAnswersDto::isQuestionActive) // fixme: move to service
                 .collect(Collectors.toList());
     }
 
@@ -78,7 +78,7 @@ public class QuestionController {
     @ResponseBody
     public ResponseEntity<?> getQuestionsCountBySurvey(@PathVariable Integer id) {
         List<QuestionWithAnswersDto> questionsWithAnswers = questionDataService.findQuestionsWithAnswersBySurveyId(id).stream()
-                .filter(QuestionWithAnswersDto::isQuestionActive)
+                .filter(QuestionWithAnswersDto::isQuestionActive) // fixme: move to service
                 .collect(Collectors.toList());
 
         int questionCount = questionsWithAnswers.size();
@@ -89,7 +89,7 @@ public class QuestionController {
     @PostMapping
     @ResponseBody
     public QuestionDto addQuestion(@Valid @RequestBody QuestionDto questionDto) {
-        questionDto.setStatus(false);
+        questionDto.setStatus(false); // fixme: move to service
         QuestionEntity questionEntity = questionDataService.convertToEntity(questionDto);
         QuestionEntity savedEntity = questionDataService.save(questionEntity);
         QuestionDto savedDto = QuestionDto.convertToDto(savedEntity);

@@ -12,7 +12,6 @@ import java.util.List;
 public interface SurveyRepository extends JpaRepository<SurveyEntity, Integer> {
 
     boolean existsByName(String name);
-
     @Query("SELECT s.id, s.name, AVG(p.score) " +
             "FROM PathwayEntity p JOIN p.survey s " +
             "WHERE p.intern.id = :internId " +
@@ -30,6 +29,7 @@ public interface SurveyRepository extends JpaRepository<SurveyEntity, Integer> {
     @Query("SELECT s.name, AVG(p.score) FROM PathwayEntity p JOIN p.survey s GROUP BY s.name")
     List<Object[]> fetchSurveyDataForRanking();
 
+    // fixme: delete every comments below
     /* @Query("SELECT s.name, AVG(p.score) " +
             "FROM PathwayEntity p JOIN p.survey s " +
             "WHERE p.intern.status = true " +

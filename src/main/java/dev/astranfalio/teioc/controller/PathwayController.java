@@ -41,7 +41,7 @@ public class PathwayController {
         List<PathwayEntity> pathwayEntities = pathwayDataService.findAllByInternId(internId);
         List<PathwayDto> pathwayDtos = pathwayEntities.stream()
                 .map(PathwayDto::convertToDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); // fixme: change for .toList()
         return pathwayDtos;
     }
 
@@ -49,6 +49,7 @@ public class PathwayController {
     @ResponseBody
     public PathwayDto addPathway(@Valid @RequestBody PathwayDto pathwayDto) {
         // Log the received duration
+        // fixme: remove the lines here
         System.out.println("Received Duration from Frontend: " + pathwayDto.getDuration());
 
         return pathwayDataService.addPathway(pathwayDto);
@@ -73,6 +74,7 @@ public class PathwayController {
     @PutMapping("/{intern_id}/{survey_id}/update-score")
     @ResponseBody
     public PathwayDto updatePathwayScore(@PathVariable Integer intern_id, @PathVariable Integer survey_id) {
+        // fixme: no need of comment here
         // Call a method to update the pathway's score here
         pathwayDataService.updatePathwayScore(intern_id, survey_id);
 

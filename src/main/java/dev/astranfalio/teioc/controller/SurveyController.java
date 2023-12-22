@@ -28,7 +28,7 @@ public class SurveyController {
     @ResponseBody
     public List<SurveyDto> getAllActiveSurveys() {
         return surveyDataService.findAll().stream()
-                .filter(SurveyEntity::getStatus)
+                .filter(SurveyEntity::getStatus) // fixme: move to service
                 .map(SurveyDto::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -51,23 +51,23 @@ public class SurveyController {
     @GetMapping("/available-surveys/{intern_id}")
     @ResponseBody
     public List<SurveyDto> getActiveAvailableSurveysForIntern(@PathVariable("intern_id") Integer intern_id) {
+        // fixme: move to service
         List<Integer> displayedSurveyIds = pathwayDataService.findAllByInternId(intern_id)
                 .stream()
                 .map(pathway -> pathway.getSurvey().getId())
                 .toList();
         List<SurveyEntity> allSurveys = surveyDataService.findAll();
         List<SurveyDto> availableSurveys = allSurveys.stream()
-                .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus())
+                .filter(survey -> !displayedSurveyIds.contains(survey.getId()) && survey.getStatus()) // fixme: move to service
                 .map(SurveyDto::convertToDto)
                 .collect(Collectors.toList());
         return availableSurveys;
     }
 
-
     @PostMapping
     @ResponseBody
     public SurveyDto addSurvey(@Valid @RequestBody SurveyDto surveyDto) {
-        surveyDto.setStatus(false);
+        surveyDto.setStatus(false); // fixme: move to service
         SurveyEntity surveyEntity = SurveyDataService.convertToEntity(surveyDto, topicRepository);
         SurveyEntity savedEntity = surveyDataService.save(surveyEntity);
         SurveyDto savedDto = SurveyDto.convertToDto(savedEntity);

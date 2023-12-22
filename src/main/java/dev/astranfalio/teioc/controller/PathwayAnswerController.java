@@ -56,6 +56,7 @@ public class PathwayAnswerController {
         pathwayAnswerDataService.deleteById(new PathwayAnswerId(intern_id, survey_id, answer_id));
     }
 
+    // fixme: just delete it. Never used and do not work anyway.
     @PutMapping("/{intern_id}/{survey_id}/{answer_id}")
     @ResponseBody
     @Deprecated
@@ -75,6 +76,6 @@ public class PathwayAnswerController {
         for (PathwayAnswerDto answer : answers) {
             pathwayAnswerDataService.add(answer);
         }
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build(); // fixme: redundant.
     }
 }

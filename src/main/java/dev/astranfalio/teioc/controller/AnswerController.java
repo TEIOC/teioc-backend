@@ -21,7 +21,7 @@ public class AnswerController {
     @ResponseBody
     public List<AnswerDto> getAllActiveAnswers() {
         return answerDataService.findAll().stream()
-                .filter(answerEntity -> answerEntity.getStatus())
+                .filter(answerEntity -> answerEntity.getStatus()) // fixme: move to a service
                 .map(AnswerDto::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -46,11 +46,9 @@ public class AnswerController {
     @ResponseBody
     public List<AnswerDto> getActiveAnswersByQuestionId(@PathVariable Integer id) {
         return answerDataService.findAnswersByQuestionId(id).stream()
-                .filter(answerDto -> answerDto.getStatus())
+                .filter(answerDto -> answerDto.getStatus()) // fixme: move to a service
                 .collect(Collectors.toList());
     }
-
-
 
     @PostMapping
     @ResponseBody
