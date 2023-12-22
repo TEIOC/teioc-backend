@@ -18,7 +18,7 @@ public class DeleteInactiveInternsService {
 
     private final InternRepository internRepository;
     private final PathwayRepository pathwayRepository;
-    private final PathwayAnswerRepository pathwayAnswerRepository; // Add this repository
+    private final PathwayAnswerRepository pathwayAnswerRepository;
 
     @Autowired
     public DeleteInactiveInternsService(

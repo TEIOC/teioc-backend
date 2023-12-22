@@ -69,23 +69,16 @@ public class PathwayDataService extends AbstractDataService<PathwayEntity, Pathw
         PathwayEntity pathway = findById(new PathwayId(internId, surveyId));
         int score = calculateScore(internId, surveyId);
 
-        pathway.setDuration(duration); // Update duration
-        pathway.setScore(score); // Update score
+        pathway.setDuration(duration);
+        pathway.setScore(score);
 
         return repository.save(pathway);
     }
 
     public void updatePathwayScore(Integer internId, Integer surveyId) {
-        // Calculate the new score based on the updated pathway answers
         int score = calculateScore(internId, surveyId);
-
-        // Find the pathway entity by internId and surveyId
         PathwayEntity pathway = findById(new PathwayId(internId, surveyId));
-
-        // Update the score
         pathway.setScore(score);
-
-        // Save the updated pathway entity
         repository.save(pathway);
     }
 
