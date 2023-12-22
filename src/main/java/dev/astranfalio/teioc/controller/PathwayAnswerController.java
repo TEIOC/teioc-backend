@@ -72,10 +72,9 @@ public class PathwayAnswerController {
 
     @PostMapping("/save-answers")
     @ResponseBody
-    public ResponseEntity<?> saveInternAnswers(@RequestBody List<PathwayAnswerDto> answers) {
+    public void saveInternAnswers(@RequestBody List<PathwayAnswerDto> answers) {
         for (PathwayAnswerDto answer : answers) {
             pathwayAnswerDataService.add(answer);
         }
-        return ResponseEntity.ok().build(); // fixme: redundant.
     }
 }
